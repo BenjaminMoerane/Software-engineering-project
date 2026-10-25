@@ -45,5 +45,28 @@ int main(){const std::string path="lms_integration_test.sqlite3";std::remove(pat
  lms::data::Statement audit(db.handle(),"SELECT actor_id,old_mark,new_mark,reason FROM mark_audit WHERE mark_id=?1 ORDER BY audit_id DESC LIMIT 1");audit.bind(1,corrected);require(audit.step(),"mark audit row exists");require(audit.integer(0)==lecturerId&&!audit.isNull(1)&&audit.real(1)==70.0&&audit.real(2)==72.0&&audit.text(3)=="Corrected after moderation","audit fields are correct");
  // Another department's HoD cannot moderate this mark.
  lms::domain::Session forged=student;forged.role=lms::domain::Role::Administrator;mustFail([&]{svc.createDepartment(forged,"Injected");},"forged role session must be denied");int otherDep=svc.createDepartment(admin,"Arts");int otherHodId=svc.createUser(admin,"otherhod","CorrectHorseBattery5!","Other Head",lms::domain::Role::HeadOfDepartment,otherDep);auto otherHod=svc.login("otherhod","CorrectHorseBattery5!");svc.updateUserAccount(admin,otherHodId,"Other Head Updated",lms::domain::Role::HeadOfDepartment,otherDep);otherHod=svc.login("otherhod","CorrectHorseBattery5!");require(otherHod.fullName=="Other Head Updated","administrator can update user account");mustFail([&]{svc.moderate(otherHod,mark,true,"cross-department attempt");},"cross-department moderation must be denied");
+ // Regression tests: resubmission deadline rule (FR-10/BR-04) and approved-mark change guard (FR-17).
+ {int lateAssignment=svc.createAssignment(lecturer,course,"Late rule test","Deadline rules","2026-10-20T12:00:00Z",100.0);
+  int lateSub=svc.submit(student2,lateAssignment,"first-late-submission");
+  lms::data::Statement lv(db.handle(),"SELECT count(*),sum(is_current),max(lateness_days) FROM submission_versions WHERE submission_id=?1");lv.bind(1,lateSub);
+  require(lv.step()&&lv.integer(0)==1&&lv.integer(1)==1&&lv.integer(2)==1,"first late submission within the window is still accepted");
+  mustFail([&]{svc.submit(student2,lateAssignment,"late-resubmission");},"resubmission after the applicable deadline must be rejected");
+  lms::data::Statement lv2(db.handle(),"SELECT count(*),sum(is_current),max(version_no) FROM submission_versions WHERE submission_id=?1");lv2.bind(1,lateSub);
+  require(lv2.step()&&lv2.integer(0)==1&&lv2.integer(1)==1&&lv2.integer(2)==1,"rejected resubmission leaves the version history and current version unchanged");
+  // Boundary (provisional OD-02: at-deadline is on time): extended deadline for extendedAssignment is 2026-10-22T12:00:00Z.
+  testNow="2026-10-22T12:00:00Z";svc.submit(student2,extendedAssignment,"resubmission-at-deadline");
+  testNow="2026-10-22T12:00:01Z";mustFail([&]{svc.submit(student2,extendedAssignment,"resubmission-one-second-late");},"resubmission one second after the deadline must be rejected");
+  lms::data::Statement bv(db.handle(),"SELECT count(*),sum(is_current),max(version_no) FROM submission_versions WHERE submission_id=?1");bv.bind(1,extendedSubmission);
+  require(bv.step()&&bv.integer(0)==3&&bv.integer(1)==1&&bv.integer(2)==3,"only the at-deadline resubmission was added");
+  testNow="2026-10-21T12:00:00Z";}
+ {int guardAssignment=svc.createAssignment(lecturer,course,"Approval guard","Approved mark guard","2026-10-22T12:00:00Z",100.0);
+  int guardSub=svc.submit(student,guardAssignment,"guard-submission");int guardMark=svc.markSubmission(lecturer,guardSub,90.0,"Good","Initial mark");
+  svc.moderate(hod,guardMark,true,"Approved for release");
+  mustFail([&]{svc.markSubmission(lecturer,guardSub,10.0,"Changed after approval","Attempt to change an approved mark");},"an approved, unreleased mark cannot be changed without fresh moderation");
+  lms::data::Statement gm(db.handle(),"SELECT final_mark,(SELECT count(*) FROM mark_audit WHERE mark_id=?1) FROM marks WHERE mark_id=?1");gm.bind(1,guardMark);
+  require(gm.step()&&gm.real(0)==90.0&&gm.integer(1)==1,"blocked change leaves the mark and audit trail untouched");
+  svc.moderate(hod,guardMark,false,"Returned for correction");svc.markSubmission(lecturer,guardSub,85.0,"Revised","Corrected after return");
+  mustFail([&]{svc.release(hod,guardMark);},"corrected mark cannot be released without a fresh approval");
+  svc.moderate(hod,guardMark,true,"Re-approved");svc.release(hod,guardMark);}
  std::remove(path.c_str());std::cout<<"PASS: authentication, role checks, setup, assignment, submission/resubmission, extension, late penalty, mark bounds, moderation gate, release, feedback visibility, audit and student/department isolation\n";return 0;
  }catch(const std::exception&e){std::remove(path.c_str());std::cerr<<"FAIL: "<<e.what()<<'\n';return 1;}}

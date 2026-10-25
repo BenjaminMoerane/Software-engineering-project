@@ -1,0 +1,34 @@
+Requirement ID,Requirement summary,Implementation location,Verification evidence,Status / qualification
+BR-01 / FR-01,Username/password authentication,src/services/LmsService.cpp login; src/security/PasswordHasher.cpp,tests/integration_tests.cpp valid and invalid login,Implemented for basic console authentication
+BR-01 / FR-02,Four-role authorisation,src/domain/User.hpp; src/services/LmsService.cpp requireRole and scoped operations,tests/integration_tests.cpp role denial and forged session,Partial; full role/operation negative matrix remains
+FR-03,Create/update/deactivate/assign user accounts,src/services/LmsService.cpp createUser and deactivateUser,tests/integration_tests.cpp account creation and role setup,Implemented core account create/update/deactivate; password reset workflow not implemented
+FR-04,Create and maintain departments/courses,src/services/LmsService.cpp createDepartment and createCourse,tests/integration_tests.cpp creates department/course,Partial: department/course update exists; full list/deactivate screens not complete
+FR-05,Assign lecturers and enrol students,src/services/LmsService.cpp assignLecturer and enrolStudent,tests/integration_tests.cpp setup and successful use,Implemented core operations; negative target-role cases need expansion
+FR-06,Create assignments for assigned courses,src/services/LmsService.cpp createAssignment,tests/integration_tests.cpp assignment creation and student denial,Implemented core workflow
+FR-07,Individual extensions,src/services/LmsService.cpp grantIndividualExtension and listAssignments,Not separately asserted in service-level integration test,Partial: service implemented; latest unit test does not exercise extension service or authorisation
+FR-08,Student views only enrolled course assignments,src/services/LmsService.cpp listAssignments,tests/integration_tests.cpp student sees enrolled assignment,Partial: negative cross-course test not yet explicit
+FR-09,Record submission timestamp,src/services/LmsService.cpp submit/submitFile and injected clock,tests/integration_tests.cpp submission timestamp invalid-date test and managed local file copy,Partial: local copy implemented with size/extension checks; no content inspection malware scanning or role-checked download service
+FR-10,Resubmit before applicable deadline and mark latest valid version,src/services/LmsService.cpp submit; submission_versions schema,Not fully exercised,Partial: version creation implemented; deadline enforcement/resubmission policy needs clarification and tests
+BR-05 / FR-11,Late penalty and zero beyond three days,src/services/LatePenaltyPolicy.hpp; src/services/LmsService.cpp submit/markSubmission,tests/integration_tests.cpp one-late-day arithmetic,Provisional pending OD-01–OD-04; beyond-three-day boundary tests needed
+FR-12,Lecturer views assigned-course submissions,src/services/LmsService.cpp submissionsForMarking,tests/integration_tests.cpp lecturer queue,Partial: core queue works; cross-course negative test needed
+FR-13,Mark bounds and written feedback,src/services/LmsService.cpp markSubmission,tests/integration_tests.cpp mark and feedback after release,Partial: invalid upper/lower boundary tests needed
+FR-14,Audit actor/time/old/new/reason atomically,src/services/LmsService.cpp markSubmission transaction; mark_audit and mark_history schemas,tests/integration_tests.cpp audit row forced audit failure rollback and mark-history snapshots,Implemented for marking actions; moderation/release events remain in their own tables and broader failure testing remains
+FR-15,Department-scoped HoD moderation,src/services/LmsService.cpp moderate,tests/integration_tests.cpp cross-department HoD denied,Implemented core department scope; more negative cases needed
+FR-16,Hide unreleased marks and feedback,src/services/LmsService.cpp releasedResults and release_records join,tests/integration_tests.cpp unreleased results empty,Implemented core access path
+FR-17,Only approved marks can be released,src/services/LmsService.cpp release,tests/integration_tests.cpp unmoderated and returned mark release denied,Implemented core workflow
+FR-18,Students see only their own released results,src/services/LmsService.cpp releasedResults,tests/integration_tests.cpp student sees own released result,Partial: multi-student ownership isolation test needed
+FR-19,Persistent SQLite records,src/data/Database.cpp; schema,tests/smoke_tests.cpp persistence after reopen,Implemented for basic persistence; broader workflow restart test needed
+FR-20,Input validation and safe database errors,src/data/Database.cpp; src/services/LmsService.cpp,tests/smoke_tests.cpp FK rejection; integration test forced audit failure,Partial: broader invalid-input matrix and operational logging needed
+FR-21,Show individual extension deadline,src/services/LmsService.cpp listAssignments; src/main.cpp,Not yet separately tested,Partial: output path implemented
+FR-22,Role-specific console navigation,src/main.cpp,Manual first-run/bootstrap smoke test,Partial: basic menu exists; usability test not run
+NFR-01,95% login under 2 seconds with 800 students,Not benchmarked,No target hardware/workload available,Not verified
+NFR-02,Assignment list under 2 seconds with 100,000 records,Not benchmarked,No target hardware/workload available,Not verified
+NFR-03,Offline core operation,Local SQLite/OpenSSL dependencies only,No disconnected environment test run,Design supports offline operation; not verified end-to-end
+NFR-04,Salted hashes and no plaintext storage,src/security/PasswordHasher.cpp; users schema,tests/smoke_tests.cpp salted hashes and verification,Implemented basic password hashing; database inspection/log audit not fully tested
+NFR-05,100% prohibited actions denied,Service role checks,Partial negative tests,Not fully verified
+NFR-06,Audit integrity,Transactional mark/audit service,tests/integration_tests.cpp forced audit failure rollback,Implemented core behavior
+NFR-07,100 consecutive core workflow runs,Not run,No repeat-run report yet,Not verified
+NFR-08,Usability with representative users,Not run,No participant session,Not verified
+NFR-09,Clean checkout builds/tests, CMakeLists.txt and source tree,Fresh build and CTest recorded in progress report,Verified in current local environment; CI not configured
+NFR-10,Technician installs within 30 minutes,README build steps,No technician acceptance test,Not verified
+CR1,v1.1 class-wide extensions,Explicitly excluded from current service/schema,Gate 2 blockers and README,Deferred as required; not implemented in v1.0

@@ -58,7 +58,7 @@ Environment: GCC (Linux container), CMake, SQLite, OpenSSL as installed there.
 | 100 consecutive CTest runs per compiler (GCC, Clang) | 100/100 passed each |
 | 100 scripted end-to-end console workflows per compiler (admin creates department, HoD, lecturer, student, course; student submits a file; lecturer marks; HoD approves and releases; student sees the result; wrong-password rejection included), fresh directory and database each run | 100/100 passed each. Each run checked: exit 0, empty stderr, one stored file, `integrity_check` ok, 0 foreign-key violations, one audit row, one release record, `OnTime`, no plaintext passwords in the database file. |
 | Failure modes: missing directory, directory as database, corrupt file, random-bytes file, no arguments | Clean error message and exit status 1 each; no crash |
-| Random-garbage console input, 300 runs (fresh and populated database) | 0 crashes or hangs |
+| Random-garbage console input, 150 runs per compiler (fresh and populated database alternating) | 0 crashes or hangs |
 | `clang-tidy` bugprone + analyzer checks on all four `.cpp` files | 1 warning (widening of `20U*1024U*1024U`), a false positive: the value fits in `unsigned int` |
 | Source directory moved after building | Clean "Cannot read schema file" error, exit 1; documented in the build guide |
 

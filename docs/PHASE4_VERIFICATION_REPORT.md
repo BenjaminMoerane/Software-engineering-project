@@ -14,6 +14,7 @@ Authority order used: assignment brief, Phase 2 SRS/use cases, Phase 3 SDD and d
 | F3 | `markSubmission` changed a mark the HoD had approved but not released; the old "Approved" decision then still allowed release. | SDD Moderate and release: a mark changed after review needs a fresh decision. FR-17. | `src/services/LmsService.cpp`: refuse the change until the HoD returns the mark (`949f483`) | `tests/integration_tests.cpp`. Confirmed that the new assertion fails with the guard removed and passes with it. |
 | F4 | `submit()` accepted a resubmission after the applicable deadline. | Brief and BR-04/FR-10: resubmit before the deadline. SDD: reject a resubmission that violates the deadline rule. | `src/services/LmsService.cpp`: reject when `version>1` and lateness > 0 (`949f483`) | `tests/integration_tests.cpp`: first late submission accepted; late resubmission rejected; at-deadline accepted; one second after rejected; history and single current version unchanged. Confirmed failing before the fix. |
 | F5 | Extra `mark_history` table not in the Phase 3 data dictionary or SDD. `mark_audit` already holds actor, time, old, new and reason. | Brief audit-log rule, FR-14, NFR-06; Phase 3 schema authoritative | Removed table, index, insert and test assertion (`1a618cb`) | Schema tables compared with the Phase 3 data dictionary: identical 14-table set. Fresh and repeated initialisation keep data; `integrity_check` ok; 0 foreign-key violations. |
+| F8 | Menu options 5 (Assign lecturer) and 6 (Enrol student) passed two prompt reads as arguments of one call. C++ leaves that evaluation order unspecified: GCC 13 asked for the user ID first, Clang 18 asked for the course ID first (reproduced). | FR-22 (consistent console flow); portability | `src/main.cpp`: read the course ID first, then the user ID, into locals (`63e7d53`) | Same scripted console workflow now passes on GCC 13 and Clang 18 (section 3b). Manual/scripted, not part of CTest. |
 | F1 | `BUILD_GUIDE.md` said file bytes are not managed and passwords are not masked; the code does both. README contradicted itself. | NFR-09 | Corrected guide and README (`4db7570`) | Masking observed in a real pseudo-terminal (see section 3). |
 | F6 | Stale statements: "byte-for-byte" schema claim, `mark_history` references, traceability rows for FR-07/FR-10/FR-14/NFR-09, "EOF handling corrected". | Accuracy of artefacts | Corrected the false statements only (`4db7570`) | Inspection. |
 
@@ -46,11 +47,29 @@ Environment: GCC (Linux container), CMake, SQLite, OpenSSL as installed there.
 | Database created by the supplied version (with `mark_history`) opened by the repaired build | Login worked; data kept; integrity ok |
 | Restart persistence (log in again on an existing database) | Passed |
 
+## 3b. Extended testing (final code, package extracted to a path containing spaces, `&` and non-ASCII characters)
+
+| Check | Result |
+|---|---|
+| GCC 13.3 Release (Make), Debug (Ninja), `-O3 -Werror`, RelWithDebInfo, MinSizeRel | Built, 0 warnings, 3/3 tests passed each |
+| Clang 18.1 Release, Debug (Ninja), `-Werror` | Built, 0 warnings, 3/3 tests passed each |
+| GCC 13 ASan + UBSan (`-fno-sanitize-recover`) | 3/3 passed, no reports |
+| Valgrind memcheck on each test executable (Debug) | No errors, no definite leaks |
+| 100 consecutive CTest runs per compiler (GCC, Clang) | 100/100 passed each |
+| 100 scripted end-to-end console workflows per compiler (admin creates department, HoD, lecturer, student, course; student submits a file; lecturer marks; HoD approves and releases; student sees the result; wrong-password rejection included), fresh directory and database each run | 100/100 passed each. Each run checked: exit 0, empty stderr, one stored file, `integrity_check` ok, 0 foreign-key violations, one audit row, one release record, `OnTime`, no plaintext passwords in the database file. |
+| Failure modes: missing directory, directory as database, corrupt file, random-bytes file, no arguments | Clean error message and exit status 1 each; no crash |
+| Random-garbage console input, 300 runs (fresh and populated database) | 0 crashes or hangs |
+| `clang-tidy` bugprone + analyzer checks on all four `.cpp` files | 1 warning (widening of `20U*1024U*1024U`), a false positive: the value fits in `unsigned int` |
+| Source directory moved after building | Clean "Cannot read schema file" error, exit 1; documented in the build guide |
+
+The end-to-end script is a verification aid and is not part of the package or CTest.
+
 ## 3a. NOT VERIFIED
 
 - Windows `_getch` password path (not run; no Windows environment).
 - Hosted Git remote and hosted CI run (none created; no URL claimed).
-- Static analysis: cppcheck and clang-tidy not available; GCC `-fanalyzer` warnings from the earlier session are not re-evaluated (see `STATIC_ANALYSIS_REPORT.md`).
+- Clang ASan/UBSan (the sanitizer runtime is not installed in this environment; GCC ASan/UBSan was run instead), MSVC, macOS, 32-bit builds and any Windows build.
+- Static analysis: cppcheck not available (clang-tidy was run, see 3b); GCC `-fanalyzer` warnings from the earlier session are not re-evaluated (see `STATIC_ANALYSIS_REPORT.md`).
 - Line coverage, the 800-student / 100,000-record benchmark (NFR-01/02), the 100-run reliability run (NFR-07), usability and installation acceptance (NFR-08/10), offline end-to-end test (NFR-03), a full negative permission matrix (NFR-05).
 - GoogleTest/Catch2: the tests are dependency-free CTest executables. The brief names GoogleTest or Catch2 for Phase 5; that is not met here.
 - Results in `PHASE4_PROGRESS_REPORT.md` from the earlier session that are not listed above were not re-run.

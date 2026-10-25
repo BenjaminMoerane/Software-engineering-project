@@ -2,7 +2,9 @@
 
 ## Scope and status
 
-This package is an incremental C++17/SQLite implementation, not a claim that every Phase 4 mark-bearing requirement is complete. The formal Gate 2 status remains **NOT APPROVED** per the Phase 3 validation report. The implementation preserves the Phase 3 schema byte-for-byte and records provisional policy decisions separately.
+This package is an incremental C++17/SQLite implementation, not a claim that every Phase 4 mark-bearing requirement is complete. The formal Gate 2 status remains **NOT APPROVED** per the Phase 3 validation report. The schema has the same tables as the Phase 3 data dictionary and records provisional policy decisions separately.
+
+> **Note:** the results below were recorded in an earlier session and were not all re-run. The checks actually executed for the final package are in `docs/PHASE4_VERIFICATION_REPORT.md`, which takes precedence.
 
 ## Implemented
 
@@ -46,7 +48,7 @@ The tests are dependency-free CTest executables, not GoogleTest/Catch2. GoogleTe
 
 - Formal Gate 2 approval and decisions OD-01–OD-08.
 - Account update and full department/course maintenance operations.
-- Dedicated service-level tests for resubmission deadline boundaries, beyond-three-day submission workflow, all mark bounds, multi-student ownership and the full negative permission matrix. File-copy validation and append-only mark-history snapshots have integration-test coverage.
+- Dedicated service-level tests for resubmission deadline boundaries, beyond-three-day submission workflow, all mark bounds, multi-student ownership and the full negative permission matrix. File-copy validation has integration-test coverage.
 - Full workflow restart test, static analysis, coverage, 100-repeat reliability run, 800-student/100,000-record performance benchmarks, target hardware measurements, usability/installation acceptance tests.
 - Hosted Git remote and evidence from a clean hosted checkout. A CI workflow file is present, but no hosted CI execution is claimed.
 - File storage is implemented as a local directory copy, but MIME/content validation, malware scanning, OS-level storage hardening, and a dedicated role-checked download interface remain incomplete. Masked password entry is implemented but requires manual verification on the target OS/terminal.

@@ -13,6 +13,8 @@
 | OD-07 | Extension deadline semantics | Individual revised deadline replaces original deadline for that student | Confirm precedence and interactions with late calculations |
 | OD-08 | Corrections after release | Marking and moderation of a released mark are blocked | Approve correction, audit, moderation and re-release workflow before enabling it |
 
+**Numbering conflict (unresolved):** the table above and `GATE2_REVIEW_AND_DECISION_RECORD.md` use one OD-01 to OD-08 numbering. The open-decision register in the Phase 3 SDD numbers them differently: OD-01 calendar day; OD-02 at-deadline boundary; OD-03 extension as applicable deadline; OD-04 penalty arithmetic; OD-05 beyond-window retention; OD-06 performance/concurrency; OD-07 extension display (CR1 separate); OD-08 post-release correction. The Phase 3 validation report was not available to decide which is authoritative; confirm before Gate 2.
+
 ## Gate 2 review checklist
 
 - [ ] Supervisor/HoD formally reviews and approves the Phase 3 SDD, diagrams, schema, data dictionary and traceability matrix.

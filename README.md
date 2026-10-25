@@ -4,14 +4,14 @@ This repository contains the C++17/SQLite console application and its automated 
 
 ## Implemented foundation
 
-- CMake build; SQLite persistence; schema copied byte-for-byte from the Phase 3 schema.
+- CMake build; SQLite persistence; schema with the same 14 tables as the Phase 3 data dictionary (table names compared; no column-level comparison has been run).
 - Parameterised SQLite statements, RAII statement handling, foreign-key enforcement, a busy timeout and WAL mode.
 - Salted scrypt password hashes using OpenSSL and constant-time hash comparison.
 - First-run bootstrap of the initial Administrator account when the `users` table is empty.
 - Four role-specific polymorphic user types and server-side role/session checks.
 - Service workflows for departments, user creation/deactivation, courses, lecturer assignment, enrolment, assignment creation, individual extensions, submission/resubmission, marking/feedback, HoD moderation and explicit release.
 - Application-generated UTC submission timestamps; invalid date components are rejected.
-- Mark updates, audit writes and an append-only mark-history snapshot (mark, penalty, feedback, actor, reason and timestamp) are committed in one SQLite transaction. A forced audit-write failure is covered by an integration test.
+- Mark updates and `mark_audit` writes (actor, time, old/new mark, reason) are committed in one SQLite transaction. A forced audit-write failure is covered by an integration test.
 - Students can retrieve only their own results that have release records. Returned marks return to the lecturer marking queue. Post-release corrections are blocked pending OD-08 approval.
 - CTest smoke and integration executables.
 
@@ -41,14 +41,16 @@ The brief says 10% of the available mark per late day, for up to three days, and
 - Formal Gate 2 approval is still **NOT APPROVED**. See `docs/GATE2_BLOCKERS.md`.
 - The UI remains a basic console menu. File extensions and size are checked, but extensions are not a substitute for content-type inspection or malware scanning. The storage folder is local and must be protected with operating-system permissions; a dedicated authorised file-download interface is not implemented.
 - Full maintenance/listing workflows and password reset are incomplete; account name/role/department update and department/course update operations are included.
-- The database schema's unique mark-per-submission-version constraint is preserved. A returned mark is updated in place; `mark_audit` records old/new final marks, and `mark_history` preserves append-only snapshots of raw mark, penalty, final mark, feedback, actor, reason and time. This is history of marking actions, not a full immutable copy of every related moderation/release record.
+- The database schema's unique mark-per-submission-version constraint is preserved. A returned mark is updated in place; `mark_audit` records actor, time, old/new final mark and reason for every change (FR-14). Raw mark, penalty and earlier feedback text are not versioned, and no history table beyond the Phase 3 tables exists. A mark the HoD has approved cannot be changed until the HoD returns it for correction, so release always follows a decision made on the current mark. A resubmission is accepted only on or before the applicable deadline; a first late submission within the window is still accepted.
+- Suspected, not fixed: if a student resubmits after their work was marked but before the deadline, the existing mark stays tied to the earlier version. Resolving it needs a policy decision.
+- The OD-01 to OD-08 numbering in `docs/GATE2_BLOCKERS.md` and `docs/GATE2_REVIEW_AND_DECISION_RECORD.md` differs from the open-decision register in the Phase 3 SDD (for example OD-04 is penalty arithmetic in the SDD). The Phase 3 validation report was not available to settle this, so the conflict is recorded, not resolved.
 - OD-08 post-release correction is blocked. Class-wide extensions remain deferred to CR1/v1.1.
 - The included tests are dependency-free executables registered with CTest. GoogleTest/Catch2, cppcheck and clang-tidy are not installed in the execution environment. GCC `-fanalyzer` compiled the project but emitted warnings that remain under review; see `docs/STATIC_ANALYSIS_REPORT.md`.
 - No hosted Git remote, CI run, code coverage result, 800-student/100,000-record benchmark, target-school-hardware measurement, or user-acceptance test is claimed.
-- The code has not yet received an independent security review. In particular, file permissions, masked password input, deployment hardening and the full negative permission matrix require additional work.
+- The code has not yet received an independent security review. In particular, file permissions, manual testing of masked password input on the target terminals (the Windows `_getch` path has not been run), deployment hardening and the full negative permission matrix require additional work.
 
 ## Source-of-truth rules
 
-Do not alter the Phase 3 schema or promote provisional decisions to approved policy without reconciling the official brief, Phase 2 SRS, Phase 3 SDD/data dictionary/traceability and Gate 2 decisions. The Phase 3 core tables and relationships are preserved. Phase 4 adds a `mark_history` table for append-only marking snapshots; this is an additive schema change and should be reconciled with the Phase 3 data dictionary/SDD before formal Gate 2 approval.
+Do not alter the Phase 3 schema or promote provisional decisions to approved policy without reconciling the official brief, Phase 2 SRS, Phase 3 SDD/data dictionary/traceability and Gate 2 decisions. The schema contains the same tables as the Phase 3 data dictionary and adds none.
 
 See [`BUILD_GUIDE.md`](BUILD_GUIDE.md) for the expanded build, test and troubleshooting guide. The upload directory contains learner assessment data and should not be committed to Git or included in source-code archives.

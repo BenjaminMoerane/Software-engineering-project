@@ -15,7 +15,7 @@ This is a working Phase 4 implementation candidate, not a declaration that every
 | Core LMS workflow | Implemented incrementally | Users, departments, courses, lecturer assignment, enrolment, assignments, individual extensions, submission versions, marking, feedback, moderation and release. |
 | Local submission file copy | Implemented with limitations | Existing regular file, 1-byte–20-MiB size and extension allowlist are checked; file is copied under a random server-generated name. Integration test confirms stored file exists. This is not a network upload service and does not inspect file content or scan for malware. |
 | Late policy | Provisional | Helper and boundary tests pass for the documented assumption. OD-01–OD-04 are still unresolved. |
-| Mark audit and history | Implemented for marking actions | Audit records old/new final mark and reason. New append-only `mark_history` snapshots raw mark, penalty, final mark, feedback, actor, reason and timestamp in the same transaction. Moderation/release event histories are separate tables. |
+| Mark audit and history | Implemented for marking actions | `mark_audit` records actor, time, old/new final mark and reason in the same transaction as the mark change (forced-failure rollback tested). Moderation and release events are separate tables. No additional history table exists. |
 | Console password entry | Implemented | Password echo is disabled on POSIX terminals and Windows uses `_getch`; target-platform manual verification is still needed. |
 | Post-release correction | Deliberately blocked | Remains blocked pending unresolved OD-08; no unapproved correction workflow has been invented. |
 | Class-wide extensions | Not in v1.0 | Deferred to CR1/v1.1 as required by the current project baseline. |
@@ -25,7 +25,7 @@ This is a working Phase 4 implementation candidate, not a declaration that every
 
 ## Known gaps before calling Phase 4 complete
 
-1. Reconcile the additive `mark_history` table with the Phase 3 data dictionary, SDD and traceability matrix; do not claim the original schema is byte-for-byte unchanged.
+1. Suspected, unresolved: a resubmission after marking but before the deadline leaves the mark tied to the earlier version (needs a policy decision).
 2. Add a role-checked file retrieval mechanism and harden the storage directory using operating-system permissions. File extension validation alone is not security validation.
 3. Expand negative permission tests and cover resubmission deadline rules, beyond-window submissions, extension authorisation, invalid files and restart/persistence workflows.
 4. Review GCC `-fanalyzer` warnings; see `STATIC_ANALYSIS_REPORT.md`. No claim of clean static analysis is made.

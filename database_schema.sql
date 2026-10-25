@@ -123,19 +123,6 @@ CREATE TABLE IF NOT EXISTS mark_audit (
   reason TEXT NOT NULL CHECK(length(trim(reason)) > 0),
   CHECK(old_mark IS NULL OR old_mark >= 0)
 );
-CREATE TABLE IF NOT EXISTS mark_history (
-  history_id INTEGER PRIMARY KEY,
-  mark_id INTEGER NOT NULL REFERENCES marks(mark_id) ON UPDATE CASCADE ON DELETE RESTRICT,
-  actor_id INTEGER NOT NULL REFERENCES users(user_id) ON UPDATE CASCADE ON DELETE RESTRICT,
-  action TEXT NOT NULL CHECK(action IN ('Created','Updated')),
-  raw_mark REAL NOT NULL CHECK(raw_mark >= 0),
-  penalty_amount REAL NOT NULL CHECK(penalty_amount >= 0),
-  final_mark REAL NOT NULL CHECK(final_mark >= 0),
-  feedback TEXT NOT NULL,
-  reason TEXT NOT NULL CHECK(length(trim(reason)) > 0),
-  recorded_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
-);
-CREATE INDEX IF NOT EXISTS ix_mark_history_mark_time ON mark_history(mark_id, recorded_at, history_id);
 
 CREATE INDEX IF NOT EXISTS ix_courses_department ON courses(department_id);
 CREATE INDEX IF NOT EXISTS ix_enrolments_student ON enrolments(student_id, course_id);

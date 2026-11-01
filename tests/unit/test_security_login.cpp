@@ -3,6 +3,7 @@
 
 #include "security/PasswordHasher.hpp"
 
+#include <cctype>
 #include <fstream>
 #include <iterator>
 #include <stdexcept>
@@ -118,4 +119,24 @@ TEST(PasswordHasher, T_PASSWORD_04_damaged_stored_values_never_verify) {
     // Observed behaviour: a malformed (non-hex or odd-length) stored encoding throws rather than returning false.
     // Recorded as observation O-1 in docs/test/DEFECT_LOG.md (needs a decision, not changed in this phase).
     EXPECT_THROW(PasswordHasher::verify("example-passphrase", PasswordHash{"zz", "not-hex"}), std::invalid_argument);
+    // Even length but non-hex characters in either field is also a malformed encoding.
+    PasswordHash badChar = good;
+    badChar.saltHex[0] = 'z';
+    EXPECT_THROW(PasswordHasher::verify("example-passphrase", badChar), std::invalid_argument);
+    badChar = good;
+    badChar.hashHex[1] = 'g';
+    EXPECT_THROW(PasswordHasher::verify("example-passphrase", badChar), std::invalid_argument);
+}
+
+TEST(PasswordHasher, T_PASSWORD_05_upper_case_hex_verifies_and_empty_password_is_refused) {
+    using lms::security::PasswordHash;
+    using lms::security::PasswordHasher;
+    const auto good = PasswordHasher::hash("example-passphrase");
+    PasswordHash upper = good;
+    for (char& c : upper.hashHex)
+        c = static_cast<char>(std::toupper(static_cast<unsigned char>(c)));
+    for (char& c : upper.saltHex)
+        c = static_cast<char>(std::toupper(static_cast<unsigned char>(c)));
+    EXPECT_TRUE(PasswordHasher::verify("example-passphrase", upper));
+    EXPECT_THROW(PasswordHasher::hash(""), std::invalid_argument);
 }

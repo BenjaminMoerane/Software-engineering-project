@@ -77,6 +77,8 @@ cmake --build build --config Release
 ctest --test-dir build --output-on-failure
 ```
 
+This runs the GoogleTest unit and integration suite (`lms_unit_tests`), the Python system/acceptance tests (`lms_system_tests`, needs Python 3) and the three earlier executables. GoogleTest 1.14.0 is used from the system if installed, otherwise downloaded at configure time from a pinned commit. Without network access and without GoogleTest, add `-DLMS_ENABLE_GTEST=OFF` at configure time to build only the three dependency-free executables. The unit suite takes about a minute. Coverage, the test plan and results: `docs/test/`.
+
 For a Visual Studio multi-configuration build:
 
 ```powershell

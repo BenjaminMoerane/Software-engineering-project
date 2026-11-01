@@ -6,14 +6,14 @@ Environment: Linux container, 2 CPU cores, Intel Xeon 2.10 GHz; GCC 13.3.0, Clan
 
 | Run | Result |
 |---|---|
-| GCC 13 Debug with coverage: `ctest` (5 targets) | 5 of 5 passed. GoogleTest: 137 passed, 1 skipped. System tests: 28 of 28 passed. |
+| GCC 13 Debug with coverage: `ctest` (5 targets) | 5 of 5 passed. GoogleTest: 138 passed, 1 skipped. System tests: 28 of 28 passed. |
 | Clang 18 Release, Ninja, `-Werror`: `ctest` | 5 of 5 passed, 0 compiler warnings or errors. |
 | Skipped test | `T_FILE_11` (unreadable source file) skips under root, because root can read any file (observation O-5). |
 | Full workflow, 100 consecutive runs of system test ST_PERS_01 (new program process per role, Release, GCC) | 100 of 100 passed (NFR-07 on this environment). |
 | Offline workflow ST_OFF_01 in an isolated network namespace (`unshare -rn`) | Passed (NFR-03 for the console workflow). |
-| RTM check (`tests/system/check_rtm.py`) | 138 unit/integration and 28 system test IDs; every test ID named in `RTM.csv` exists; every test is traced to a requirement. |
+| RTM check (`tests/system/check_rtm.py`) | 139 unit/integration and 28 system test IDs; every test ID named in `RTM.csv` exists; every test is traced to a requirement. |
 
-Test counts by area: login and passwords 11; authorisation and scope 14 (the first includes 54 denied role/operation pairs); administration 11; assignments and extensions 13; submission, resubmission and files 31; penalty policy and domain 11; marking and audit 14; moderation, queue and release 21; persistence and database errors 19; system and acceptance 28; plus the 3 earlier executables.
+Test counts by area: login and passwords 12; authorisation and scope 14 (the first includes 54 denied role/operation pairs); administration 11; assignments and extensions 13; submission, resubmission and files 24; penalty policy and domain 11; marking and audit 14; moderation, queue and release 21; persistence and database errors 19; system and acceptance 28; plus the 3 earlier executables. These add up to 139 GoogleTest tests.
 
 ## Synthetic performance benchmark (NFR-01, NFR-02)
 

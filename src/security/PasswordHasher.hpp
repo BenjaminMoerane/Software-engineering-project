@@ -9,7 +9,7 @@ struct PasswordHash {
 
 // Uses OpenSSL's scrypt KDF. The salt is generated independently for each hash.
 class PasswordHasher {
-public:
+  public:
     static PasswordHash hash(const std::string& password);
     static bool verify(const std::string& password, const PasswordHash& stored);
 };

@@ -7,9 +7,10 @@
 
 namespace {
 void require(bool condition, const std::string& message) {
-    if (!condition) throw std::runtime_error(message);
+    if (!condition)
+        throw std::runtime_error(message);
 }
-}
+} // namespace
 int main() {
     const std::string path = "lms_smoke_test.sqlite3";
     std::remove(path.c_str());
@@ -20,14 +21,19 @@ int main() {
             database.initialiseSchema();
             database.execute("INSERT INTO departments(name) VALUES ('Computer Science');");
             bool rejected = false;
-            try { database.execute("INSERT INTO courses(department_id, course_code, title) VALUES (999, 'BAD1', 'Invalid FK');"); }
-            catch (const std::runtime_error&) { rejected = true; }
+            try {
+                database.execute(
+                    "INSERT INTO courses(department_id, course_code, title) VALUES (999, 'BAD1', 'Invalid FK');");
+            } catch (const std::runtime_error&) {
+                rejected = true;
+            }
             require(rejected, "invalid foreign key should be rejected");
         }
         {
             lms::data::Database reopened(path);
             sqlite3_stmt* statement = nullptr;
-            require(sqlite3_prepare_v2(reopened.handle(), "SELECT count(*) FROM departments WHERE name=?1;", -1, &statement, nullptr) == SQLITE_OK,
+            require(sqlite3_prepare_v2(reopened.handle(), "SELECT count(*) FROM departments WHERE name=?1;", -1,
+                                       &statement, nullptr) == SQLITE_OK,
                     "prepare persistence query");
             sqlite3_bind_text(statement, 1, "Computer Science", -1, SQLITE_STATIC);
             require(sqlite3_step(statement) == SQLITE_ROW && sqlite3_column_int(statement, 0) == 1,

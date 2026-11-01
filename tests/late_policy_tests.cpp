@@ -7,14 +7,19 @@
 
 namespace {
 void require(bool condition, const std::string& message) {
-    if (!condition) throw std::runtime_error(message);
+    if (!condition)
+        throw std::runtime_error(message);
 }
-template<class F> void mustFail(F action, const std::string& message) {
+template <class F> void mustFail(F action, const std::string& message) {
     bool failed = false;
-    try { action(); } catch (const std::invalid_argument&) { failed = true; }
+    try {
+        action();
+    } catch (const std::invalid_argument&) {
+        failed = true;
+    }
     require(failed, message);
 }
-}
+} // namespace
 
 int main() {
     using lms::services::LatePenaltyPolicy;
@@ -35,9 +40,12 @@ int main() {
         mustFail([] { LatePenaltyPolicy::evaluate(100.01, 100.0, 0); }, "raw mark above maximum rejected");
         mustFail([] { LatePenaltyPolicy::evaluate(1.0, 0.0, 0); }, "nonpositive maximum rejected");
         mustFail([] { LatePenaltyPolicy::evaluate(1.0, 100.0, -1); }, "negative lateness rejected");
-        mustFail([] { LatePenaltyPolicy::evaluate(std::numeric_limits<double>::quiet_NaN(), 100.0, 0); }, "NaN raw mark rejected");
-        mustFail([] { LatePenaltyPolicy::evaluate(1.0, std::numeric_limits<double>::infinity(), 0); }, "infinite maximum rejected");
-        std::cout << "PASS: late-policy arithmetic, zero floor, three-day boundary, beyond-window status, invalid and non-finite inputs (policy remains provisional pending Gate 2)\n";
+        mustFail([] { LatePenaltyPolicy::evaluate(std::numeric_limits<double>::quiet_NaN(), 100.0, 0); },
+                 "NaN raw mark rejected");
+        mustFail([] { LatePenaltyPolicy::evaluate(1.0, std::numeric_limits<double>::infinity(), 0); },
+                 "infinite maximum rejected");
+        std::cout
+            << "PASS: late-policy arithmetic, zero floor, three-day boundary, beyond-window status, invalid and non-finite inputs (policy remains provisional pending Gate 2)\n";
         return 0;
     } catch (const std::exception& error) {
         std::cerr << "FAIL: " << error.what() << '\n';

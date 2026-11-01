@@ -29,6 +29,13 @@ TEST_F(Admin, T_ADMIN_02_user_input_validation) {
     EXPECT_FAILS_WITH(svc().createUser(admin_, "u", "LongPassword12", "N", Role::Student, -1), "Invalid department ID");
 }
 
+TEST_F(Admin, T_ADMIN_11_password_length_boundary) {
+    EXPECT_FAILS_WITH(svc().createUser(admin_, "pw9", "123456789", "N", Role::Student, 0), "at least 10 characters");
+    EXPECT_NO_THROW(svc().createUser(admin_, "pw10", "1234567890", "N", Role::Student, 0));
+    EXPECT_EQ(scalar("SELECT count(*) FROM users WHERE username='pw9'"), 0);
+    EXPECT_EQ(scalar("SELECT count(*) FROM users WHERE username='pw10'"), 1);
+}
+
 TEST_F(Admin, T_ADMIN_03_duplicate_username_is_rejected_without_a_partial_record) {
     const int before = scalar("SELECT count(*) FROM users");
     EXPECT_ANY_THROW(svc().createUser(admin_, "student", "LongPassword12", "Dup", Role::Student, dep_));

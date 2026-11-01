@@ -106,6 +106,25 @@ TEST_F(Submission, T_RESUB_02_the_latest_version_is_the_one_marked) {
     EXPECT_EQ(scalar("SELECT version_id FROM marks WHERE mark_id=" + std::to_string(mark)), currentVersion);
 }
 
+// Observation O-6 (docs/test/DEFECT_LOG.md): this pins what the code does today, it is not an approved rule.
+// A resubmission after the work was marked but before the deadline leaves the mark tied to the earlier version
+// and the work does not return to the lecturer queue. FR-10 says the latest valid version is the one marked.
+TEST_F(Submission, T_RESUB_08_resubmission_after_marking_current_behaviour) {
+    const int a = newAssignment();
+    const int s = submitAt(kBeforeDeadline, a, student_);
+    const int mark = svc().markSubmission(lecturer_, s, 60, "fb", "initial");
+    const int v1 =
+        scalar("SELECT version_id FROM submission_versions WHERE version_no=1 AND submission_id=" + std::to_string(s));
+    submitAt("2026-10-19T13:00:00Z", a, student_);
+    EXPECT_EQ(scalar("SELECT version_id FROM marks WHERE mark_id=" + std::to_string(mark)), v1);
+    EXPECT_TRUE(svc().submissionsForMarking(lecturer_).empty());
+    // A lecturer who knows the submission ID can re-mark, which moves the mark to the latest version.
+    svc().markSubmission(lecturer_, s, 65, "fb", "marked latest version");
+    const int current =
+        scalar("SELECT version_id FROM submission_versions WHERE is_current=1 AND submission_id=" + std::to_string(s));
+    EXPECT_EQ(scalar("SELECT version_id FROM marks WHERE mark_id=" + std::to_string(mark)), current);
+}
+
 TEST_F(Submission, T_RESUB_03_resubmission_exactly_at_the_deadline_is_allowed) {
     const int a = newAssignment();
     submitAt(kBeforeDeadline, a, student_);

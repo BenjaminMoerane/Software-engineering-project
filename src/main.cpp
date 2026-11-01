@@ -241,8 +241,8 @@ int main(int argc, char* argv[]) {
                             double m = askDouble("Raw mark: ");
                             auto fb = ask("Written feedback: ");
                             auto reason = ask("Mark-change reason: ");
-                            std::cout << "Mark recorded as ID " << svc.markSubmission(s, id, m, fb, reason)
-                                      << " (pending HoD moderation).\n";
+                            const int markId = svc.markSubmission(s, id, m, fb, reason);
+                            std::cout << "Mark recorded as ID " << markId << " (pending HoD moderation).\n";
                             break;
                         }
                         case 11: {

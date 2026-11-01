@@ -111,6 +111,13 @@ void showAssignments(lms::services::LmsService& svc, const lms::domain::Session&
         std::cout << '\n';
     }
 }
+void showModerationQueue(lms::services::LmsService& svc, const lms::domain::Session& s) {
+    for (const auto& m : svc.moderationQueue(s))
+        std::cout << "Mark " << m.markId << " | " << m.courseCode << " | " << m.assignmentTitle << " | student "
+                  << m.studentName << " | " << m.lateStatus << " | raw " << m.rawMark << " penalty " << m.penalty
+                  << " final " << m.finalMark << "/" << m.maxMark << " | " << m.state << " | feedback: " << m.feedback
+                  << '\n';
+}
 } // namespace
 int main(int argc, char* argv[]) {
     const std::string path = argc > 1 ? argv[1] : "lms.sqlite3";
@@ -239,6 +246,7 @@ int main(int argc, char* argv[]) {
                             break;
                         }
                         case 11: {
+                            showModerationQueue(svc, s);
                             int id = askInt("Mark ID: ");
                             bool approve = ask("Approve? (y/n): ") == "y";
                             auto reason = ask("Reason: ");
@@ -247,6 +255,7 @@ int main(int argc, char* argv[]) {
                             break;
                         }
                         case 12:
+                            showModerationQueue(svc, s);
                             svc.release(s, askInt("Mark ID: "));
                             std::cout << "Mark released.\n";
                             break;

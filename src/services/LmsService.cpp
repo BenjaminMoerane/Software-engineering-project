@@ -519,6 +519,25 @@ int LmsService::markSubmission(const Session& s, int sub, double raw, const std:
     tx.commit();
     return markId;
 }
+std::vector<ModerationItemView> LmsService::moderationQueue(const Session& s) const {
+    requireRole(s, Role::HeadOfDepartment);
+    Statement q(
+        db_.handle(),
+        "SELECT m.mark_id,su.submission_id,u.full_name,c.course_code,a.title,sv.late_status,COALESCE(f.body,''),m.raw_mark,m.penalty_amount,m.final_mark,a.max_mark,(SELECT md.decision FROM moderation_decisions md WHERE md.mark_id=m.mark_id ORDER BY md.decided_at DESC,md.moderation_id DESC LIMIT 1),m.marked_at>(SELECT md.decided_at FROM moderation_decisions md WHERE md.mark_id=m.mark_id ORDER BY md.decided_at DESC,md.moderation_id DESC LIMIT 1) FROM marks m JOIN submissions su ON su.submission_id=m.submission_id JOIN submission_versions sv ON sv.version_id=m.version_id JOIN assignments a ON a.assignment_id=su.assignment_id JOIN courses c ON c.course_id=a.course_id JOIN users u ON u.user_id=su.student_id LEFT JOIN feedback f ON f.mark_id=m.mark_id WHERE m.current=1 AND c.department_id=?1 AND NOT EXISTS (SELECT 1 FROM release_records rr WHERE rr.mark_id=m.mark_id) ORDER BY m.marked_at,m.mark_id");
+    q.bind(1, s.departmentId);
+    std::vector<ModerationItemView> out;
+    while (q.step()) {
+        const std::string decision = q.isNull(11) ? "" : q.text(11);
+        const bool correctedSinceReturn = !q.isNull(12) && q.integer(12) == 1;
+        if (decision == "ReturnedForCorrection" && !correctedSinceReturn)
+            continue; // back with the lecturer, not yet corrected
+        const bool decided = decision == "Approved";
+        out.push_back({q.integer(0), q.integer(1), q.text(2), q.text(3), q.text(4), q.text(5), q.text(6),
+                       decided ? "ApprovedAwaitingRelease" : "PendingModeration", q.real(7), q.real(8), q.real(9),
+                       q.real(10)});
+    }
+    return out;
+}
 void LmsService::moderate(const Session& s, int markId, bool approve, const std::string& reason) {
     requireRole(s, Role::HeadOfDepartment);
     nonblank(reason, "Moderation reason");

@@ -2,6 +2,9 @@
 // (FR-15..FR-18; UC-03 main, alternative and exception flows; OD-08 behaviour).
 #include "TestSupport.hpp"
 
+#include <chrono>
+#include <thread>
+
 using namespace lmstest;
 
 class Moderation : public LmsFixture {
@@ -150,4 +153,48 @@ TEST_F(Moderation, T_REL_04_results_are_private_to_their_owner_and_listed_for_ea
     EXPECT_EQ(svc().releasedResults(student_).size(), 2U);
     EXPECT_TRUE(svc().releasedResults(student2_).empty());
     EXPECT_TRUE(svc().releasedResults(outsider_).empty());
+}
+
+// UC-03 steps 1-2: the HoD opens a department moderation queue listing marks awaiting moderation (defect F9).
+TEST_F(Moderation, T_MODQ_01_queue_lists_a_pending_mark_with_the_details_needed_to_decide) {
+    const auto q = svc().moderationQueue(hod_);
+    ASSERT_EQ(q.size(), 1U);
+    EXPECT_EQ(q[0].markId, mark_);
+    EXPECT_EQ(q[0].submissionId, submission_);
+    EXPECT_EQ(q[0].courseCode, "SCI101");
+    EXPECT_EQ(q[0].studentName, "student Person");
+    EXPECT_EQ(q[0].state, "PendingModeration");
+    EXPECT_DOUBLE_EQ(q[0].rawMark, 80.0);
+    EXPECT_DOUBLE_EQ(q[0].finalMark, 80.0);
+    EXPECT_EQ(q[0].feedback, "Good work");
+}
+
+TEST_F(Moderation, T_MODQ_02_queue_follows_the_workflow_pending_approved_released) {
+    svc().moderate(hod_, mark_, true, "ok");
+    auto q = svc().moderationQueue(hod_);
+    ASSERT_EQ(q.size(), 1U);
+    EXPECT_EQ(q[0].state, "ApprovedAwaitingRelease"); // still visible so the HoD can release it
+    svc().release(hod_, mark_);
+    EXPECT_TRUE(svc().moderationQueue(hod_).empty());
+}
+
+TEST_F(Moderation, T_MODQ_03_returned_mark_leaves_the_queue_and_comes_back_after_correction) {
+    svc().moderate(hod_, mark_, false, "Please clarify");
+    EXPECT_TRUE(svc().moderationQueue(hod_).empty());
+    std::this_thread::sleep_for(std::chrono::milliseconds(20)); // marked_at has millisecond resolution
+    svc().markSubmission(lecturer_, submission_, 75.0, "Clarified", "Corrected");
+    const auto q = svc().moderationQueue(hod_);
+    ASSERT_EQ(q.size(), 1U);
+    EXPECT_EQ(q[0].state, "PendingModeration");
+    EXPECT_DOUBLE_EQ(q[0].rawMark, 75.0);
+}
+
+TEST_F(Moderation, T_MODQ_04_queue_is_limited_to_the_hods_own_department) {
+    EXPECT_TRUE(svc().moderationQueue(otherHod_).empty());
+}
+
+TEST_F(Moderation, T_MODQ_05_only_a_hod_may_open_the_queue) {
+    EXPECT_FAILS_WITH(svc().moderationQueue(lecturer_), "Access denied");
+    EXPECT_FAILS_WITH(svc().moderationQueue(student_), "Access denied");
+    EXPECT_FAILS_WITH(svc().moderationQueue(admin_), "Access denied");
 }

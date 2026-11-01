@@ -17,6 +17,11 @@ struct SubmissionView {
     std::string studentName, assignmentTitle, submittedAt, lateStatus, contentRef;
     double maxMark{};
 };
+struct ModerationItemView {
+    int markId{}, submissionId{};
+    std::string studentName, courseCode, assignmentTitle, lateStatus, feedback, state;
+    double rawMark{}, penalty{}, finalMark{}, maxMark{};
+};
 struct ResultView {
     int assignmentId{};
     std::string assignmentTitle, courseCode, feedback;
@@ -50,6 +55,7 @@ class LmsService {
     std::vector<SubmissionView> submissionsForMarking(const domain::Session&) const;
     int markSubmission(const domain::Session&, int submissionId, double rawMark, const std::string& feedback,
                        const std::string& reason);
+    std::vector<ModerationItemView> moderationQueue(const domain::Session&) const;
     void moderate(const domain::Session&, int markId, bool approve, const std::string& reason);
     void release(const domain::Session&, int markId);
     std::vector<ResultView> releasedResults(const domain::Session&) const;

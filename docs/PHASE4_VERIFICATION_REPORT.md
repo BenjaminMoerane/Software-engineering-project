@@ -1,5 +1,7 @@
 # Phase 4 repair: traceability and verification report
 
+> Phase 5 update: the "not verified" items about GoogleTest, coverage, the benchmark, the 100-run reliability run, the offline test and the permission matrix are addressed in `docs/test/` (test plan, RTM, defect log, coverage report, results). Findings F9 and F10 and observations O-1 to O-6 are in `docs/test/DEFECT_LOG.md`. The text below is the Phase 4 record and is kept unchanged.
+
 Gate 2 status is **NOT APPROVED** (per the Phase 3 validation report). Nothing here changes that, and no provisional rule (OD-01 to OD-08) has been promoted to approved policy.
 
 Repair basis: the supplied `Phase_4_Implementation_Updated.zip`. It contained no `.git` directory, so history in this repository starts with a baseline commit of that snapshot (`af63ca4`, unmodified). Earlier history, if it exists elsewhere, was not available.

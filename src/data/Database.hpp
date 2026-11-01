@@ -4,7 +4,7 @@
 
 namespace lms::data {
 class Statement {
-public:
+  public:
     Statement(sqlite3* db, const std::string& sql);
     ~Statement();
     Statement(const Statement&) = delete;
@@ -22,23 +22,25 @@ public:
     double real(int column) const;
     std::string text(int column) const;
     bool isNull(int column) const;
-private:
+
+  private:
     sqlite3* db_{};
     sqlite3_stmt* stmt_{};
 };
 class Transaction {
-public:
+  public:
     explicit Transaction(sqlite3* db);
     ~Transaction();
     Transaction(const Transaction&) = delete;
     Transaction& operator=(const Transaction&) = delete;
     void commit();
-private:
+
+  private:
     sqlite3* db_{};
     bool committed_{false};
 };
 class Database {
-public:
+  public:
     explicit Database(const std::string& path);
     ~Database();
     Database(const Database&) = delete;
@@ -49,7 +51,8 @@ public:
     void execute(const std::string& sql) const;
     void initialiseSchema() const;
     bool foreignKeysEnabled() const;
-private:
+
+  private:
     sqlite3* db_{nullptr};
 };
-}
+} // namespace lms::data

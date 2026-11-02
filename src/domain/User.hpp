@@ -1,9 +1,10 @@
 #pragma once
+#include <cstdint>
 #include <memory>
 #include <stdexcept>
 #include <string>
 namespace lms::domain {
-enum class Role { Administrator, Lecturer, HeadOfDepartment, Student };
+enum class Role : std::uint8_t { Administrator, Lecturer, HeadOfDepartment, Student };
 inline std::string roleName(Role r) {
     switch (r) {
     case Role::Administrator:
@@ -39,6 +40,10 @@ class User {
   public:
     explicit User(Session s) : session_(std::move(s)) {}
     virtual ~User() = default;
+    User(const User&) = delete; // polymorphic base: no slicing copies
+    User& operator=(const User&) = delete;
+    User(User&&) = delete;
+    User& operator=(User&&) = delete;
     const Session& session() const noexcept { return session_; }
     virtual bool canAdminister() const noexcept = 0;
     virtual bool canTeach() const noexcept = 0;

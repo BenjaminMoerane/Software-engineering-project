@@ -12,6 +12,14 @@ include(CTest)
 add_library(lms_core
     src/data/Database.cpp
     src/security/PasswordHasher.cpp
+    src/data/SqliteRepositories.cpp
+    src/services/Validation.cpp
+    src/services/DeadlineEvaluator.cpp
+    src/services/AccessServices.cpp
+    src/services/AdministrationServices.cpp
+    src/services/AssessmentServices.cpp
+    src/services/MarkingServices.cpp
+    src/services/ModerationServices.cpp
     src/services/LmsService.cpp
 )
 target_include_directories(lms_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
@@ -73,7 +81,8 @@ if(BUILD_TESTING)
             tests/unit/test_submission.cpp
             tests/unit/test_marking_audit.cpp
             tests/unit/test_moderation_release.cpp
-            tests/unit/test_persistence_errors.cpp)
+            tests/unit/test_persistence_errors.cpp
+            tests/unit/test_architecture.cpp)
         target_link_libraries(lms_unit_tests PRIVATE lms_core GTest::gtest GTest::gtest_main)
         if(NOT MSVC)
             target_compile_options(lms_unit_tests PRIVATE -Wall -Wextra)
@@ -84,6 +93,10 @@ if(BUILD_TESTING)
     # System and acceptance tests drive the real console program (needs Python 3).
     find_package(Python3 COMPONENTS Interpreter)
     if(Python3_Interpreter_FOUND)
+        # Architecture rule: no SQL or SQLite access outside src/data/ (Repository/DAO pattern).
+        add_test(NAME lms_architecture_sql_isolation
+            COMMAND ${Python3_EXECUTABLE} -I ${CMAKE_CURRENT_SOURCE_DIR}/tests/architecture/check_sql_isolation.py
+                    ${CMAKE_CURRENT_SOURCE_DIR})
         add_test(NAME lms_system_tests
             COMMAND ${Python3_EXECUTABLE} -I ${CMAKE_CURRENT_SOURCE_DIR}/tests/system/run_system_tests.py
                     --app $<TARGET_FILE:lms_app>)

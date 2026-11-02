@@ -127,9 +127,7 @@ int main(int argc, char* argv[]) {
         lms::services::LmsService svc(db);
         std::cout << "CS4433 Moderated Learning Management System (console, offline)\nDatabase: " << path << "\n";
         for (;;) {
-            lms::data::Statement count(db.handle(), "SELECT count(*) FROM users");
-            count.step();
-            if (count.integer(0) == 0) {
+            if (!svc.hasAnyUser()) {
                 std::cout << "First-run setup: create the initial Administrator account.\n";
                 try {
                     const auto un = ask("Username: ");

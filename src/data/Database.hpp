@@ -33,6 +33,8 @@ class Transaction {
     ~Transaction();
     Transaction(const Transaction&) = delete;
     Transaction& operator=(const Transaction&) = delete;
+    Transaction(Transaction&&) = delete;
+    Transaction& operator=(Transaction&&) = delete;
     void commit();
 
   private:

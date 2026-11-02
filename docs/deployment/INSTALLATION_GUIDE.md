@@ -1,4 +1,4 @@
-# Installation guide — CS4433 Moderated LMS v1.0
+# Installation guide — CS4433 Moderated LMS v1.1
 
 **Audience:** the school's IT technician. **Time:** about 30 minutes for a first installation (NFR-10). This target has not yet been timed with a technician; please note your time in §8.
 
@@ -25,7 +25,7 @@ sudo apt update
 sudo apt install -y build-essential cmake git libsqlite3-dev libssl-dev python3
 git clone https://github.com/BenjaminMoerane/Software-engineering-project.git lms-src
 cd lms-src
-git checkout v1.0
+git checkout v1.1
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build --parallel
 ctest --test-dir build --output-on-failure        # optional but recommended: all 6 test groups should pass (about 1 minute)
@@ -44,11 +44,11 @@ The database schema is built into the program, so after installation you may del
 
 ### Option B — Linux, from the release package
 
-If you were given `cs4433-moderated-lms-1.0.0-Linux.tar.gz` (made with `cpack` on the build machine), install the runtime libraries and unpack it:
+If you were given `cs4433-moderated-lms-1.1.0-Linux.tar.gz` (made with `cpack` on the build machine), install the runtime libraries and unpack it:
 
 ```bash
 sudo apt install -y libsqlite3-0 libssl3t64      # Ubuntu 24.04; on 22.04 use libssl3
-sudo mkdir -p /opt/lms && sudo tar -xzf cs4433-moderated-lms-1.0.0-Linux.tar.gz -C /opt/lms --strip-components=1
+sudo mkdir -p /opt/lms && sudo tar -xzf cs4433-moderated-lms-1.1.0-Linux.tar.gz -C /opt/lms --strip-components=1
 ```
 
 ### Option C — Windows (not verified)
@@ -58,7 +58,7 @@ sudo mkdir -p /opt/lms && sudo tar -xzf cs4433-moderated-lms-1.0.0-Linux.tar.gz 
 3. In a "x64 Native Tools" prompt:
    ```powershell
    git clone https://github.com/BenjaminMoerane/Software-engineering-project.git lms-src
-   cd lms-src; git checkout v1.0
+   cd lms-src; git checkout v1.1
    cmake -S . -B build -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake
    cmake --build build --config Release
    ctest --test-dir build -C Release --output-on-failure
@@ -69,7 +69,7 @@ sudo mkdir -p /opt/lms && sudo tar -xzf cs4433-moderated-lms-1.0.0-Linux.tar.gz 
 ## 3. Check the installation
 
 ```bash
-/opt/lms/bin/lms_app --version          # prints: lms_app 1.0.0
+/opt/lms/bin/lms_app --version          # prints: lms_app 1.1.0
 ```
 
 On Windows: `C:\LMS\app\bin\lms_app.exe --version`.
@@ -131,14 +131,14 @@ Windows: copy `C:\LMS\data` to the backup drive as `LMS-YYYY-MM-DD`.
 
 ## 8. Upgrading, uninstalling and recording the installation
 
-- **Upgrade:** back up (§7), install the new version over the old one (§2), then read that version's release notes for any database step before first use.
+- **Upgrade:** back up (§7), install the new version over the old one (§2), then read that version's release notes for any database step before first use. **v1.0 → v1.1:** no manual step. The first time v1.1 opens a v1.0 database it adds the `class_extensions` table and changes nothing else (tested by T_CR1_09). After the upgrade, `lms_app --version` prints `1.1.0`; log in once and check that the existing assignments are listed.
 - **Uninstall:** `sudo rm -rf /opt/lms` (or delete `C:\LMS\app`). Removing the program does **not** remove `/srv/lms`; archive or securely delete it according to the school's retention policy.
 - Please record: date, technician, operating system, time taken, and any step that differed from this guide. This is the evidence for NFR-10.
 
 ## 9. Design notes for the technician
 
 - **One computer, one user at a time.** SQLite is designed for a database on the local disk. Putting the database on a network share and opening it from several PCs is unsafe, because file locking over SMB/NFS is not reliable and can corrupt the database. This is why v1.0 is deployed on a single machine (Phase 3 SDD: local, offline deployment). Several PCs would need a client–server database, which the brief rules out of scope.
-- **No passwords are stored**, only salted scrypt hashes, so a lost password cannot be recovered. v1.0 has **no password-reset function** (a known gap, see release notes): the Administrator can only deactivate the account (`14`) and create a new one (`3`). The new account does not inherit the old account's submissions or marks, so ask users to keep their passwords safe.
+- **No passwords are stored**, only salted scrypt hashes, so a lost password cannot be recovered. This version has **no password-reset function** (a known gap, see release notes): the Administrator can only deactivate the account (`14`) and create a new one (`3`). The new account does not inherit the old account's submissions or marks, so ask users to keep their passwords safe.
 - Every mark change is written to an audit table, together with who made it, when, and why.
 
 ## 10. Troubleshooting

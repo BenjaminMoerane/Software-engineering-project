@@ -1,6 +1,6 @@
 # CS4433 Moderated LMS
 
-Current release: **v1.0** ([release notes](RELEASE_NOTES.md)). Install: [`docs/deployment/INSTALLATION_GUIDE.md`](docs/deployment/INSTALLATION_GUIDE.md) · user manuals: [`docs/deployment/`](docs/deployment/) · build: [`BUILD_GUIDE.md`](BUILD_GUIDE.md).
+Current release: **v1.1** ([release notes](RELEASE_NOTES.md)). Install: [`docs/deployment/INSTALLATION_GUIDE.md`](docs/deployment/INSTALLATION_GUIDE.md) · user manuals: [`docs/deployment/`](docs/deployment/) · build: [`BUILD_GUIDE.md`](BUILD_GUIDE.md).
 
 | Phase | Where |
 |---|---|
@@ -8,6 +8,7 @@ Current release: **v1.0** ([release notes](RELEASE_NOTES.md)). Install: [`docs/d
 | 5 Verification and validation | `docs/test/` (test plan, RTM, results, coverage, defect log), `tests/` |
 | 6 Configuration management and QA | `docs/CODING_STANDARD.md`, `docs/BRANCHING_STRATEGY.md`, `docs/qa/`, `.github/workflows/ci.yml` |
 | 7 Deployment | `docs/deployment/`, `RELEASE_NOTES.md`, tag `v1.0` |
+| 8 Maintenance (CR1) | `docs/maintenance/` (impact analysis, design updates, regression results), tag `v1.1` |
 
 This repository contains the C++17/SQLite console application and its automated tests. It is an incremental implementation of the Phase 3 design, not evidence that the full course project or Gate 2 is approved.
 
@@ -63,7 +64,7 @@ The brief says 10% of the available mark per late day, for up to three days, and
 - The database schema's unique mark-per-submission-version constraint is preserved. A returned mark is updated in place; `mark_audit` records actor, time, old/new final mark and reason for every change (FR-14). Raw mark, penalty and earlier feedback text are not versioned, and no history table beyond the Phase 3 tables exists. A mark the HoD has approved cannot be changed until the HoD returns it for correction, so release always follows a decision made on the current mark. A resubmission is accepted only on or before the applicable deadline; a first late submission within the window is still accepted.
 - Confirmed, not fixed: if a student resubmits after their work was marked but before the deadline, the existing mark stays tied to the earlier version (observation O-6, pinned by test T_RESUB_08). Resolving it needs a policy decision.
 - The OD-01 to OD-08 numbering in `docs/GATE2_BLOCKERS.md` and `docs/GATE2_REVIEW_AND_DECISION_RECORD.md` differs from the open-decision register in the Phase 3 SDD (for example OD-04 is penalty arithmetic in the SDD). The Phase 3 validation report was not available to settle this, so the conflict is recorded, not resolved.
-- OD-08 post-release correction is blocked. Class-wide extensions remain deferred to CR1/v1.1.
+- OD-08 post-release correction is blocked. Class-wide extensions (CR1) are implemented in v1.1; their precedence rules CR1-D1..D4 are provisional.
 - Tests: GoogleTest suite, system tests and three dependency-free executables, all registered with CTest. cppcheck is not installed in the execution environment. GCC `-fanalyzer` compiled the project but emitted warnings that remain under review; see `docs/STATIC_ANALYSIS_REPORT.md`.
 - Measured in a Linux container: business-logic line coverage 99.2% and branch coverage 90.6% (`docs/test/COVERAGE_REPORT.md`) and a synthetic 800-student/100,000-record benchmark (`docs/test/TEST_RESULTS.md`). Hosted repository: https://github.com/BenjaminMoerane/Software-engineering-project with GitHub Actions CI (`.github/workflows/ci.yml`). No target-school-hardware measurement or user-acceptance test with real users is claimed.
 - The code has not yet received an independent security review. In particular, file permissions, manual testing of masked password input on the target terminals (the Windows `_getch` path has not been run), deployment hardening and the full negative permission matrix require additional work.

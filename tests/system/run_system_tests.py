@@ -415,6 +415,36 @@ class Offline(SystemTest):
         self.assertIn("SCI101 | Lab | 90/100 | Great", p.stdout)
 
 
+class CR1ClassExtension(SystemTest):
+    """v1.1 change request CR1 (FR-23, BR-11), driven through the console like a lecturer and students would."""
+
+    def test_ST_CR1_01_class_extension_reaches_every_student_and_changes_timeliness(self):
+        self.world()
+        self.assignment(stamp(-hours(1)))  # deadline already passed
+        new_deadline = stamp(hours(48))
+        out = self.role("lect", LECT_PW, ["18", "1", new_deadline, "Exam week clash"])
+        self.assertIn("Class-wide extension saved", out)
+        for user, pw in (("stud", STUD_PW), ("stud2", STUD2_PW)):
+            listing = self.role(user, pw, ["1"])
+            self.assertIn("class extension " + new_deadline, listing)
+            self.assertNotIn("your extension", listing)
+        self.assertIn("Submission file stored", self.submit(1))
+        self.assertEqual(self.query("SELECT late_status, deadline_used FROM submission_versions"),
+                         [("OnTime", new_deadline)])
+        self.assertEqual(self.query("SELECT count(*), max(reason) FROM class_extensions"), [(1, "Exam week clash")])
+
+    def test_ST_CR1_02_exception_flows_wrong_role_and_shortening(self):
+        self.world()
+        self.assignment(stamp(hours(24)))
+        out = self.role("stud", STUD_PW, ["18", "1", stamp(hours(48)), "Please"])
+        self.assertIn("Operation failed: Access denied", out)
+        first = stamp(hours(72))
+        self.assertIn("Class-wide extension saved", self.role("lect", LECT_PW, ["18", "1", first, "First"]))
+        out = self.role("lect", LECT_PW, ["18", "1", stamp(hours(48)), "Shorten"])
+        self.assertIn("Operation failed: A class-wide extension can only move the deadline later", out)
+        self.assertEqual(self.query("SELECT revised_deadline FROM class_extensions"), [(first,)])
+
+
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--app", required=True)

@@ -1,4 +1,4 @@
-# User manual — common to all roles (v1.0)
+# User manual — common to all roles (v1.1)
 
 ## Starting and logging in
 

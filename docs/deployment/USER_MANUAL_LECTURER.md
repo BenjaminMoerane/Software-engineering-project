@@ -1,4 +1,4 @@
-# User manual — Lecturer (v1.0)
+# User manual — Lecturer (v1.1)
 
 Read [USER_MANUAL_COMMON.md](USER_MANUAL_COMMON.md) first. You can work only with courses the Administrator has assigned to you.
 
@@ -16,6 +16,19 @@ Result: `Created assignment N`. Students enrolled in the course now see it with 
 ## 2. Give one student more time — option `8`
 
 Enter the assignment ID, the student's user ID, the **revised deadline** (must be later than the original, otherwise `Revised deadline must be later than original deadline`) and a reason. The reason is stored. The student sees `your extension <date>` in their assignment list, and lateness for that student is measured from the revised deadline.
+
+## 2a. Give the whole class more time — option `18` (new in v1.1)
+
+Enter the assignment ID, the **revised deadline for the whole class** (UTC) and a reason. Result: `Class-wide extension saved for every student enrolled in the course.` Every student enrolled in the course, including students enrolled later, sees `class extension <date>` in their assignment list.
+
+| Rule | Detail |
+|---|---|
+| Must be later | than the original deadline, and later than any class-wide extension already in force. You can extend again, but you cannot bring the date forward (`A class-wide extension can only move the deadline later than …`). |
+| Kept on record | Every class-wide extension and every change is stored with your name, the time and the reason. |
+| Combined with individual extensions | Each student gets the **latest** of: the original deadline, the class-wide extension, and their own individual extension. A class extension never shortens a student's individual extension. |
+| Work already submitted | Keeps the lateness recorded when it was submitted. To excuse one student's lateness, give that student an individual extension **before** they submit. |
+
+These combination rules are provisional (CR1-D1 … D4) until approved by the Head of Department.
 
 ## 3. Mark work — option `10`
 
@@ -46,7 +59,7 @@ Result: `Mark recorded as ID N (pending HoD moderation).` The student cannot see
 - **Before the HoD has decided:** mark the same submission again; the mark is updated and the change is audited (old value, new value, reason).
 - **After the HoD approved it:** you cannot change it (`Mark is approved by the HoD; it must be returned for correction …`). Ask the HoD to return it.
 - **Returned by the HoD:** it reappears in your queue (option `10`); re-mark it with a reason, and it goes back to the HoD.
-- **After release:** changes are blocked in v1.0 pending a school decision (OD-08).
+- **After release:** changes are blocked in this version, pending a school decision (OD-08).
 
 ## Known limitation
 

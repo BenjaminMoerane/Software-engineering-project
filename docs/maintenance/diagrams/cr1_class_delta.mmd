@@ -1,0 +1,65 @@
+---
+title: CR1 v1.1 class diagram delta (new and changed members only; unchanged classes as in SDD Fig 2)
+---
+classDiagram
+  direction LR
+  class ExtensionService {
+    -ICourseRepository& courses_
+    -AuthorizationService& authz_
+    +grantIndividualExtension(Session, int, int, string, string) void
+    +grantClassExtension(Session, int, string, string) int «new»
+  }
+  class SubmissionService {
+    +submit(Session, int assignmentId, string contentRef) int  «changed: uses applicableDeadline»
+  }
+  class DeadlineEvaluator {
+    <<utility>>
+    +toEpochSeconds(string)$ int64
+    +latenessDays(string submittedAt, string deadline)$ int
+    +classify(int days)$ string
+    +applicableDeadline(string original, optional~string~ individual, optional~string~ classWide)$ string  «new, BR-11»
+  }
+  class ICourseRepository {
+    <<interface>>
+    +upsertExtension(int, int, int, string, string) void
+    +findExtensionDeadline(int, int) optional~string~
+    +insertClassExtension(int, int, string, string) int «new»
+    +findClassExtensionDeadline(int assignmentId) optional~string~  «new»
+  }
+  class SqliteCourseRepository {
+    <<SQLite>>
+  }
+  class Extension {
+    <<entity>>
+    +int extensionId
+    +int assignmentId
+    +int studentId
+    +int authorisedBy
+    +string revisedDeadline
+    +string reason
+  }
+  class ClassExtension {
+    <<entity, new>>
+    +int classExtensionId
+    +int assignmentId
+    +int authorisedBy
+    +string revisedDeadline
+    +string reason
+    +string createdAt
+  }
+  class Assignment {
+    <<entity>>
+    +int assignmentId
+    +string deadline
+  }
+  class AssignmentView {
+    +string extensionDeadline
+    +string classExtensionDeadline  «new»
+  }
+  ICourseRepository <|.. SqliteCourseRepository
+  ExtensionService --> ICourseRepository
+  SubmissionService --> ICourseRepository
+  SubmissionService ..> DeadlineEvaluator
+  ExtensionService ..> DeadlineEvaluator
+  Assignment "1" -- "0..*" Extension : per student
+  Assignment "1" -- "0..*" ClassExtension : history, newest in force

@@ -177,7 +177,9 @@ std::optional<repo::AssignmentInfo> SqliteCourseRepository::findActiveAssignment
 std::vector<repo::AssignmentView> SqliteCourseRepository::listAssignmentsVisibleTo(int userId, const std::string& role,
                                                                                    int departmentId) const {
     Statement q(db_.handle(),
-                "SELECT a.assignment_id,c.course_code,a.title,a.deadline,a.max_mark,COALESCE(e.revised_deadline,'') "
+                "SELECT a.assignment_id,c.course_code,a.title,a.deadline,a.max_mark,COALESCE(e.revised_deadline,''),"
+                "COALESCE((SELECT ce.revised_deadline FROM class_extensions ce WHERE ce.assignment_id=a.assignment_id "
+                "ORDER BY ce.class_extension_id DESC LIMIT 1),'') "
                 "FROM assignments a JOIN courses c ON c.course_id=a.course_id "
                 "LEFT JOIN extensions e ON e.assignment_id=a.assignment_id AND e.student_id=?1 "
                 "WHERE a.active=1 "
@@ -192,7 +194,7 @@ std::vector<repo::AssignmentView> SqliteCourseRepository::listAssignmentsVisible
     q.bind(3, departmentId);
     std::vector<repo::AssignmentView> out;
     while (q.step())
-        out.push_back({q.integer(0), q.text(1), q.text(2), q.text(3), q.real(4), q.text(5)});
+        out.push_back({q.integer(0), q.text(1), q.text(2), q.text(3), q.real(4), q.text(5), q.text(6)});
     return out;
 }
 void SqliteCourseRepository::upsertExtension(int assignmentId, int studentId, int authorisedBy,
@@ -212,6 +214,25 @@ std::optional<std::string> SqliteCourseRepository::findExtensionDeadline(int ass
     Statement q(db_.handle(), "SELECT revised_deadline FROM extensions WHERE assignment_id=?1 AND student_id=?2");
     q.bind(1, assignmentId);
     q.bind(2, studentId);
+    if (!q.step())
+        return std::nullopt;
+    return q.text(0);
+}
+int SqliteCourseRepository::insertClassExtension(int assignmentId, int authorisedBy, const std::string& revisedDeadline,
+                                                 const std::string& reason) {
+    Statement q(db_.handle(), "INSERT INTO class_extensions(assignment_id,authorised_by,revised_deadline,reason) "
+                              "VALUES(?1,?2,?3,?4)");
+    q.bind(1, assignmentId);
+    q.bind(2, authorisedBy);
+    q.bind(3, revisedDeadline);
+    q.bind(4, reason);
+    q.execute();
+    return lastId(db_);
+}
+std::optional<std::string> SqliteCourseRepository::findClassExtensionDeadline(int assignmentId) const {
+    Statement q(db_.handle(), "SELECT revised_deadline FROM class_extensions WHERE assignment_id=?1 "
+                              "ORDER BY class_extension_id DESC LIMIT 1");
+    q.bind(1, assignmentId);
     if (!q.step())
         return std::nullopt;
     return q.text(0);

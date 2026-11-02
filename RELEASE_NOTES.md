@@ -1,5 +1,37 @@
 # Release notes
 
+## v1.1.0 — maintenance release for change request CR1 (Phase 8)
+
+**Perfective maintenance:** class-wide extensions. Analysis: `docs/maintenance/CR1_IMPACT_ANALYSIS.md`; design updates: `docs/maintenance/CR1_DESIGN_UPDATES.md`; regression evidence: `docs/maintenance/REGRESSION_RESULTS.md`.
+
+### New
+
+- **Class-wide extensions (FR-23).** Lecturer menu option `18` extends an assignment's deadline for every student enrolled in the course, with a reason. A class extension can be extended again but never brought forward; every change is kept with who, when and why.
+- **Shown on the assignment list (FR-21 extended).** Students and lecturers see `class extension <date>` next to the deadline, as well as `your extension <date>` for an individual extension.
+- **Applicable deadline (BR-11).** Submission timeliness and resubmission use the latest of the original deadline, the class-wide extension and the student's individual extension.
+
+### Provisional (awaiting HoD/supervisor approval)
+
+CR1-D1 the class means every enrolled student, including later enrolments · CR1-D2 the latest deadline wins · CR1-D3 class extensions only move later · CR1-D4 work already submitted keeps the lateness recorded at submission. Each is isolated in one place in the code.
+
+### Upgrade from v1.0
+
+Back up the data folder, install v1.1 over v1.0, start as normal. **No manual database step:** on first start v1.1 adds the `class_extensions` table to a v1.0 database and changes nothing else (verified by T_CR1_09 on a real v1.0-schema database). `lms_app --version` prints `1.1.0`.
+
+### Quality
+
+165 GoogleTest tests (+10) and 30 system tests (+2). The complete v1.0 suite passes unchanged on GCC and Clang, Debug and Release (`-Werror`), and under ASan/UBSan. Business-logic coverage is 99.1% lines / 91.5% branches; clang-tidy and cppcheck report 0 findings; mutation check of the precedence rule 4/4. Traceability is now checked by CTest (`lms_rtm_traceability`).
+
+### Fixed
+
+F13: the traceability checker silently ignored test IDs containing digits (e.g. `T_CR1_01`). Documentation: F12 (fixed in v1.0) added to the defect log.
+
+### Known limitations
+
+Unchanged from v1.0 (below), except that class-wide extensions are now available.
+
+---
+
 ## v1.0.0 — first release (Phase 7)
 
 **Moderated Learning Management System**: an offline, single-computer console application in C++17 with SQLite, for a secondary school with four roles: Administrator, Lecturer, Head of Department and Student.

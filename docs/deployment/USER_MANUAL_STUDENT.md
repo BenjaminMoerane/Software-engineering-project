@@ -1,4 +1,4 @@
-# User manual — Student (v1.0)
+# User manual — Student (v1.1)
 
 Read [USER_MANUAL_COMMON.md](USER_MANUAL_COMMON.md) first.
 
@@ -8,7 +8,14 @@ Read [USER_MANUAL_COMMON.md](USER_MANUAL_COMMON.md) first.
 4 | MATH101 | Essay 1 | deadline 2026-11-20T12:00:00Z | max 100 | your extension 2026-11-23T12:00:00Z
 ```
 
-The first number is the **assignment ID**. Times are UTC (12:00Z = 14:00 in Maseru). If you have been given an extension, it is shown, and it is your real deadline.
+The first number is the **assignment ID**. Times are UTC (12:00Z = 14:00 in Maseru).
+
+Extensions are shown at the end of the line:
+
+- `class extension <date>`: your lecturer gave the **whole class** more time (new in v1.1).
+- `your extension <date>`: you personally were given more time.
+
+If you see more than one date, **the latest one is your deadline**, for submitting and for resubmitting.
 
 ## 2. Submit your work — option `9`
 

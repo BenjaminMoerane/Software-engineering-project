@@ -45,6 +45,8 @@ class LmsService {
                          const std::string& deadline, double maxMark);
     void grantIndividualExtension(const domain::Session&, int assignmentId, int studentId,
                                   const std::string& revisedDeadline, const std::string& reason);
+    int grantClassExtension(const domain::Session&, int assignmentId, const std::string& revisedDeadline,
+                            const std::string& reason); // CR1 / FR-23
     std::vector<AssignmentView> listAssignments(const domain::Session&) const;
     // Submission (FR-09, FR-10, FR-12)
     int submit(const domain::Session&, int assignmentId, const std::string& contentRef);

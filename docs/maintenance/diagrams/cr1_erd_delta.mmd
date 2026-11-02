@@ -1,0 +1,25 @@
+---
+title: CR1 v1.1 ERD delta (class_extensions added; all v1.0 tables unchanged)
+---
+erDiagram
+  assignments ||--o{ extensions : "individual"
+  assignments ||--o{ class_extensions : "class-wide"
+  users ||--o{ class_extensions : "authorises"
+  courses ||--o{ assignments : has
+  courses ||--o{ enrolments : "the class"
+  class_extensions {
+    INTEGER class_extension_id PK
+    INTEGER assignment_id FK "NOT NULL"
+    INTEGER authorised_by FK "NOT NULL"
+    TEXT revised_deadline "NOT NULL, ISO-8601 UTC"
+    TEXT reason "NOT NULL, non-blank"
+    TEXT created_at "NOT NULL, default now"
+  }
+  extensions {
+    INTEGER extension_id PK
+    INTEGER assignment_id FK
+    INTEGER student_id FK
+    INTEGER authorised_by FK
+    TEXT revised_deadline
+    TEXT reason
+  }

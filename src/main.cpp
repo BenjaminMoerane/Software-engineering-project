@@ -108,6 +108,8 @@ void showAssignments(const lms::services::LmsService& svc, const lms::domain::Se
     for (const auto& a : svc.listAssignments(s)) {
         std::cout << a.id << " | " << a.courseCode << " | " << a.title << " | deadline " << a.deadline << " | max "
                   << a.maxMark;
+        if (!a.classExtensionDeadline.empty()) // CR1: class-wide extension shown on the assignment list
+            std::cout << " | class extension " << a.classExtensionDeadline;
         if (!a.extensionDeadline.empty())
             std::cout << " | your extension " << a.extensionDeadline;
         std::cout << '\n';
@@ -180,6 +182,13 @@ void grantExtension(LmsService& svc, const Session& s) {
     svc.grantIndividualExtension(s, a, student, deadline, reason);
     std::cout << "Extension saved.\n";
 }
+void grantClassExtension(LmsService& svc, const Session& s) { // CR1 / FR-23
+    int a = askInt("Assignment ID: ");
+    auto deadline = ask("Revised deadline for the whole class UTC: ");
+    auto reason = ask("Reason: ");
+    svc.grantClassExtension(s, a, deadline, reason);
+    std::cout << "Class-wide extension saved for every student enrolled in the course.\n";
+}
 void submitWork(LmsService& svc, const Session& s) {
     int a = askInt("Assignment ID: ");
     auto source = ask("Path to file to submit: ");
@@ -247,10 +256,11 @@ void updateCourse(LmsService& svc, const Session& s) {
 
 const std::map<int, Handler>& menuHandlers() {
     static const std::map<int, Handler> handlers{
-        {1, listAssignments},   {2, createDepartment}, {3, createUser},     {4, createCourse},    {5, assignLecturer},
-        {6, enrolStudent},      {7, createAssignment}, {8, grantExtension}, {9, submitWork},      {10, markWork},
-        {11, moderateMark},     {12, releaseMark},     {13, viewResults},   {14, deactivateUser}, {15, updateUser},
-        {16, updateDepartment}, {17, updateCourse}};
+        {1, listAssignments}, {2, createDepartment},    {3, createUser},       {4, createCourse},
+        {5, assignLecturer},  {6, enrolStudent},        {7, createAssignment}, {8, grantExtension},
+        {9, submitWork},      {10, markWork},           {11, moderateMark},    {12, releaseMark},
+        {13, viewResults},    {14, deactivateUser},     {15, updateUser},      {16, updateDepartment},
+        {17, updateCourse},   {18, grantClassExtension}};
     return handlers;
 }
 
@@ -259,7 +269,7 @@ constexpr const char* kMenu =
     "lecturer [Admin] 6 Enrol student [Admin]\n7 Create assignment [Lecturer] 8 Grant individual extension "
     "[Lecturer]\n9 Submit/resubmit [Student] 10 Mark submission [Lecturer] 11 Moderate mark [HoD]\n12 Release mark "
     "[HoD] 13 View released results [Student] 14 Deactivate user [Admin] 15 Update user [Admin] 16 Update "
-    "department [Admin] 17 Update course [Admin] 0 Logout\n";
+    "department [Admin] 17 Update course [Admin] 18 Grant class-wide extension [Lecturer] 0 Logout\n";
 
 // Runs one logged-in session until the user chooses 0 (or input ends, which askInt reports as 0).
 void runSession(LmsService& svc, const Session& s) {
@@ -306,11 +316,17 @@ SetupResult firstRunSetup(LmsService& svc) {
 #define LMS_VERSION "unknown"
 #endif
 
+// Installation check (docs/deployment/INSTALLATION_GUIDE.md section 3). Returns true if the flag was handled.
+bool printVersionIfRequested(int argc, char* argv[]) {
+    if (argc < 2 || std::string(argv[1]) != "--version")
+        return false;
+    std::cout << "lms_app " << LMS_VERSION << '\n';
+    return true;
+}
+
 int main(int argc, char* argv[]) {
-    if (argc > 1 && std::string(argv[1]) == "--version") { // installation check (docs/deployment/INSTALLATION_GUIDE.md)
-        std::cout << "lms_app " << LMS_VERSION << '\n';
+    if (printVersionIfRequested(argc, argv))
         return 0;
-    }
     const std::string path = argc > 1 ? argv[1] : "lms.sqlite3";
     try {
         lms::data::Database db(path);

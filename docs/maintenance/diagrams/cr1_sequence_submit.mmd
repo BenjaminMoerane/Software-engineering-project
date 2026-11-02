@@ -1,0 +1,30 @@
+---
+title: Submit assignment (SDD Fig 5) updated for CR1 — applicable-deadline resolution
+---
+sequenceDiagram
+  actor St as Student
+  participant UI as Console (main.cpp)
+  participant SS as SubmissionService
+  participant AZ as AuthorizationService
+  participant CR as ICourseRepository
+  participant DE as DeadlineEvaluator
+  participant SR as ISubmissionRepository
+  St->>UI: 9, assignment ID, file path
+  UI->>SS: submitFile(session, assignmentId, path)
+  SS->>AZ: requireRole(Student)
+  SS->>CR: findActiveAssignment(assignmentId)
+  SS->>AZ: isStudentEnrolled(student, course)
+  SS->>CR: findExtensionDeadline(assignmentId, student)
+  SS->>CR: findClassExtensionDeadline(assignmentId)
+  Note over SS,CR: new in v1.1
+  SS->>DE: applicableDeadline(original, individual, classWide)
+  DE-->>SS: latest of the three (BR-11)
+  SS->>DE: latenessDays(serverNow, applicable)
+  alt resubmission (version > 1) and late
+    SS-->>UI: reject: only before the applicable deadline
+  else first submission, or on time
+    SS->>SR: saveVersion(version with deadline_used, lateness, status)
+    Note over SR: snapshot kept, later extensions never rewrite it (CR1-D4)
+    SS-->>UI: submission ID
+  end
+  UI-->>St: Submission file stored and saved

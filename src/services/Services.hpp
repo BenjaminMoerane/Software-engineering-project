@@ -106,6 +106,9 @@ class ExtensionService {
         : courses_(courses), authz_(authz) {}
     void grantIndividualExtension(const Session&, int assignmentId, int studentId, const std::string& revisedDeadline,
                                   const std::string& reason);
+    // CR1 / FR-23: extends the deadline for every student enrolled in the assignment's course. Returns the record id.
+    int grantClassExtension(const Session&, int assignmentId, const std::string& revisedDeadline,
+                            const std::string& reason);
 
   private:
     repo::ICourseRepository& courses_;

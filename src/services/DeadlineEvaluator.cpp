@@ -1,5 +1,6 @@
 #include "services/DeadlineEvaluator.hpp"
 #include "services/PenaltyStrategy.hpp"
+#include "services/Validation.hpp"
 
 #include <stdexcept>
 
@@ -26,8 +27,7 @@ std::int64_t daysFromCivil(int y, int m, int d) {
 } // namespace
 
 std::int64_t DeadlineEvaluator::toEpochSeconds(const std::string& s) {
-    if (s.size() < 19 || s[4] != '-' || s[7] != '-' || (s[10] != 'T' && s[10] != ' ') || s[13] != ':' ||
-        s[16] != ':')
+    if (s.size() < 19 || s[4] != '-' || s[7] != '-' || (s[10] != 'T' && s[10] != ' ') || s[13] != ':' || s[16] != ':')
         throw std::invalid_argument("Timestamp is not a valid UTC date/time: " + s);
     const int year = digits(s, 0, 4), month = digits(s, 5, 2), day = digits(s, 8, 2);
     const int hour = digits(s, 11, 2), minute = digits(s, 14, 2), second = digits(s, 17, 2);
@@ -39,7 +39,9 @@ std::int64_t DeadlineEvaluator::toEpochSeconds(const std::string& s) {
     }
     if (i < s.size() && s[i] == 'Z')
         ++i;
-    if (i != s.size() || month < 1 || month > 12 || day < 1 || day > 31 || hour > 23 || minute > 59 || second > 59)
+    // Phase 6 review CR-04: reject impossible calendar dates (e.g. 2026-02-30) instead of normalising them forward.
+    if (i != s.size() || month < 1 || month > 12 || day < 1 || day > validation::daysInMonth(year, month) ||
+        hour > 23 || minute > 59 || second > 59)
         throw std::invalid_argument("Timestamp is not a valid UTC date/time: " + s);
     return daysFromCivil(year, month, day) * 86400 + std::int64_t{hour} * 3600 + std::int64_t{minute} * 60 + second;
 }

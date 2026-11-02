@@ -1,22 +1,110 @@
 name: C++ LMS CI
 
+# Runs on every push to any branch and on every pull request (brief Phase 6: "builds the project and runs the
+# tests on every push"). Any failing job blocks merging to main (docs/BRANCHING_STRATEGY.md section 4).
 on:
   push:
   pull_request:
 
+permissions:
+  contents: read
+
+env:
+  DEPS: cmake g++ clang libsqlite3-dev libssl-dev python3
+
 jobs:
   build-and-test:
-    runs-on: ubuntu-latest
+    name: build-and-test (${{ matrix.compiler }}, ${{ matrix.build_type }})
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler: [gcc, clang]
+        build_type: [Debug, Release]
     steps:
-      - name: Check out source
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
       - name: Install build dependencies
+        run: sudo apt-get update && sudo apt-get install -y $DEPS
+      - name: Configure (warnings as errors)
         run: |
-          sudo apt-get update
-          sudo apt-get install -y cmake g++ libsqlite3-dev libssl-dev
-      - name: Configure Debug
-        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug
+          if [ "${{ matrix.compiler }}" = gcc ]; then export CC=gcc CXX=g++; else export CC=clang CXX=clang++; fi
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DLMS_WARNINGS_AS_ERRORS=ON
       - name: Build
         run: cmake --build build --parallel 2
-      - name: Run tests
+      - name: Run all CTest targets (unit, integration, system, SQL-isolation rule)
         run: ctest --test-dir build --output-on-failure
+      - name: Upload test log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ctest-${{ matrix.compiler }}-${{ matrix.build_type }}
+          path: build/Testing/Temporary/LastTest.log
+
+  sanitizers:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install build dependencies
+        run: sudo apt-get update && sudo apt-get install -y $DEPS
+      - name: Configure with AddressSanitizer + UndefinedBehaviorSanitizer
+        run: >
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug
+          -DCMAKE_CXX_FLAGS="-fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all"
+          -DCMAKE_EXE_LINKER_FLAGS="-fsanitize=address,undefined"
+      - name: Build
+        run: cmake --build build --parallel 2
+      - name: Run tests under sanitizers
+        run: ctest --test-dir build --output-on-failure
+
+  coverage:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: |
+          sudo apt-get update && sudo apt-get install -y $DEPS
+          pipx install "gcovr==8.*"
+      - name: Configure coverage build
+        run: cmake -S . -B build-cov -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=g++ -DLMS_ENABLE_COVERAGE=ON
+      - name: Build and test
+        run: |
+          cmake --build build-cov --parallel 2
+          ctest --test-dir build-cov --output-on-failure
+      - name: Coverage gate (business-logic layer >= 70% lines, brief Phase 5)
+        run: |
+          gcovr -r . --object-directory build-cov --filter src/services/ --filter src/domain/ \
+            --fail-under-line 70 --txt --txt-metric line | tee coverage-line.txt
+          gcovr -r . --object-directory build-cov --filter src/services/ --filter src/domain/ \
+            --exclude-throw-branches --exclude-unreachable-branches --txt --txt-metric branch | tee coverage-branch.txt
+          gcovr -r . --object-directory build-cov --filter src/ --exclude src/main.cpp --html-details coverage.html
+      - uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: |
+            coverage-line.txt
+            coverage-branch.txt
+            coverage*.html
+
+  static-analysis:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install analysers
+        run: |
+          sudo apt-get update && sudo apt-get install -y $DEPS clang-tidy clang-format cppcheck
+      - name: Formatting check (.clang-format; CODING_STANDARD.md section 2)
+        run: clang-format --dry-run --Werror $(git ls-files 'src/*' 'tests/*.cpp' 'tests/unit/*')
+      - name: Configure (compile database)
+        run: cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DLMS_ENABLE_GTEST=OFF
+      - name: clang-tidy (config in .clang-tidy; any finding fails)
+        run: clang-tidy -p build --quiet --warnings-as-errors='*' $(git ls-files 'src/*.cpp')
+      - name: cppcheck (any finding fails)
+        run: >
+          cppcheck --enable=warning,style,performance,portability --std=c++17 --error-exitcode=1
+          --inline-suppr --suppress=missingIncludeSystem -I src
+          --project=build/compile_commands.json --file-filter="$PWD/src/*" -q
+      - name: Code metrics (lizard; CCN > 10 reported, not failing)
+        run: |
+          pipx install lizard
+          lizard src -l cpp -C 10 -w | tee lizard-warnings.txt || true
+          lizard src -l cpp | tail -4

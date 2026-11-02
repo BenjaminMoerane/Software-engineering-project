@@ -25,14 +25,23 @@ add_library(lms_core
 target_include_directories(lms_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 target_link_libraries(lms_core PUBLIC SQLite::SQLite3 OpenSSL::Crypto)
 target_compile_definitions(lms_core PRIVATE LMS_SCHEMA_PATH="${CMAKE_CURRENT_SOURCE_DIR}/database_schema.sql")
+# Warning policy (docs/CODING_STANDARD.md section 7). CI builds with LMS_WARNINGS_AS_ERRORS=ON.
+option(LMS_WARNINGS_AS_ERRORS "Treat compiler warnings in project code as errors" OFF)
 if(MSVC)
-    target_compile_options(lms_core PRIVATE /W4 /permissive-)
+    set(LMS_WARNING_FLAGS /W4 /permissive-)
+    set(LMS_WERROR_FLAG /WX)
 else()
-    target_compile_options(lms_core PRIVATE -Wall -Wextra -Wpedantic -Wconversion -Wshadow)
+    set(LMS_WARNING_FLAGS -Wall -Wextra -Wpedantic -Wconversion -Wshadow)
+    set(LMS_WERROR_FLAG -Werror)
 endif()
+if(LMS_WARNINGS_AS_ERRORS)
+    list(APPEND LMS_WARNING_FLAGS ${LMS_WERROR_FLAG})
+endif()
+target_compile_options(lms_core PRIVATE ${LMS_WARNING_FLAGS})
 
 add_executable(lms_app src/main.cpp)
 target_link_libraries(lms_app PRIVATE lms_core)
+target_compile_options(lms_app PRIVATE ${LMS_WARNING_FLAGS})
 
 # Optional gcov instrumentation (GCC or Clang). Use with a Debug build, then run gcovr (see docs/test/TEST_PLAN.md).
 option(LMS_ENABLE_COVERAGE "Instrument the build for gcov/gcovr line coverage" OFF)

@@ -27,8 +27,8 @@ int MarkingService::markSubmission(const Session& s, int submissionId, double ra
 
     // The penalty is applied exactly once, here, from the lateness recorded on the version being marked.
     const PenaltyResult penalty = penalty_.calculate(ctx->latenessDays, ctx->maxMark);
-    const domain::MarkWrite write{submissionId, ctx->versionId, s.userId, rawMark, penalty.penalty,
-                          applyPenalty(rawMark, penalty), feedback};
+    const domain::MarkWrite write{
+        submissionId, ctx->versionId, s.userId, rawMark, penalty.penalty, applyPenalty(rawMark, penalty), feedback};
 
     // Guards, mark/feedback write and audit event share one transaction: any failure leaves no partial change.
     auto tx = tx_.begin();

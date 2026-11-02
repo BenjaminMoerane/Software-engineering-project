@@ -62,8 +62,7 @@ std::vector<std::string> CourseService::listDepartments() const {
     return out;
 }
 
-int CourseService::createCourse(const Session& s, int departmentId, const std::string& code,
-                                const std::string& title) {
+int CourseService::createCourse(const Session& s, int departmentId, const std::string& code, const std::string& title) {
     authz_.requireRole(s, Role::Administrator);
     validation::nonblank(code, "Course code");
     validation::nonblank(title, "Course title");

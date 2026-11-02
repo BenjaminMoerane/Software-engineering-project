@@ -268,6 +268,16 @@ TEST(DeadlineEvaluator, T_ARCH_13_malformed_timestamps_are_rejected_not_treated_
     EXPECT_THROW(DeadlineEvaluator::toEpochSeconds("2026-10-20T12:00:00+02:00"), std::invalid_argument);
 }
 
+TEST(DeadlineEvaluator, T_ARCH_15_impossible_calendar_dates_are_rejected) {
+    // Defect F11 (Phase 6 review): day <= 31 was the only check, so 2026-02-30 was silently read as 2026-03-02.
+    EXPECT_THROW(DeadlineEvaluator::toEpochSeconds("2026-02-30T12:00:00Z"), std::invalid_argument);
+    EXPECT_THROW(DeadlineEvaluator::toEpochSeconds("2026-04-31T12:00:00Z"), std::invalid_argument);
+    EXPECT_THROW(DeadlineEvaluator::toEpochSeconds("2025-02-29T00:00:00Z"), std::invalid_argument); // not leap
+    EXPECT_NO_THROW(DeadlineEvaluator::toEpochSeconds("2028-02-29T00:00:00Z"));                     // leap
+    EXPECT_NO_THROW(DeadlineEvaluator::toEpochSeconds("2000-02-29T00:00:00Z"));                     // 400-rule
+    EXPECT_THROW(DeadlineEvaluator::toEpochSeconds("2100-02-29T00:00:00Z"), std::invalid_argument); // 100-rule
+}
+
 TEST_F(ArchitectureTest, T_ARCH_14_unenrolled_student_cannot_submit_even_with_fakes) {
     courses.studentEnrolled = false;
     AuthorizationService authz(users, courses);

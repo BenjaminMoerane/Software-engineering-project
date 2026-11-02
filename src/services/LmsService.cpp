@@ -14,16 +14,22 @@ LmsService::LmsService(data::Database& db, std::function<std::string()> clock)
       audit_(marks_), marking_(submissions_, marks_, moderation_, tx_, authz_, audit_, penalty_),
       moderationSvc_(moderation_, authz_), results_(moderation_, authz_) {}
 
-bool LmsService::hasAnyUser() const { return authn_.hasAnyUser(); }
+bool LmsService::hasAnyUser() const {
+    return authn_.hasAnyUser();
+}
 int LmsService::bootstrapAdministrator(const std::string& u, const std::string& p, const std::string& n) {
     return authn_.bootstrapAdministrator(u, p, n);
 }
-Session LmsService::login(const std::string& u, const std::string& p) const { return authn_.login(u, p); }
+Session LmsService::login(const std::string& u, const std::string& p) const {
+    return authn_.login(u, p);
+}
 
 int LmsService::createDepartment(const Session& s, const std::string& name) {
     return courseSvc_.createDepartment(s, name);
 }
-void LmsService::deactivateUser(const Session& s, int userId) { userAdmin_.deactivateUser(s, userId); }
+void LmsService::deactivateUser(const Session& s, int userId) {
+    userAdmin_.deactivateUser(s, userId);
+}
 void LmsService::updateUserAccount(const Session& s, int userId, const std::string& fullName, Role role, int dep) {
     userAdmin_.updateUserAccount(s, userId, fullName, role, dep);
 }
@@ -40,16 +46,21 @@ int LmsService::createUser(const Session& s, const std::string& u, const std::st
 int LmsService::createCourse(const Session& s, int dep, const std::string& code, const std::string& title) {
     return courseSvc_.createCourse(s, dep, code, title);
 }
-void LmsService::assignLecturer(const Session& s, int c, int l) { courseSvc_.assignLecturer(s, c, l); }
-void LmsService::enrolStudent(const Session& s, int c, int st) { courseSvc_.enrolStudent(s, c, st); }
-std::vector<std::string> LmsService::listDepartments() const { return courseSvc_.listDepartments(); }
+void LmsService::assignLecturer(const Session& s, int c, int l) {
+    courseSvc_.assignLecturer(s, c, l);
+}
+void LmsService::enrolStudent(const Session& s, int c, int st) {
+    courseSvc_.enrolStudent(s, c, st);
+}
+std::vector<std::string> LmsService::listDepartments() const {
+    return courseSvc_.listDepartments();
+}
 
 int LmsService::createAssignment(const Session& s, int c, const std::string& t, const std::string& d,
                                  const std::string& deadline, double max) {
     return assignmentSvc_.createAssignment(s, c, t, d, deadline, max);
 }
-void LmsService::grantIndividualExtension(const Session& s, int a, int st, const std::string& d,
-                                          const std::string& r) {
+void LmsService::grantIndividualExtension(const Session& s, int a, int st, const std::string& d, const std::string& r) {
     extensionSvc_.grantIndividualExtension(s, a, st, d, r);
 }
 std::vector<AssignmentView> LmsService::listAssignments(const Session& s) const {
@@ -77,7 +88,11 @@ std::vector<ModerationItemView> LmsService::moderationQueue(const Session& s) co
 void LmsService::moderate(const Session& s, int m, bool approve, const std::string& r) {
     moderationSvc_.moderate(s, m, approve, r);
 }
-void LmsService::release(const Session& s, int m) { moderationSvc_.release(s, m); }
-std::vector<ResultView> LmsService::releasedResults(const Session& s) const { return results_.releasedResults(s); }
+void LmsService::release(const Session& s, int m) {
+    moderationSvc_.release(s, m);
+}
+std::vector<ResultView> LmsService::releasedResults(const Session& s) const {
+    return results_.releasedResults(s);
+}
 
 } // namespace lms::services

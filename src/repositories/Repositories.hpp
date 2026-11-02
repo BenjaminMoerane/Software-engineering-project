@@ -66,8 +66,7 @@ class ICourseRepository {
     virtual bool updateDepartment(int departmentId, const std::string& name) = 0;
     virtual std::vector<std::pair<int, std::string>> listDepartments() const = 0;
     virtual int insertCourse(int departmentId, const std::string& code, const std::string& title) = 0;
-    virtual bool updateCourse(int courseId, const std::string& code, const std::string& title,
-                              int departmentId) = 0;
+    virtual bool updateCourse(int courseId, const std::string& code, const std::string& title, int departmentId) = 0;
     virtual std::optional<int> departmentOfCourse(int courseId) const = 0;
     virtual void assignLecturer(int courseId, int lecturerId) = 0;
     virtual void enrolStudent(int courseId, int studentId) = 0;

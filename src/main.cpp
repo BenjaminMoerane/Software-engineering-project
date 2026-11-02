@@ -128,7 +128,9 @@ using Handler = void (*)(LmsService&, const Session&);
 // Prompts and messages are unchanged; system tests ST_* depend on them.
 // All menu handlers share one Handler signature, so read-only handlers cannot take a const service.
 // cppcheck-suppress constParameterCallback
-void listAssignments(LmsService& svc, const Session& s) { showAssignments(svc, s); }
+void listAssignments(LmsService& svc, const Session& s) {
+    showAssignments(svc, s);
+}
 void createDepartment(LmsService& svc, const Session& s) {
     int id = svc.createDepartment(s, ask("Department name: "));
     std::cout << "Created department " << id << '\n';
@@ -245,9 +247,9 @@ void updateCourse(LmsService& svc, const Session& s) {
 
 const std::map<int, Handler>& menuHandlers() {
     static const std::map<int, Handler> handlers{
-        {1, listAssignments}, {2, createDepartment}, {3, createUser},     {4, createCourse},   {5, assignLecturer},
-        {6, enrolStudent},    {7, createAssignment}, {8, grantExtension}, {9, submitWork},     {10, markWork},
-        {11, moderateMark},   {12, releaseMark},     {13, viewResults},   {14, deactivateUser}, {15, updateUser},
+        {1, listAssignments},   {2, createDepartment}, {3, createUser},     {4, createCourse},    {5, assignLecturer},
+        {6, enrolStudent},      {7, createAssignment}, {8, grantExtension}, {9, submitWork},      {10, markWork},
+        {11, moderateMark},     {12, releaseMark},     {13, viewResults},   {14, deactivateUser}, {15, updateUser},
         {16, updateDepartment}, {17, updateCourse}};
     return handlers;
 }

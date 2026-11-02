@@ -57,8 +57,7 @@ int SubmissionService::submit(const Session& s, int assignmentId, const std::str
         throw std::runtime_error("Access denied: student is not enrolled in this course");
 
     // Applicable deadline = individual extension if one exists, otherwise the assignment deadline.
-    const std::string deadline =
-        courses_.findExtensionDeadline(assignmentId, s.userId).value_or(assignment->deadline);
+    const std::string deadline = courses_.findExtensionDeadline(assignmentId, s.userId).value_or(assignment->deadline);
     const int days = DeadlineEvaluator::latenessDays(submittedAt, deadline);
 
     const auto prior = submissions_.find(assignmentId, s.userId);

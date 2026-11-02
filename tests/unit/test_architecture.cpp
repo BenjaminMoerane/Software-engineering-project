@@ -273,8 +273,8 @@ TEST(DeadlineEvaluator, T_ARCH_15_impossible_calendar_dates_are_rejected) {
     EXPECT_THROW(DeadlineEvaluator::toEpochSeconds("2026-02-30T12:00:00Z"), std::invalid_argument);
     EXPECT_THROW(DeadlineEvaluator::toEpochSeconds("2026-04-31T12:00:00Z"), std::invalid_argument);
     EXPECT_THROW(DeadlineEvaluator::toEpochSeconds("2025-02-29T00:00:00Z"), std::invalid_argument); // not leap
-    EXPECT_NO_THROW(DeadlineEvaluator::toEpochSeconds("2028-02-29T00:00:00Z"));                      // leap
-    EXPECT_NO_THROW(DeadlineEvaluator::toEpochSeconds("2000-02-29T00:00:00Z"));                      // 400-rule
+    EXPECT_NO_THROW(DeadlineEvaluator::toEpochSeconds("2028-02-29T00:00:00Z"));                     // leap
+    EXPECT_NO_THROW(DeadlineEvaluator::toEpochSeconds("2000-02-29T00:00:00Z"));                     // 400-rule
     EXPECT_THROW(DeadlineEvaluator::toEpochSeconds("2100-02-29T00:00:00Z"), std::invalid_argument); // 100-rule
 }
 

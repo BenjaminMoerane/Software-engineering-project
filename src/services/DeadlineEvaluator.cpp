@@ -27,8 +27,7 @@ std::int64_t daysFromCivil(int y, int m, int d) {
 } // namespace
 
 std::int64_t DeadlineEvaluator::toEpochSeconds(const std::string& s) {
-    if (s.size() < 19 || s[4] != '-' || s[7] != '-' || (s[10] != 'T' && s[10] != ' ') || s[13] != ':' ||
-        s[16] != ':')
+    if (s.size() < 19 || s[4] != '-' || s[7] != '-' || (s[10] != 'T' && s[10] != ' ') || s[13] != ':' || s[16] != ':')
         throw std::invalid_argument("Timestamp is not a valid UTC date/time: " + s);
     const int year = digits(s, 0, 4), month = digits(s, 5, 2), day = digits(s, 8, 2);
     const int hour = digits(s, 11, 2), minute = digits(s, 14, 2), second = digits(s, 17, 2);

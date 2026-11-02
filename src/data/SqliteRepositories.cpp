@@ -4,8 +4,12 @@
 
 namespace lms::data {
 namespace {
-int lastId(const Database& db) { return static_cast<int>(sqlite3_last_insert_rowid(db.handle())); }
-bool changedOneRow(const Database& db) { return sqlite3_changes(db.handle()) == 1; }
+int lastId(const Database& db) {
+    return static_cast<int>(sqlite3_last_insert_rowid(db.handle()));
+}
+bool changedOneRow(const Database& db) {
+    return sqlite3_changes(db.handle()) == 1;
+}
 void bindOptionalDepartment(Statement& q, int index, int departmentId) {
     if (departmentId > 0)
         q.bind(index, departmentId);
@@ -13,9 +17,8 @@ void bindOptionalDepartment(Statement& q, int index, int departmentId) {
         q.bindNull(index);
 }
 // Latest moderation decision for a mark, used as a scalar sub-query in several statements.
-constexpr const char* kLatestDecision =
-    "(SELECT md.decision FROM moderation_decisions md WHERE md.mark_id=m.mark_id "
-    "ORDER BY md.decided_at DESC,md.moderation_id DESC LIMIT 1)";
+constexpr const char* kLatestDecision = "(SELECT md.decision FROM moderation_decisions md WHERE md.mark_id=m.mark_id "
+                                        "ORDER BY md.decided_at DESC,md.moderation_id DESC LIMIT 1)";
 
 class SqliteTransaction final : public repo::ITransaction {
   public:
@@ -71,8 +74,7 @@ bool SqliteUserRepository::deactivate(int userId) {
     q.execute();
     return changedOneRow(db_);
 }
-bool SqliteUserRepository::update(int userId, const std::string& fullName, const std::string& role,
-                                  int departmentId) {
+bool SqliteUserRepository::update(int userId, const std::string& fullName, const std::string& role, int departmentId) {
     Statement q(db_.handle(), "UPDATE users SET full_name=?1,role=?2,department_id=?3 WHERE user_id=?4");
     q.bind(1, fullName);
     q.bind(2, role);
@@ -195,11 +197,10 @@ std::vector<repo::AssignmentView> SqliteCourseRepository::listAssignmentsVisible
 }
 void SqliteCourseRepository::upsertExtension(int assignmentId, int studentId, int authorisedBy,
                                              const std::string& revisedDeadline, const std::string& reason) {
-    Statement q(db_.handle(),
-                "INSERT INTO extensions(assignment_id,student_id,authorised_by,revised_deadline,reason) "
-                "VALUES(?1,?2,?3,?4,?5) ON CONFLICT(assignment_id,student_id) DO UPDATE SET "
-                "authorised_by=excluded.authorised_by,revised_deadline=excluded.revised_deadline,"
-                "reason=excluded.reason,created_at=strftime('%Y-%m-%dT%H:%M:%fZ','now')");
+    Statement q(db_.handle(), "INSERT INTO extensions(assignment_id,student_id,authorised_by,revised_deadline,reason) "
+                              "VALUES(?1,?2,?3,?4,?5) ON CONFLICT(assignment_id,student_id) DO UPDATE SET "
+                              "authorised_by=excluded.authorised_by,revised_deadline=excluded.revised_deadline,"
+                              "reason=excluded.reason,created_at=strftime('%Y-%m-%dT%H:%M:%fZ','now')");
     q.bind(1, assignmentId);
     q.bind(2, studentId);
     q.bind(3, authorisedBy);
@@ -403,8 +404,8 @@ std::vector<repo::ModerationQueueRow> SqliteModerationRepository::unreleasedCurr
     std::vector<repo::ModerationQueueRow> out;
     while (q.step()) {
         repo::ModerationQueueRow row;
-        row.item = {q.integer(0), q.integer(1), q.text(2), q.text(3), q.text(4), q.text(5), q.text(6),
-                    "",           q.real(7),    q.real(8), q.real(9), q.real(10)};
+        row.item = {q.integer(0), q.integer(1), q.text(2), q.text(3), q.text(4), q.text(5),
+                    q.text(6),    "",           q.real(7), q.real(8), q.real(9), q.real(10)};
         row.latestDecision = q.isNull(11) ? "" : q.text(11);
         row.correctedSinceLatestDecision = !q.isNull(12) && q.integer(12) == 1;
         out.push_back(std::move(row));

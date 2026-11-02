@@ -35,7 +35,9 @@ void AuthorizationService::requireLecturerAssigned(int lecturerId, int courseId)
         throw std::runtime_error("Access denied: lecturer is not assigned to this course");
 }
 
-bool AuthenticationService::hasAnyUser() const { return users_.countUsers() != 0; }
+bool AuthenticationService::hasAnyUser() const {
+    return users_.countUsers() != 0;
+}
 
 int AuthenticationService::bootstrapAdministrator(const std::string& username, const std::string& password,
                                                   const std::string& fullName) {

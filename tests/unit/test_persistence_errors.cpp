@@ -1,6 +1,10 @@
 // T-PERSIST / T-DB-ERROR: persistence across restarts, foreign keys, and the data-access layer's error handling
 // (FR-19, FR-20; Database, Statement and Transaction classes).
+#include "EmbeddedSchema.hpp"
 #include "TestSupport.hpp"
+
+#include <fstream>
+#include <sstream>
 
 #include <utility>
 
@@ -227,4 +231,14 @@ TEST_F(RawDb, T_DB_ERROR_14_database_objects_can_be_moved) {
     std::error_code ec;
     for (const char* suffix : {".other", ".other-wal", ".other-shm"})
         fs::remove(path_ + suffix, ec);
+}
+
+TEST(Packaging, T_PERSIST_06_embedded_schema_is_identical_to_database_schema_sql) {
+    // Defect F12: the program used to read database_schema.sql from the build-time source path, so an installed copy
+    // could not start. The schema is now compiled in; this test fails if the compiled copy drifts from the file.
+    std::ifstream in(LMS_SOURCE_SCHEMA_FILE);
+    ASSERT_TRUE(in) << "cannot open " << LMS_SOURCE_SCHEMA_FILE;
+    std::ostringstream file;
+    file << in.rdbuf();
+    EXPECT_EQ(file.str(), std::string(lms::data::kEmbeddedSchema));
 }

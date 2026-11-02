@@ -1,0 +1,237 @@
+CS4433 Moderated Learning Management System (console, offline)
+Database: walk.sqlite3
+First-run setup: create the initial Administrator account.
+Username: Password (at least 10 characters): 
+Full name: Administrator created.
+Login username (or 'quit'): Password: 
+Welcome, School Admin (Administrator)
+
+1 List assignments  2 Create department [Admin]  3 Create user [Admin]
+4 Create course [Admin] 5 Assign lecturer [Admin] 6 Enrol student [Admin]
+7 Create assignment [Lecturer] 8 Grant individual extension [Lecturer]
+9 Submit/resubmit [Student] 10 Mark submission [Lecturer] 11 Moderate mark [HoD]
+12 Release mark [HoD] 13 View released results [Student] 14 Deactivate user [Admin] 15 Update user [Admin] 16 Update department [Admin] 17 Update course [Admin] 0 Logout
+Choice: Department name: Created department 1
+
+1 List assignments  2 Create department [Admin]  3 Create user [Admin]
+4 Create course [Admin] 5 Assign lecturer [Admin] 6 Enrol student [Admin]
+7 Create assignment [Lecturer] 8 Grant individual extension [Lecturer]
+9 Submit/resubmit [Student] 10 Mark submission [Lecturer] 11 Moderate mark [HoD]
+12 Release mark [HoD] 13 View released results [Student] 14 Deactivate user [Admin] 15 Update user [Admin] 16 Update department [Admin] 17 Update course [Admin] 0 Logout
+Choice: Role (Administrator/Lecturer/HeadOfDepartment/Student): Department ID (0 if none): Username: Password (10+ chars): 
+Full name: Created user 2
+
+1 List assignments  2 Create department [Admin]  3 Create user [Admin]
+4 Create course [Admin] 5 Assign lecturer [Admin] 6 Enrol student [Admin]
+7 Create assignment [Lecturer] 8 Grant individual extension [Lecturer]
+9 Submit/resubmit [Student] 10 Mark submission [Lecturer] 11 Moderate mark [HoD]
+12 Release mark [HoD] 13 View released results [Student] 14 Deactivate user [Admin] 15 Update user [Admin] 16 Update department [Admin] 17 Update course [Admin] 0 Logout
+Choice: Role (Administrator/Lecturer/HeadOfDepartment/Student): Department ID (0 if none): Username: Password (10+ chars): 
+Full name: Created user 3
+
+1 List assignments  2 Create department [Admin]  3 Create user [Admin]
+4 Create course [Admin] 5 Assign lecturer [Admin] 6 Enrol student [Admin]
+7 Create assignment [Lecturer] 8 Grant individual extension [Lecturer]
+9 Submit/resubmit [Student] 10 Mark submission [Lecturer] 11 Moderate mark [HoD]
+12 Release mark [HoD] 13 View released results [Student] 14 Deactivate user [Admin] 15 Update user [Admin] 16 Update department [Admin] 17 Update course [Admin] 0 Logout
+Choice: Role (Administrator/Lecturer/HeadOfDepartment/Student): Department ID (0 if none): Username: Password (10+ chars): 
+Full name: Created user 4
+
+1 List assignments  2 Create department [Admin]  3 Create user [Admin]
+4 Create course [Admin] 5 Assign lecturer [Admin] 6 Enrol student [Admin]
+7 Create assignment [Lecturer] 8 Grant individual extension [Lecturer]
+9 Submit/resubmit [Student] 10 Mark submission [Lecturer] 11 Moderate mark [HoD]
+12 Release mark [HoD] 13 View released results [Student] 14 Deactivate user [Admin] 15 Update user [Admin] 16 Update department [Admin] 17 Update course [Admin] 0 Logout
+Choice: Department ID: Course code: Course title: Created course 1
+
+1 List assignments  2 Create department [Admin]  3 Create user [Admin]
+4 Create course [Admin] 5 Assign lecturer [Admin] 6 Enrol student [Admin]
+7 Create assignment [Lecturer] 8 Grant individual extension [Lecturer]
+9 Submit/resubmit [Student] 10 Mark submission [Lecturer] 11 Moderate mark [HoD]
+12 Release mark [HoD] 13 View released results [Student] 14 Deactivate user [Admin] 15 Update user [Admin] 16 Update department [Admin] 17 Update course [Admin] 0 Logout
+Choice: Course ID: Lecturer user ID: Lecturer assigned.
+
+1 List assignments  2 Create department [Admin]  3 Create user [Admin]
+4 Create course [Admin] 5 Assign lecturer [Admin] 6 Enrol student [Admin]
+7 Create assignment [Lecturer] 8 Grant individual extension [Lecturer]
+9 Submit/resubmit [Student] 10 Mark submission [Lecturer] 11 Moderate mark [HoD]
+12 Release mark [HoD] 13 View released results [Student] 14 Deactivate user [Admin] 15 Update user [Admin] 16 Update department [Admin] 17 Update course [Admin] 0 Logout
+Choice: Course ID: Student user ID: Student enrolled.
+
+1 List assignments  2 Create department [Admin]  3 Create user [Admin]
+4 Create course [Admin] 5 Assign lecturer [Admin] 6 Enrol student [Admin]
+7 Create assignment [Lecturer] 8 Grant individual extension [Lecturer]
+9 Submit/resubmit [Student] 10 Mark submission [Lecturer] 11 Moderate mark [HoD]
+12 Release mark [HoD] 13 View released results [Student] 14 Deactivate user [Admin] 15 Update user [Admin] 16 Update department [Admin] 17 Update course [Admin] 0 Logout
+Choice: Login username (or 'quit'): Password: 
+Welcome, Lerato Lecturer (Lecturer)
+
+1 List assignments  2 Create department [Admin]  3 Create user [Admin]
+4 Create course [Admin] 5 Assign lecturer [Admin] 6 Enrol student [Admin]
+7 Create assignment [Lecturer] 8 Grant individual extension [Lecturer]
+9 Submit/resubmit [Student] 10 Mark submission [Lecturer] 11 Moderate mark [HoD]
+12 Release mark [HoD] 13 View released results [Student] 14 Deactivate user [Admin] 15 Update user [Admin] 16 Update department [Admin] 17 Update course [Admin] 0 Logout
+Choice: Course ID: Title: Description: Deadline UTC (YYYY-MM-DDTHH:MM:SSZ): Maximum mark: Created assignment 1
+
+1 List assignments  2 Create department [Admin]  3 Create user [Admin]
+4 Create course [Admin] 5 Assign lecturer [Admin] 6 Enrol student [Admin]
+7 Create assignment [Lecturer] 8 Grant individual extension [Lecturer]
+9 Submit/resubmit [Student] 10 Mark submission [Lecturer] 11 Moderate mark [HoD]
+12 Release mark [HoD] 13 View released results [Student] 14 Deactivate user [Admin] 15 Update user [Admin] 16 Update department [Admin] 17 Update course [Admin] 0 Logout
+Choice: Course ID: Title: Description: Deadline UTC (YYYY-MM-DDTHH:MM:SSZ): Maximum mark: Created assignment 2
+
+1 List assignments  2 Create department [Admin]  3 Create user [Admin]
+4 Create course [Admin] 5 Assign lecturer [Admin] 6 Enrol student [Admin]
+7 Create assignment [Lecturer] 8 Grant individual extension [Lecturer]
+9 Submit/resubmit [Student] 10 Mark submission [Lecturer] 11 Moderate mark [HoD]
+12 Release mark [HoD] 13 View released results [Student] 14 Deactivate user [Admin] 15 Update user [Admin] 16 Update department [Admin] 17 Update course [Admin] 0 Logout
+Choice: Assignment ID: Student ID: Revised deadline UTC: Reason: Extension saved.
+
+1 List assignments  2 Create department [Admin]  3 Create user [Admin]
+4 Create course [Admin] 5 Assign lecturer [Admin] 6 Enrol student [Admin]
+7 Create assignment [Lecturer] 8 Grant individual extension [Lecturer]
+9 Submit/resubmit [Student] 10 Mark submission [Lecturer] 11 Moderate mark [HoD]
+12 Release mark [HoD] 13 View released results [Student] 14 Deactivate user [Admin] 15 Update user [Admin] 16 Update department [Admin] 17 Update course [Admin] 0 Logout
+Choice: Login username (or 'quit'): Password: 
+Welcome, Thabo Mokoena (Student)
+
+1 List assignments  2 Create department [Admin]  3 Create user [Admin]
+4 Create course [Admin] 5 Assign lecturer [Admin] 6 Enrol student [Admin]
+7 Create assignment [Lecturer] 8 Grant individual extension [Lecturer]
+9 Submit/resubmit [Student] 10 Mark submission [Lecturer] 11 Moderate mark [HoD]
+12 Release mark [HoD] 13 View released results [Student] 14 Deactivate user [Admin] 15 Update user [Admin] 16 Update department [Admin] 17 Update course [Admin] 0 Logout
+Choice: 1 | MATH101 | Essay 1 | deadline 2026-11-01T12:00:00Z | max 100
+2 | MATH101 | Essay 2 | deadline 2026-12-01T12:00:00Z | max 100 | your extension 2026-12-04T12:00:00Z
+
+1 List assignments  2 Create department [Admin]  3 Create user [Admin]
+4 Create course [Admin] 5 Assign lecturer [Admin] 6 Enrol student [Admin]
+7 Create assignment [Lecturer] 8 Grant individual extension [Lecturer]
+9 Submit/resubmit [Student] 10 Mark submission [Lecturer] 11 Moderate mark [HoD]
+12 Release mark [HoD] 13 View released results [Student] 14 Deactivate user [Admin] 15 Update user [Admin] 16 Update department [Admin] 17 Update course [Admin] 0 Logout
+Choice: Assignment ID: Path to file to submit: Submission file stored and saved (submission ID 1).
+
+1 List assignments  2 Create department [Admin]  3 Create user [Admin]
+4 Create course [Admin] 5 Assign lecturer [Admin] 6 Enrol student [Admin]
+7 Create assignment [Lecturer] 8 Grant individual extension [Lecturer]
+9 Submit/resubmit [Student] 10 Mark submission [Lecturer] 11 Moderate mark [HoD]
+12 Release mark [HoD] 13 View released results [Student] 14 Deactivate user [Admin] 15 Update user [Admin] 16 Update department [Admin] 17 Update course [Admin] 0 Logout
+Choice: Assignment ID: Path to file to submit: Submission file stored and saved (submission ID 2).
+
+1 List assignments  2 Create department [Admin]  3 Create user [Admin]
+4 Create course [Admin] 5 Assign lecturer [Admin] 6 Enrol student [Admin]
+7 Create assignment [Lecturer] 8 Grant individual extension [Lecturer]
+9 Submit/resubmit [Student] 10 Mark submission [Lecturer] 11 Moderate mark [HoD]
+12 Release mark [HoD] 13 View released results [Student] 14 Deactivate user [Admin] 15 Update user [Admin] 16 Update department [Admin] 17 Update course [Admin] 0 Logout
+Choice: 
+1 List assignments  2 Create department [Admin]  3 Create user [Admin]
+4 Create course [Admin] 5 Assign lecturer [Admin] 6 Enrol student [Admin]
+7 Create assignment [Lecturer] 8 Grant individual extension [Lecturer]
+9 Submit/resubmit [Student] 10 Mark submission [Lecturer] 11 Moderate mark [HoD]
+12 Release mark [HoD] 13 View released results [Student] 14 Deactivate user [Admin] 15 Update user [Admin] 16 Update department [Admin] 17 Update course [Admin] 0 Logout
+Choice: Login username (or 'quit'): Password: 
+Welcome, Lerato Lecturer (Lecturer)
+
+1 List assignments  2 Create department [Admin]  3 Create user [Admin]
+4 Create course [Admin] 5 Assign lecturer [Admin] 6 Enrol student [Admin]
+7 Create assignment [Lecturer] 8 Grant individual extension [Lecturer]
+9 Submit/resubmit [Student] 10 Mark submission [Lecturer] 11 Moderate mark [HoD]
+12 Release mark [HoD] 13 View released results [Student] 14 Deactivate user [Admin] 15 Update user [Admin] 16 Update department [Admin] 17 Update course [Admin] 0 Logout
+Choice: Submission 1 version 1 student Thabo Mokoena assignment Essay 1 status LateWithinWindow max 100 file /tmp/walk/submission_files/submission_fab141840efe92758521ea7cd611bf76.txt
+Submission 2 version 1 student Thabo Mokoena assignment Essay 2 status OnTime max 100 file /tmp/walk/submission_files/submission_822b17884412df862a5d88a87d7b653f.txt
+Submission ID: Raw mark: Written feedback: Mark-change reason: Mark recorded as ID 1 (pending HoD moderation).
+
+1 List assignments  2 Create department [Admin]  3 Create user [Admin]
+4 Create course [Admin] 5 Assign lecturer [Admin] 6 Enrol student [Admin]
+7 Create assignment [Lecturer] 8 Grant individual extension [Lecturer]
+9 Submit/resubmit [Student] 10 Mark submission [Lecturer] 11 Moderate mark [HoD]
+12 Release mark [HoD] 13 View released results [Student] 14 Deactivate user [Admin] 15 Update user [Admin] 16 Update department [Admin] 17 Update course [Admin] 0 Logout
+Choice: Login username (or 'quit'): Password: 
+Welcome, Mpho HoD (HeadOfDepartment)
+
+1 List assignments  2 Create department [Admin]  3 Create user [Admin]
+4 Create course [Admin] 5 Assign lecturer [Admin] 6 Enrol student [Admin]
+7 Create assignment [Lecturer] 8 Grant individual extension [Lecturer]
+9 Submit/resubmit [Student] 10 Mark submission [Lecturer] 11 Moderate mark [HoD]
+12 Release mark [HoD] 13 View released results [Student] 14 Deactivate user [Admin] 15 Update user [Admin] 16 Update department [Admin] 17 Update course [Admin] 0 Logout
+Choice: Mark 1 | MATH101 | Essay 1 | student Thabo Mokoena | LateWithinWindow | raw 70 penalty 20 final 50/100 | PendingModeration | feedback: Good structure; cite your sources.
+Mark ID: Approve? (y/n): Reason: Moderation decision recorded.
+
+1 List assignments  2 Create department [Admin]  3 Create user [Admin]
+4 Create course [Admin] 5 Assign lecturer [Admin] 6 Enrol student [Admin]
+7 Create assignment [Lecturer] 8 Grant individual extension [Lecturer]
+9 Submit/resubmit [Student] 10 Mark submission [Lecturer] 11 Moderate mark [HoD]
+12 Release mark [HoD] 13 View released results [Student] 14 Deactivate user [Admin] 15 Update user [Admin] 16 Update department [Admin] 17 Update course [Admin] 0 Logout
+Choice: Login username (or 'quit'): Password: 
+Welcome, Lerato Lecturer (Lecturer)
+
+1 List assignments  2 Create department [Admin]  3 Create user [Admin]
+4 Create course [Admin] 5 Assign lecturer [Admin] 6 Enrol student [Admin]
+7 Create assignment [Lecturer] 8 Grant individual extension [Lecturer]
+9 Submit/resubmit [Student] 10 Mark submission [Lecturer] 11 Moderate mark [HoD]
+12 Release mark [HoD] 13 View released results [Student] 14 Deactivate user [Admin] 15 Update user [Admin] 16 Update department [Admin] 17 Update course [Admin] 0 Logout
+Choice: Submission 1 version 1 student Thabo Mokoena assignment Essay 1 status LateWithinWindow max 100 file /tmp/walk/submission_files/submission_fab141840efe92758521ea7cd611bf76.txt
+Submission 2 version 1 student Thabo Mokoena assignment Essay 2 status OnTime max 100 file /tmp/walk/submission_files/submission_822b17884412df862a5d88a87d7b653f.txt
+Submission ID: Raw mark: Written feedback: Mark-change reason: Mark recorded as ID 1 (pending HoD moderation).
+
+1 List assignments  2 Create department [Admin]  3 Create user [Admin]
+4 Create course [Admin] 5 Assign lecturer [Admin] 6 Enrol student [Admin]
+7 Create assignment [Lecturer] 8 Grant individual extension [Lecturer]
+9 Submit/resubmit [Student] 10 Mark submission [Lecturer] 11 Moderate mark [HoD]
+12 Release mark [HoD] 13 View released results [Student] 14 Deactivate user [Admin] 15 Update user [Admin] 16 Update department [Admin] 17 Update course [Admin] 0 Logout
+Choice: Login username (or 'quit'): Password: 
+Welcome, Mpho HoD (HeadOfDepartment)
+
+1 List assignments  2 Create department [Admin]  3 Create user [Admin]
+4 Create course [Admin] 5 Assign lecturer [Admin] 6 Enrol student [Admin]
+7 Create assignment [Lecturer] 8 Grant individual extension [Lecturer]
+9 Submit/resubmit [Student] 10 Mark submission [Lecturer] 11 Moderate mark [HoD]
+12 Release mark [HoD] 13 View released results [Student] 14 Deactivate user [Admin] 15 Update user [Admin] 16 Update department [Admin] 17 Update course [Admin] 0 Logout
+Choice: Mark 1 | MATH101 | Essay 1 | student Thabo Mokoena | LateWithinWindow | raw 72 penalty 20 final 52/100 | PendingModeration | feedback: Good structure; cite your sources.
+Mark ID: Approve? (y/n): Reason: Moderation decision recorded.
+
+1 List assignments  2 Create department [Admin]  3 Create user [Admin]
+4 Create course [Admin] 5 Assign lecturer [Admin] 6 Enrol student [Admin]
+7 Create assignment [Lecturer] 8 Grant individual extension [Lecturer]
+9 Submit/resubmit [Student] 10 Mark submission [Lecturer] 11 Moderate mark [HoD]
+12 Release mark [HoD] 13 View released results [Student] 14 Deactivate user [Admin] 15 Update user [Admin] 16 Update department [Admin] 17 Update course [Admin] 0 Logout
+Choice: Mark 1 | MATH101 | Essay 1 | student Thabo Mokoena | LateWithinWindow | raw 72 penalty 20 final 52/100 | ApprovedAwaitingRelease | feedback: Good structure; cite your sources.
+Mark ID: Mark released.
+
+1 List assignments  2 Create department [Admin]  3 Create user [Admin]
+4 Create course [Admin] 5 Assign lecturer [Admin] 6 Enrol student [Admin]
+7 Create assignment [Lecturer] 8 Grant individual extension [Lecturer]
+9 Submit/resubmit [Student] 10 Mark submission [Lecturer] 11 Moderate mark [HoD]
+12 Release mark [HoD] 13 View released results [Student] 14 Deactivate user [Admin] 15 Update user [Admin] 16 Update department [Admin] 17 Update course [Admin] 0 Logout
+Choice: Login username (or 'quit'): Password: 
+Welcome, Thabo Mokoena (Student)
+
+1 List assignments  2 Create department [Admin]  3 Create user [Admin]
+4 Create course [Admin] 5 Assign lecturer [Admin] 6 Enrol student [Admin]
+7 Create assignment [Lecturer] 8 Grant individual extension [Lecturer]
+9 Submit/resubmit [Student] 10 Mark submission [Lecturer] 11 Moderate mark [HoD]
+12 Release mark [HoD] 13 View released results [Student] 14 Deactivate user [Admin] 15 Update user [Admin] 16 Update department [Admin] 17 Update course [Admin] 0 Logout
+Choice: MATH101 | Essay 1 | 52/100 | Good structure; cite your sources.
+
+1 List assignments  2 Create department [Admin]  3 Create user [Admin]
+4 Create course [Admin] 5 Assign lecturer [Admin] 6 Enrol student [Admin]
+7 Create assignment [Lecturer] 8 Grant individual extension [Lecturer]
+9 Submit/resubmit [Student] 10 Mark submission [Lecturer] 11 Moderate mark [HoD]
+12 Release mark [HoD] 13 View released results [Student] 14 Deactivate user [Admin] 15 Update user [Admin] 16 Update department [Admin] 17 Update course [Admin] 0 Logout
+Choice: Login username (or 'quit'): Password: 
+Welcome, School Admin (Administrator)
+
+1 List assignments  2 Create department [Admin]  3 Create user [Admin]
+4 Create course [Admin] 5 Assign lecturer [Admin] 6 Enrol student [Admin]
+7 Create assignment [Lecturer] 8 Grant individual extension [Lecturer]
+9 Submit/resubmit [Student] 10 Mark submission [Lecturer] 11 Moderate mark [HoD]
+12 Release mark [HoD] 13 View released results [Student] 14 Deactivate user [Admin] 15 Update user [Admin] 16 Update department [Admin] 17 Update course [Admin] 0 Logout
+Choice: User ID to deactivate: Account deactivated.
+
+1 List assignments  2 Create department [Admin]  3 Create user [Admin]
+4 Create course [Admin] 5 Assign lecturer [Admin] 6 Enrol student [Admin]
+7 Create assignment [Lecturer] 8 Grant individual extension [Lecturer]
+9 Submit/resubmit [Student] 10 Mark submission [Lecturer] 11 Moderate mark [HoD]
+12 Release mark [HoD] 13 View released results [Student] 14 Deactivate user [Admin] 15 Update user [Admin] 16 Update department [Admin] 17 Update course [Admin] 0 Logout
+Choice: Login username (or 'quit'): Password: 
+Login failed: Invalid username or password
+Login username (or 'quit'): Goodbye.

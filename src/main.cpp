@@ -302,7 +302,15 @@ SetupResult firstRunSetup(LmsService& svc) {
 }
 } // namespace
 
+#ifndef LMS_VERSION
+#define LMS_VERSION "unknown"
+#endif
+
 int main(int argc, char* argv[]) {
+    if (argc > 1 && std::string(argv[1]) == "--version") { // installation check (docs/deployment/INSTALLATION_GUIDE.md)
+        std::cout << "lms_app " << LMS_VERSION << '\n';
+        return 0;
+    }
     const std::string path = argc > 1 ? argv[1] : "lms.sqlite3";
     try {
         lms::data::Database db(path);

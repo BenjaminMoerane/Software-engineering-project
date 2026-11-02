@@ -1,0 +1,52 @@
+# Release notes
+
+## v1.0.0 — first release (Phase 7)
+
+**Moderated Learning Management System**: an offline, single-computer console application in C++17 with SQLite, for a secondary school with four roles: Administrator, Lecturer, Head of Department and Student.
+
+Install: `docs/deployment/INSTALLATION_GUIDE.md`. Users: `docs/deployment/USER_MANUAL_*.md`.
+
+### What is included
+
+| Area | Requirements | Summary |
+|---|---|---|
+| Accounts and security | FR-01–FR-03, NFR-04, NFR-05 | Login with salted scrypt password hashes (OpenSSL), constant-time comparison; four polymorphic role types; every operation re-checks role, active state and department against the database. |
+| Administration | FR-03–FR-05 | Departments, users, courses, lecturer assignment, enrolment; update and deactivate. |
+| Assignments and extensions | FR-06–FR-08, FR-21 | Lecturers create assignments for their own courses and grant individual extensions; students see their extension in the assignment list. |
+| Submission | FR-09, FR-10 | File submission (PDF, DOC/DOCX, TXT, ZIP, PNG, JPG/JPEG; 1 B–20 MiB) copied under a random name; server-generated UTC timestamps; resubmission before the applicable deadline. |
+| Marking and late penalty | FR-11–FR-14 | Raw mark, penalty and final mark stored separately; penalty computed once by `IPenaltyStrategy`; every mark change audited (who, when, old, new, reason) in the same transaction. |
+| Moderation and release | FR-15–FR-18 | Department moderation queue; approve or return; release only after the latest decision is an approval; students see only their own released results. |
+| Persistence and robustness | FR-19, FR-20, NFR-03, NFR-06 | SQLite (WAL, foreign keys, parameterised SQL through a repository layer); invalid input and database errors never crash the program; works with no network. |
+
+### Quality evidence for this release
+
+- 155 GoogleTest unit/integration tests and 28 system/acceptance tests; all pass on GCC 13 and Clang 18, Debug and Release, with warnings treated as errors (1 test skips when run as root).
+- Business-logic coverage: 99.2% of lines, 90.6% of branches (`docs/test/COVERAGE_REPORT.md`).
+- clang-tidy and cppcheck: 0 findings; ASan/UBSan and Valgrind: 0 errors (`docs/qa/`).
+- Every user-manual flow was run on the installed binary (`docs/deployment/evidence/`).
+
+### Defects fixed since Phase 4 (`docs/test/DEFECT_LOG.md`)
+
+F9 HoD moderation queue missing (High) · F10 misleading partial message after an invalid mark · F11 impossible calendar dates accepted by the deadline parser (latent) · **F12 an installed program could not start without the source tree.** The schema is now built into the program.
+
+### Provisional business rules (not yet approved at Gate 2)
+
+These are implemented as specified in the Phase 2/3 documents but **are not stakeholder-approved policy**:
+
+- Late penalty: each started 24-hour period after the applicable deadline is one late day; 10% of the maximum mark per day, at most 3 days; more than 3 days late gives 0; the final mark is never below 0 (OD-01–OD-04). *Note:* the SDD's provisional wording favours school-local calendar days; the code counts 24-hour periods from the UTC deadline. This difference is open for the HoD's decision.
+- An individual extension replaces the deadline for that student (OD-07).
+- Corrections after release are blocked (OD-08).
+
+### Known limitations
+
+- **No password reset.** A forgotten password can only be handled by deactivating the account and creating a new one.
+- No list screens for users or courses; administrators must keep a record of IDs.
+- Resubmission after marking but before the deadline leaves the earlier mark attached to the old version (O-6, needs a policy decision).
+- Single computer, one user at a time; not for a database on a network share.
+- File type is checked by extension only; there is no content inspection or malware scanning.
+- Windows build and the Windows masked-password input are not verified; target-hardware performance, technician install time (NFR-10) and usability with real users (NFR-08) are not verified.
+- Class-wide extensions are not in v1.0 (change request CR1, planned for v1.1).
+
+### Upgrade notes
+
+First release: no upgrade path needed.

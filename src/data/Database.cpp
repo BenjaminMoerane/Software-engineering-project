@@ -1,12 +1,9 @@
 #include "data/Database.hpp"
-#include <fstream>
-#include <sstream>
+#include "EmbeddedSchema.hpp"
+
 #include <stdexcept>
 #include <utility>
 
-#ifndef LMS_SCHEMA_PATH
-#define LMS_SCHEMA_PATH "database_schema.sql"
-#endif
 namespace lms::data {
 namespace {
 std::string errorMessage(sqlite3* db, const std::string& action) {
@@ -145,12 +142,7 @@ void Database::execute(const std::string& sql) const {
     }
 }
 void Database::initialiseSchema() const {
-    std::ifstream in(LMS_SCHEMA_PATH);
-    if (!in)
-        throw std::runtime_error(std::string("Cannot read schema file: ") + LMS_SCHEMA_PATH);
-    std::ostringstream s;
-    s << in.rdbuf();
-    execute(s.str());
+    execute(kEmbeddedSchema); // idempotent: every statement in the schema uses IF NOT EXISTS
 }
 bool Database::foreignKeysEnabled() const {
     Statement s(db_, "PRAGMA foreign_keys;");

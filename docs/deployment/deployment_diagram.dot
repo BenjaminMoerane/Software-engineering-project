@@ -1,0 +1,45 @@
+// UML Deployment Diagram — CS4433 Moderated LMS v1.0 (source; render: dot -Tsvg -o deployment_diagram.svg deployment_diagram.dot)
+digraph Deployment {
+  graph [rankdir=LR, fontname="Helvetica", fontsize=11, nodesep=0.5, ranksep=0.9, pad=0.3, compound=true,
+         label="UML Deployment Diagram — CS4433 Moderated LMS v1.0 (offline, single school computer)", labelloc=t, fontsize=14];
+  node  [fontname="Helvetica", fontsize=10];
+  edge  [fontname="Helvetica", fontsize=9];
+
+  subgraph cluster_build {
+    label=<<b>«device»</b><br/>Build machine<br/><font point-size="9">GitHub Actions runner ubuntu-24.04 or technician PC</font>>;
+    style="rounded"; color="#555555";
+    pkg [shape=note, label=<«artifact»<br/><b>cs4433-moderated-lms-1.0.0</b><br/>.zip / .tar.gz (CPack)>];
+  }
+
+  subgraph cluster_pc {
+    label=<<b>«device»</b><br/>School computer<br/><font point-size="9">x86-64, Windows 10/11 or Ubuntu 22.04+, no network required</font>>;
+    style="bold"; color="#1f4e79";
+    subgraph cluster_os {
+      label=<<b>«execution environment»</b><br/>Operating system (staff account, console)>;
+      style="dashed"; color="#1f4e79";
+      app [shape=component, style=filled, fillcolor="#dbe8f5", label=<«artifact»<br/><b>lms_app(.exe)</b> 1.0.0<br/><font point-size="9">Presentation · Services · Repositories<br/>schema embedded at build time</font>>];
+      libs [shape=note, label=<«artifact»<br/>SQLite 3 library<br/>OpenSSL libcrypto 3>];
+    }
+    subgraph cluster_data {
+      label=<<b>«folder»</b> LMS data folder<br/><font point-size="9">e.g. C:\\LMS\\data  or  /srv/lms  — staff-only permissions</font>>;
+      style="dashed"; color="#7a4e00";
+      db [shape=cylinder, style=filled, fillcolor="#fff2cc", label=<«artifact»<br/><b>school_lms.sqlite3</b><br/><font point-size="9">+ -wal / -shm (WAL mode)<br/>14 tables, 3NF</font>>];
+      files [shape=folder, style=filled, fillcolor="#fff2cc", label=<«artifact»<br/><b>submission_files/</b><br/><font point-size="9">random server-generated names</font>>];
+    }
+  }
+
+  subgraph cluster_backup {
+    label=<<b>«device»</b><br/>Backup medium<br/><font point-size="9">encrypted USB drive or staff file share</font>>;
+    style="rounded"; color="#555555";
+    bak [shape=folder, label=<«artifact»<br/>dated backup copies<br/><font point-size="9">database + submission_files</font>>];
+  }
+
+  users [shape=plaintext, label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="4"><tr><td bgcolor="#eeeeee"><b>Actors at the console</b></td></tr><tr><td>Administrator</td></tr><tr><td>Lecturer</td></tr><tr><td>Head of Department</td></tr><tr><td>Student</td></tr></table>>];
+
+  pkg  -> app   [label="«deploy»\nUSB / download, unzip", style=dashed, arrowhead=open];
+  users -> app  [label="keyboard / screen\n(one user at a time)", arrowhead=none];
+  app  -> libs  [label="«use» dynamic link", style=dashed, arrowhead=open];
+  app  -> db    [label="SQLite C API\nparameterised SQL, FK on, WAL", arrowhead=open];
+  app  -> files [label="file copy\n1 B – 20 MiB, allowed extensions only", arrowhead=open];
+  db   -> bak   [label="«manual / scheduled copy»\nwhile app closed", style=dashed, arrowhead=open, ltail=cluster_data];
+}

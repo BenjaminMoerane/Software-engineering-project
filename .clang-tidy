@@ -1,0 +1,28 @@
+---
+# Static-analysis configuration (Phase 6 QA). Run: clang-tidy -p build src/**/*.cpp  (see docs/qa/STATIC_ANALYSIS_REPORT.md)
+# Families chosen for defect-finding value; purely stylistic checks that conflict with docs/CODING_STANDARD.md are off.
+Checks: >
+  bugprone-*,
+  cert-*,
+  clang-analyzer-*,
+  performance-*,
+  cppcoreguidelines-init-variables,
+  cppcoreguidelines-special-member-functions,
+  cppcoreguidelines-virtual-class-destructor,
+  cppcoreguidelines-slicing,
+  modernize-use-override,
+  modernize-use-nullptr,
+  modernize-use-equals-default,
+  modernize-use-equals-delete,
+  misc-unused-using-decls,
+  misc-redundant-expression,
+  readability-container-size-empty,
+  readability-make-member-function-const,
+  readability-redundant-string-init,
+  -bugprone-easily-swappable-parameters,
+  -cert-err58-cpp,
+  -bugprone-exception-escape
+WarningsAsErrors: ''
+HeaderFilterRegex: 'src/.*'
+FormatStyle: file
+...

@@ -1,5 +1,10 @@
 #pragma once
-#include <algorithm>
+// Convenience facade over DeadlineEvaluator + the provisional penalty strategy, kept so the Phase 4/5 late-policy
+// tests (T-PENALTY boundary tables) exercise exactly the rule MarkingService uses. New code should depend on
+// IPenaltyStrategy, not on this class.
+#include "services/DeadlineEvaluator.hpp"
+#include "services/PenaltyStrategy.hpp"
+
 #include <cmath>
 #include <stdexcept>
 
@@ -18,12 +23,9 @@ class LatePenaltyPolicy {
         if (!std::isfinite(rawMark) || !std::isfinite(maximumMark) || maximumMark <= 0.0 || rawMark < 0.0 ||
             rawMark > maximumMark || elapsedLateDays < 0)
             throw std::invalid_argument("Invalid mark or lateness input");
-        if (elapsedLateDays == 0)
-            return {0, 0.0, rawMark, "OnTime"};
-        if (elapsedLateDays > 3)
-            return {elapsedLateDays, maximumMark, 0.0, "BeyondWindow"};
-        const double penalty = static_cast<double>(elapsedLateDays) * maximumMark * 0.10;
-        return {elapsedLateDays, penalty, std::max(0.0, rawMark - penalty), "LateWithinWindow"};
+        const ProvisionalLinearPenaltyStrategy strategy;
+        const PenaltyResult r = strategy.calculate(elapsedLateDays, maximumMark);
+        return {elapsedLateDays, r.penalty, applyPenalty(rawMark, r), DeadlineEvaluator::classify(elapsedLateDays)};
     }
 };
 } // namespace lms::services

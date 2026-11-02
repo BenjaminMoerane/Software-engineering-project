@@ -1,0 +1,49 @@
+# Upgrade test: database created by the installed v1.0 binary (manual walkthrough), opened by installed v1.1
+before: tables 14 marks (1, 52.0) audit 2
+
+CS4433 Moderated Learning Management System (console, offline)
+Database: walk.sqlite3
+Login username (or 'quit'): Password: 
+Welcome, Lerato Lecturer (Lecturer)
+
+1 List assignments  2 Create department [Admin]  3 Create user [Admin]
+4 Create course [Admin] 5 Assign lecturer [Admin] 6 Enrol student [Admin]
+7 Create assignment [Lecturer] 8 Grant individual extension [Lecturer]
+9 Submit/resubmit [Student] 10 Mark submission [Lecturer] 11 Moderate mark [HoD]
+12 Release mark [HoD] 13 View released results [Student] 14 Deactivate user [Admin] 15 Update user [Admin] 16 Update department [Admin] 17 Update course [Admin] 18 Grant class-wide extension [Lecturer] 0 Logout
+Choice: 1 | MATH101 | Essay 1 | deadline 2026-11-01T12:00:00Z | max 100
+2 | MATH101 | Essay 2 | deadline 2026-12-01T12:00:00Z | max 100
+
+1 List assignments  2 Create department [Admin]  3 Create user [Admin]
+4 Create course [Admin] 5 Assign lecturer [Admin] 6 Enrol student [Admin]
+7 Create assignment [Lecturer] 8 Grant individual extension [Lecturer]
+9 Submit/resubmit [Student] 10 Mark submission [Lecturer] 11 Moderate mark [HoD]
+12 Release mark [HoD] 13 View released results [Student] 14 Deactivate user [Admin] 15 Update user [Admin] 16 Update department [Admin] 17 Update course [Admin] 18 Grant class-wide extension [Lecturer] 0 Logout
+Choice: Assignment ID: Revised deadline for the whole class UTC: Reason: Class-wide extension saved for every student enrolled in the course.
+
+1 List assignments  2 Create department [Admin]  3 Create user [Admin]
+4 Create course [Admin] 5 Assign lecturer [Admin] 6 Enrol student [Admin]
+7 Create assignment [Lecturer] 8 Grant individual extension [Lecturer]
+9 Submit/resubmit [Student] 10 Mark submission [Lecturer] 11 Moderate mark [HoD]
+12 Release mark [HoD] 13 View released results [Student] 14 Deactivate user [Admin] 15 Update user [Admin] 16 Update department [Admin] 17 Update course [Admin] 18 Grant class-wide extension [Lecturer] 0 Logout
+Choice: Assignment ID: Revised deadline for the whole class UTC: Reason: Operation failed: A class-wide extension can only move the deadline later than 2026-12-10T12:00:00Z
+
+1 List assignments  2 Create department [Admin]  3 Create user [Admin]
+4 Create course [Admin] 5 Assign lecturer [Admin] 6 Enrol student [Admin]
+7 Create assignment [Lecturer] 8 Grant individual extension [Lecturer]
+9 Submit/resubmit [Student] 10 Mark submission [Lecturer] 11 Moderate mark [HoD]
+12 Release mark [HoD] 13 View released results [Student] 14 Deactivate user [Admin] 15 Update user [Admin] 16 Update department [Admin] 17 Update course [Admin] 18 Grant class-wide extension [Lecturer] 0 Logout
+Choice: 1 | MATH101 | Essay 1 | deadline 2026-11-01T12:00:00Z | max 100
+2 | MATH101 | Essay 2 | deadline 2026-12-01T12:00:00Z | max 100 | class extension 2026-12-10T12:00:00Z
+
+1 List assignments  2 Create department [Admin]  3 Create user [Admin]
+4 Create course [Admin] 5 Assign lecturer [Admin] 6 Enrol student [Admin]
+7 Create assignment [Lecturer] 8 Grant individual extension [Lecturer]
+9 Submit/resubmit [Student] 10 Mark submission [Lecturer] 11 Moderate mark [HoD]
+12 Release mark [HoD] 13 View released results [Student] 14 Deactivate user [Admin] 15 Update user [Admin] 16 Update department [Admin] 17 Update course [Admin] 18 Grant class-wide extension [Lecturer] 0 Logout
+Choice: Login username (or 'quit'): Password: 
+Login failed: Invalid username or password
+Login username (or 'quit'): Goodbye.
+
+after: tables 15 marks (1, 52.0) audit 2 integrity ok
+[(2, 3, '2026-12-10T12:00:00Z', 'Exam week clash')]

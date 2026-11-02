@@ -1,4 +1,4 @@
-# User manual — Administrator (v1.0)
+# User manual — Administrator (v1.1)
 
 Read [USER_MANUAL_COMMON.md](USER_MANUAL_COMMON.md) first. You set up the school's structure: departments, accounts, courses, lecturer assignments and enrolments. You cannot mark, moderate or submit.
 
@@ -17,7 +17,7 @@ Do these in order, because each step needs the ID from the one before:
 
 Role names must be typed exactly: `Administrator`, `Lecturer`, `HeadOfDepartment`, `Student`. A Head of Department must belong to a department (`HeadOfDepartment must belong to a department`), because they can only moderate marks in their own department.
 
-Write down IDs as you create them; v1.0 has no "list users" or "list courses" screen (option `1` lists assignments only). Keeping a simple register (ID, name, role) next to the computer avoids mistakes.
+Write down IDs as you create them; This version has no "list users" or "list courses" screen (option `1` lists assignments only). Keeping a simple register (ID, name, role) next to the computer avoids mistakes.
 
 ## Maintaining accounts
 
@@ -28,7 +28,7 @@ Write down IDs as you create them; v1.0 has no "list users" or "list courses" sc
 | Change a course code, title or department | `17` | |
 | Someone leaves | `14` Deactivate user | The account can no longer log in. Its history (submissions, marks, audit records) is kept. You cannot deactivate your own account. |
 
-**Passwords:** passwords are never shown or stored, only a one-way hash. v1.0 has **no password-reset option**. If a user forgets their password, the only route is to deactivate the account and create a new one, which does not carry over the old account's submissions or marks. Ask users to keep passwords safe, and hand out temporary passwords in person.
+**Passwords:** passwords are never shown or stored, only a one-way hash. This version has **no password-reset option**. If a user forgets their password, the only route is to deactivate the account and create a new one, which does not carry over the old account's submissions or marks. Ask users to keep passwords safe, and hand out temporary passwords in person.
 
 ## Good practice
 

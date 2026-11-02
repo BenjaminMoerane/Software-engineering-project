@@ -4,7 +4,7 @@
 |---|---|
 | Change request | **CR1**: "A lecturer should be able to extend the deadline for a whole class, not just an individual student, and extensions should be shown on the student's assignment list." |
 | Raised by | The school (after release v1.0) |
-| Baseline | Tag `v1.0` (commit `063b7e9`); 154 + 1 GoogleTest tests, 28 system tests, all passing |
+| Baseline | Tag `v1.0` (commit `063b7e9`); 155 GoogleTest tests (1 skipped as root), 28 system tests, all passing |
 | Target | Release `v1.1.0` |
 | Branch | `feature/cr1-class-extensions` |
 | Status | Analysed → implemented → regression-tested (§7) |
@@ -70,7 +70,7 @@ The Phase 3 SDD (§7) states that the precedence rule "should be documented in t
 | `src/services/AssessmentServices.cpp` | `SubmissionService::submit` uses the resolver; `ExtensionService::grantClassExtension`. |
 | `src/services/LmsService.*`, `src/main.cpp` | Facade method; menu option **18** "Grant class-wide extension [Lecturer]"; `class extension …` in the assignment list. |
 | `src/domain/Records.hpp` | `AssignmentView::classExtensionDeadline`. |
-| Tests changed | `T_PERSIST_05` expects 15 tables (the CR1 table is an approved addition); `FakeCourses` implements the two new operations. |
+| Tests changed | `FakeCourses` (in-memory fake) implements the two new operations. *Predicted but not needed:* `T_PERSIST_05` checks that each of the 14 v1.0 tables exists rather than an exact count, so it passes unchanged; the 15-table count is asserted in T_CR1_09 instead. |
 | Tests added | `T_CR1_01` … `T_CR1_10` (unit/integration) and `ST_CR1_01` (console); see §7. |
 | Docs | Lecturer and Student manuals, release notes, RTM, data dictionary delta. |
 
@@ -85,6 +85,8 @@ The Phase 3 SDD (§7) states that the precedence rule "should be documented in t
 
 Estimated effort: about 1 day, including documents.
 
-## 7. Results (filled in after implementation)
+## 7. Results
 
-See §8 of this file after implementation and `docs/maintenance/REGRESSION_RESULTS.md`.
+Implemented as analysed, with one deviation from the prediction (`T_PERSIST_05` did not need to change; §5). Design updates are in `CR1_DESIGN_UPDATES.md`, test evidence in `REGRESSION_RESULTS.md`. Summary: 165 GoogleTest (+10) and 30 system (+2) tests; every v1.0 test unchanged and passing on GCC and Clang, Debug and Release, with sanitizers; the 4 mutants of the precedence rule are all killed; a real v1.0 database migrates with no data change. During the change, defect F13 (RTM checker ignored `T_CR1_*` IDs) was found and fixed.
+
+**Still open:** HoD/supervisor approval of CR1-D1 … D4. Until then they are labelled provisional in the code, user manuals and release notes.

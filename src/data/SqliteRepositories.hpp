@@ -50,6 +50,9 @@ class SqliteCourseRepository final : public repo::ICourseRepository {
     void upsertExtension(int assignmentId, int studentId, int authorisedBy, const std::string& revisedDeadline,
                          const std::string& reason) override;
     std::optional<std::string> findExtensionDeadline(int assignmentId, int studentId) const override;
+    int insertClassExtension(int assignmentId, int authorisedBy, const std::string& revisedDeadline,
+                             const std::string& reason) override;
+    std::optional<std::string> findClassExtensionDeadline(int assignmentId) const override;
 
   private:
     Database& db_;

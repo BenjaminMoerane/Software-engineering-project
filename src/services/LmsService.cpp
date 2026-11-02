@@ -63,6 +63,9 @@ int LmsService::createAssignment(const Session& s, int c, const std::string& t, 
 void LmsService::grantIndividualExtension(const Session& s, int a, int st, const std::string& d, const std::string& r) {
     extensionSvc_.grantIndividualExtension(s, a, st, d, r);
 }
+int LmsService::grantClassExtension(const Session& s, int a, const std::string& d, const std::string& r) {
+    return extensionSvc_.grantClassExtension(s, a, d, r);
+}
 std::vector<AssignmentView> LmsService::listAssignments(const Session& s) const {
     return assignmentSvc_.listAssignments(s);
 }

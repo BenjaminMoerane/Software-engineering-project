@@ -1,4 +1,4 @@
-# User manual — Head of Department (v1.0)
+# User manual — Head of Department (v1.1)
 
 Read [USER_MANUAL_COMMON.md](USER_MANUAL_COMMON.md) first. You review every mark in your department before students can see it (the Principal's requirement). You see only your own department.
 
@@ -34,7 +34,11 @@ Releasing is deliberate and per mark, so you can release a whole class at the sa
 
 ## 4. After release
 
-Moderating or changing a released mark is blocked in v1.0 (`… blocked pending Gate 2 decision OD-08`). If a released mark is wrong, record the case and raise it with the school; the post-release correction rule has not yet been decided.
+Moderating or changing a released mark is blocked in this version (`… blocked pending Gate 2 decision OD-08`). If a released mark is wrong, record the case and raise it with the school; the post-release correction rule has not yet been decided.
+
+## Decisions waiting for you
+
+v1.1 adds class-wide extensions. How they combine with individual extensions (the latest deadline wins; a class extension can only move later; work already submitted keeps its recorded lateness) is a **provisional** rule (CR1-D1 … D4, `docs/maintenance/CR1_IMPACT_ANALYSIS.md`) that needs your approval, together with the late-penalty rule below.
 
 ## Late-penalty rule (provisional)
 

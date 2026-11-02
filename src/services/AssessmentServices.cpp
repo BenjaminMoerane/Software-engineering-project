@@ -45,6 +45,25 @@ void ExtensionService::grantIndividualExtension(const Session& s, int assignment
     courses_.upsertExtension(assignmentId, studentId, s.userId, revisedDeadline, reason);
 }
 
+int ExtensionService::grantClassExtension(const Session& s, int assignmentId, const std::string& revisedDeadline,
+                                          const std::string& reason) {
+    authz_.requireRole(s, Role::Lecturer);
+    validation::isoUtc(revisedDeadline, "Revised deadline");
+    validation::nonblank(reason, "Extension reason");
+    const auto assignment = courses_.findActiveAssignment(assignmentId);
+    if (!assignment)
+        throw std::runtime_error("Assignment not found or inactive");
+    authz_.requireLecturerAssigned(s.userId, assignment->courseId);
+    const std::int64_t revisedAt = DeadlineEvaluator::toEpochSeconds(revisedDeadline);
+    if (revisedAt <= DeadlineEvaluator::toEpochSeconds(assignment->deadline))
+        throw std::invalid_argument("Revised deadline must be later than original deadline");
+    // CR1-D3: a class-wide extension may only move the deadline later; every change is kept as a new row.
+    if (const auto current = courses_.findClassExtensionDeadline(assignmentId);
+        current && revisedAt <= DeadlineEvaluator::toEpochSeconds(*current))
+        throw std::invalid_argument("A class-wide extension can only move the deadline later than " + *current);
+    return courses_.insertClassExtension(assignmentId, s.userId, revisedDeadline, reason);
+}
+
 int SubmissionService::submit(const Session& s, int assignmentId, const std::string& contentRef) {
     authz_.requireRole(s, Role::Student);
     const std::string submittedAt = clock_(); // server-generated timestamp; never taken from the student
@@ -56,8 +75,11 @@ int SubmissionService::submit(const Session& s, int assignmentId, const std::str
     if (!authz_.isStudentEnrolled(s.userId, assignment->courseId))
         throw std::runtime_error("Access denied: student is not enrolled in this course");
 
-    // Applicable deadline = individual extension if one exists, otherwise the assignment deadline.
-    const std::string deadline = courses_.findExtensionDeadline(assignmentId, s.userId).value_or(assignment->deadline);
+    // Applicable deadline (BR-11): latest of the assignment deadline, the class-wide extension and the student's
+    // individual extension. The version stores this deadline as a snapshot (CR1-D4).
+    const std::string deadline = DeadlineEvaluator::applicableDeadline(
+        assignment->deadline, courses_.findExtensionDeadline(assignmentId, s.userId),
+        courses_.findClassExtensionDeadline(assignmentId));
     const int days = DeadlineEvaluator::latenessDays(submittedAt, deadline);
 
     const auto prior = submissions_.find(assignmentId, s.userId);

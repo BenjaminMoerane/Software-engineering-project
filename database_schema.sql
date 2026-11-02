@@ -133,4 +133,16 @@ CREATE INDEX IF NOT EXISTS ix_versions_submission_time ON submission_versions(su
 CREATE INDEX IF NOT EXISTS ix_marks_current ON marks(submission_id, current);
 CREATE INDEX IF NOT EXISTS ix_moderation_decision ON moderation_decisions(mark_id, decided_at);
 CREATE INDEX IF NOT EXISTS ix_audit_mark_time ON mark_audit(mark_id, changed_at);
+-- CR1 / v1.1 (FR-23, BR-11): class-wide extensions. Append-only: the newest row for an assignment is in force and the
+-- older rows are the history of changes (who, when, new deadline, reason). Applies to every student enrolled in the
+-- assignment's course. Additive change: a v1.0 database gains this table, unchanged otherwise, on first start of v1.1.
+CREATE TABLE IF NOT EXISTS class_extensions (
+  class_extension_id INTEGER PRIMARY KEY,
+  assignment_id INTEGER NOT NULL REFERENCES assignments(assignment_id) ON UPDATE CASCADE ON DELETE RESTRICT,
+  authorised_by INTEGER NOT NULL REFERENCES users(user_id) ON UPDATE CASCADE ON DELETE RESTRICT,
+  revised_deadline TEXT NOT NULL,
+  reason TEXT NOT NULL CHECK(length(trim(reason)) > 0),
+  created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
+);
+CREATE INDEX IF NOT EXISTS ix_class_extensions_assignment ON class_extensions(assignment_id, class_extension_id);
 COMMIT;

@@ -71,6 +71,15 @@ struct FakeCourses : repo::ICourseRepository {
         auto it = extensions.find({a, s});
         return it == extensions.end() ? std::nullopt : std::optional<std::string>(it->second);
     }
+    std::map<int, std::string> classExtensions; // assignment -> class-wide deadline in force (CR1)
+    int insertClassExtension(int a, int, const std::string& d, const std::string&) override {
+        classExtensions[a] = d;
+        return static_cast<int>(classExtensions.size());
+    }
+    std::optional<std::string> findClassExtensionDeadline(int a) const override {
+        auto it = classExtensions.find(a);
+        return it == classExtensions.end() ? std::nullopt : std::optional<std::string>(it->second);
+    }
 };
 
 struct FakeSubmissions : repo::ISubmissionRepository {

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(CS4433_Moderated_LMS VERSION 1.0.0 LANGUAGES CXX)
+project(CS4433_Moderated_LMS VERSION 1.1.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -98,10 +98,12 @@ if(BUILD_TESTING)
             tests/unit/test_marking_audit.cpp
             tests/unit/test_moderation_release.cpp
             tests/unit/test_persistence_errors.cpp
-            tests/unit/test_architecture.cpp)
+            tests/unit/test_architecture.cpp
+            tests/unit/test_cr1_class_extensions.cpp)
         target_link_libraries(lms_unit_tests PRIVATE lms_core GTest::gtest GTest::gtest_main)
         target_include_directories(lms_unit_tests PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/generated)
-        target_compile_definitions(lms_unit_tests PRIVATE LMS_SOURCE_SCHEMA_FILE="${LMS_SCHEMA_FILE}")
+        target_compile_definitions(lms_unit_tests PRIVATE LMS_SOURCE_SCHEMA_FILE="${LMS_SCHEMA_FILE}"
+            LMS_V1_0_SCHEMA_FILE="${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/schema_v1_0.sql")
         if(NOT MSVC)
             target_compile_options(lms_unit_tests PRIVATE -Wall -Wextra)
         endif()
@@ -114,6 +116,10 @@ if(BUILD_TESTING)
         # Architecture rule: no SQL or SQLite access outside src/data/ (Repository/DAO pattern).
         add_test(NAME lms_architecture_sql_isolation
             COMMAND ${Python3_EXECUTABLE} -I ${CMAKE_CURRENT_SOURCE_DIR}/tests/architecture/check_sql_isolation.py
+                    ${CMAKE_CURRENT_SOURCE_DIR})
+        # Traceability rule (brief section 6): every RTM test ID exists and every test is traced to a requirement.
+        add_test(NAME lms_rtm_traceability
+            COMMAND ${Python3_EXECUTABLE} -I ${CMAKE_CURRENT_SOURCE_DIR}/tests/system/check_rtm.py
                     ${CMAKE_CURRENT_SOURCE_DIR})
         add_test(NAME lms_system_tests
             COMMAND ${Python3_EXECUTABLE} -I ${CMAKE_CURRENT_SOURCE_DIR}/tests/system/run_system_tests.py

@@ -5,6 +5,7 @@
 //
 // Provisional rule pending Gate 2: lateness = elapsed 24-hour periods after the deadline, rounded up.
 #include <cstdint>
+#include <optional>
 #include <string>
 
 namespace lms::services {
@@ -17,6 +18,11 @@ class DeadlineEvaluator {
     static int latenessDays(const std::string& submittedAt, const std::string& deadline);
     // "OnTime" (0 days), "LateWithinWindow" (1-3 days) or "BeyondWindow" (> 3 days).
     static const char* classify(int latenessDays);
+    // BR-11 (CR1, provisional decision CR1-D2): the applicable deadline is the LATEST of the original deadline, the
+    // class-wide extension in force and the student's individual extension, so no extension can shorten the time a
+    // student already has. The only place this rule is implemented.
+    static std::string applicableDeadline(const std::string& original, const std::optional<std::string>& individual,
+                                          const std::optional<std::string>& classWide);
 };
 
 } // namespace lms::services

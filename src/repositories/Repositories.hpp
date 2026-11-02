@@ -79,6 +79,10 @@ class ICourseRepository {
     virtual void upsertExtension(int assignmentId, int studentId, int authorisedBy, const std::string& revisedDeadline,
                                  const std::string& reason) = 0;
     virtual std::optional<std::string> findExtensionDeadline(int assignmentId, int studentId) const = 0;
+    // CR1 (v1.1): class-wide extensions; append-only, the newest row for the assignment is in force.
+    virtual int insertClassExtension(int assignmentId, int authorisedBy, const std::string& revisedDeadline,
+                                     const std::string& reason) = 0;
+    virtual std::optional<std::string> findClassExtensionDeadline(int assignmentId) const = 0;
 };
 
 class ISubmissionRepository {

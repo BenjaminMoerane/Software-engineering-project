@@ -12,7 +12,8 @@ struct AssignmentView {
     int id{};
     std::string courseCode, title, deadline;
     double maxMark{};
-    std::string extensionDeadline;
+    std::string extensionDeadline;      // individual extension for the viewing student (FR-21), empty if none
+    std::string classExtensionDeadline; // class-wide extension in force (CR1, FR-23), empty if none
 };
 struct SubmissionView {
     int submissionId{}, versionId{}, studentId{}, assignmentId{}, versionNo{}, latenessDays{};

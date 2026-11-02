@@ -59,4 +59,21 @@ const char* DeadlineEvaluator::classify(int days) {
     return days <= ProvisionalLinearPenaltyStrategy::kWindowDays ? "LateWithinWindow" : "BeyondWindow";
 }
 
+std::string DeadlineEvaluator::applicableDeadline(const std::string& original,
+                                                  const std::optional<std::string>& individual,
+                                                  const std::optional<std::string>& classWide) {
+    std::string best = original;
+    std::int64_t bestAt = toEpochSeconds(original);
+    for (const auto* candidate : {&individual, &classWide}) {
+        if (!candidate->has_value())
+            continue;
+        const std::int64_t at = toEpochSeconds(**candidate);
+        if (at > bestAt) {
+            bestAt = at;
+            best = **candidate;
+        }
+    }
+    return best;
+}
+
 } // namespace lms::services

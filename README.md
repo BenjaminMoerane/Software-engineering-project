@@ -1,4 +1,4 @@
-# CS4433 Moderated LMS — Phase 4 implementation work
+# CS4433 Moderated LMS
 
 This repository contains the C++17/SQLite console application and its automated tests. It is an incremental implementation of the Phase 3 design, not evidence that the full course project or Gate 2 is approved.
 
@@ -14,6 +14,16 @@ This repository contains the C++17/SQLite console application and its automated 
 - Mark updates and `mark_audit` writes (actor, time, old/new mark, reason) are committed in one SQLite transaction. A forced audit-write failure is covered by an integration test.
 - Students can retrieve only their own results that have release records. Returned marks return to the lecturer marking queue. Post-release corrections are blocked pending OD-08 approval.
 - CTest smoke and integration executables, a GoogleTest unit/integration suite and Python system/acceptance tests (see `docs/test/TEST_PLAN.md`).
+
+## Architecture (Phase 3 SDD: layered modular monolith)
+
+| Layer | Location | Notes |
+|---|---|---|
+| Presentation | `src/main.cpp` | Role menus only; no business decisions, no SQL. |
+| Application services | `src/services/` | `LmsService` facade/composition root delegating to Authentication, Authorization, UserAdministration, Course, Assignment, Extension, Submission, Marking, Audit, Moderation and ResultQuery services. |
+| Domain and policy | `src/domain/`, `src/services/DeadlineEvaluator.*`, `src/services/PenaltyStrategy.hpp` | Abstract `User` + four role subclasses (Factory `makeUser`); Strategy `IPenaltyStrategy` / `ProvisionalLinearPenaltyStrategy`. |
+| Data access | `src/repositories/Repositories.hpp` (interfaces), `src/data/` (SQLite) | Repository pattern: `IUserRepository`, `ICourseRepository`, `ISubmissionRepository`, `IMarkRepository`, `IModerationRepository`, `ITransactionManager`. **Only `src/data/` may contain SQL**; CTest `lms_architecture_sql_isolation` enforces this on every build and CI run. |
+| Security adapter | `src/security/PasswordHasher.*` | OpenSSL scrypt, salted, constant-time compare. |
 
 ## Build and test
 
@@ -34,7 +44,7 @@ Deadlines must be entered as UTC timestamps in `YYYY-MM-DDTHH:MM:SSZ` format. Su
 
 ## Provisional business rule: late work
 
-The brief says 10% of the available mark per late day, for up to three days, and zero after that. Phase 2 records unresolved interpretations. The current isolated `LatePenaltyPolicy` is a **provisional implementation for testing only**: it counts elapsed 24-hour periods rounded up, deducts 10% of the maximum mark for each late day (capped at three deductions), clamps at zero, and awards zero beyond three days. The policy must not be described as stakeholder-approved until OD-01–OD-04 are resolved at Gate 2. Extension deadlines are currently used as the applicable deadline; confirm OD-07.
+The brief says 10% of the available mark per late day, for up to three days, and zero after that. Phase 2 records unresolved interpretations. The current `ProvisionalLinearPenaltyStrategy` (behind `IPenaltyStrategy`, with lateness computed by `DeadlineEvaluator`) is a **provisional implementation**: it counts elapsed 24-hour periods rounded up, deducts 10% of the maximum mark for each late day (capped at three deductions), clamps at zero, and awards zero beyond three days. The policy must not be described as stakeholder-approved until OD-01–OD-04 are resolved at Gate 2. Extension deadlines are currently used as the applicable deadline; confirm OD-07.
 
 ## Known limitations / remaining work
 
@@ -46,7 +56,7 @@ The brief says 10% of the available mark per late day, for up to three days, and
 - The OD-01 to OD-08 numbering in `docs/GATE2_BLOCKERS.md` and `docs/GATE2_REVIEW_AND_DECISION_RECORD.md` differs from the open-decision register in the Phase 3 SDD (for example OD-04 is penalty arithmetic in the SDD). The Phase 3 validation report was not available to settle this, so the conflict is recorded, not resolved.
 - OD-08 post-release correction is blocked. Class-wide extensions remain deferred to CR1/v1.1.
 - Tests: GoogleTest suite, system tests and three dependency-free executables, all registered with CTest. cppcheck is not installed in the execution environment. GCC `-fanalyzer` compiled the project but emitted warnings that remain under review; see `docs/STATIC_ANALYSIS_REPORT.md`.
-- Measured in a Linux container: line coverage of the business-logic layer 98.6% (`docs/test/COVERAGE_REPORT.md`) and a synthetic 800-student/100,000-record benchmark (`docs/test/TEST_RESULTS.md`). No hosted Git remote, hosted CI run, target-school-hardware measurement or user-acceptance test is claimed.
+- Measured in a Linux container: business-logic line coverage 99.2% and branch coverage 90.6% (`docs/test/COVERAGE_REPORT.md`) and a synthetic 800-student/100,000-record benchmark (`docs/test/TEST_RESULTS.md`). Hosted repository: https://github.com/BenjaminMoerane/Software-engineering-project with GitHub Actions CI (`.github/workflows/ci.yml`). No target-school-hardware measurement or user-acceptance test with real users is claimed.
 - The code has not yet received an independent security review. In particular, file permissions, manual testing of masked password input on the target terminals (the Windows `_getch` path has not been run), deployment hardening and the full negative permission matrix require additional work.
 
 ## Source-of-truth rules

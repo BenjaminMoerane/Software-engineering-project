@@ -2,18 +2,22 @@
 
 Environment: Linux container, 2 CPU cores, Intel Xeon 2.10 GHz; GCC 13.3.0, Clang 18.1.3, CMake 3.28.3, Python 3.13, OpenSSL 3.0.13, GoogleTest 1.14.0. Gate 2 is NOT APPROVED; results for provisional rules (OD-01..OD-08) show the current provisional behaviour only.
 
-## Automated suites
+## Automated suites (re-run after the repository refactor, commit `b1fcffc`)
 
 | Run | Result |
 |---|---|
-| GCC 13 Debug with coverage: `ctest` (5 targets) | 5 of 5 passed. GoogleTest: 138 passed, 1 skipped. System tests: 28 of 28 passed. |
-| Clang 18 Release, Ninja, `-Werror`: `ctest` | 5 of 5 passed, 0 compiler warnings or errors. |
-| Skipped test | `T_FILE_11` (unreadable source file) skips under root, because root can read any file (observation O-5). |
-| Full workflow, 100 consecutive runs of system test ST_PERS_01 (new program process per role, Release, GCC) | 100 of 100 passed (NFR-07 on this environment). |
-| Offline workflow ST_OFF_01 in an isolated network namespace (`unshare -rn`) | Passed (NFR-03 for the console workflow). |
-| RTM check (`tests/system/check_rtm.py`) | 139 unit/integration and 28 system test IDs; every test ID named in `RTM.csv` exists; every test is traced to a requirement. |
+| GCC 13.3 Debug, `-Wall -Wextra -Wpedantic -Wshadow -Wconversion`: `ctest` (6 targets) | 6 of 6 passed, 0 compiler warnings. GoogleTest: 153 run, 152 passed, 1 skipped. System tests: 28 of 28 passed. |
+| Clang 18.1 Debug, same warning flags: `ctest` | 6 of 6 passed, 0 compiler warnings. |
+| GCC 13.3 with AddressSanitizer + UndefinedBehaviorSanitizer (+ LeakSanitizer), `-fno-sanitize-recover=all` | 6 of 6 passed; 0 sanitizer reports. |
+| Clang sanitizers | NOT RUN: the Clang sanitizer runtime (`libclang_rt.asan`) is not installed in this environment. |
+| GCC 13 coverage build | 6 of 6 passed; 99.2% line / 90.6% branch on the business-logic layer (see `COVERAGE_REPORT.md`). |
+| Architecture check `lms_architecture_sql_isolation` (CTest) | Passed: no SQL text, `sqlite3_*` call, `Statement`/`Transaction` use or `handle()` call outside `src/data/`. |
+| Skipped test | `T_FILE_11` (unreadable source file) skips under root, because root can read any file (O-5). It runs on the non-root GitHub Actions runner. |
+| Full workflow, 100 consecutive runs of ST_PERS_01 (Phase 5 baseline, pre-refactor) | 100 of 100 passed (NFR-07). Not repeated after the refactor; ST_PERS_01 itself passes in every run above. |
+| Offline workflow ST_OFF_01 in an isolated network namespace (Phase 5 baseline) | Passed (NFR-03). |
+| RTM check (`tests/system/check_rtm.py`) | 153 unit/integration and 28 system test IDs; 181 traced; no RTM ID missing from the tests; no test untraced. |
 
-Test counts by area: login and passwords 12; authorisation and scope 14 (the first includes 54 denied role/operation pairs); administration 11; assignments and extensions 13; submission, resubmission and files 24; penalty policy and domain 11; marking and audit 14; moderation, queue and release 21; persistence and database errors 19; system and acceptance 28; plus the 3 earlier executables. These add up to 139 GoogleTest tests.
+Test counts by area: login and passwords 12; authorisation and scope 14 (the first includes 54 denied role/operation pairs); administration 11; assignments and extensions 13; submission, resubmission and files 24; penalty policy and domain 11; marking and audit 14; moderation, queue and release 21; persistence and database errors 19; architecture (fakes, strategy, deadline evaluator) 14 = 153 GoogleTest tests; plus 28 system/acceptance tests and 3 earlier executables.
 
 ## Synthetic performance benchmark (NFR-01, NFR-02)
 
@@ -28,8 +32,8 @@ These numbers are comfortably inside the stated limits on this machine, but they
 
 ## Defects found by testing
 
-F9 (no HoD moderation queue, High) and F10 (misleading partial message, Low) were found and fixed in this phase; see `DEFECT_LOG.md`. Observations O-1 to O-6 remain open for decisions; O-6 (resubmission after marking vs FR-10) needs a policy decision.
+F9 (no HoD moderation queue, High) and F10 (misleading partial message, Low) were found and fixed in this phase; see `DEFECT_LOG.md`. O-2 and O-3 were closed by the refactor; O-1, O-4, O-5 and O-6 remain open; O-6 (resubmission after marking vs FR-10) needs a policy decision.
 
 ## NOT VERIFIED
 
-Windows/macOS/MSVC builds and the Windows password prompt; a hosted CI run; Clang sanitizers; usability (NFR-08) and technician installation (NFR-10) with people; target-hardware performance; concurrent use.
+Windows/macOS/MSVC builds and the Windows password prompt; hosted CI on the Phase 5-8 commits (only `42a0b64` has a hosted run, reported successful); Clang sanitizers; usability (NFR-08) and technician installation (NFR-10) with people; target-hardware performance; concurrent use.

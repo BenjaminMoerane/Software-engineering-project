@@ -1,0 +1,5 @@
+src/main.cpp:55: style: The scope of the variable 'value' can be reduced. [variableScope]
+src/main.cpp:105: style: Parameter 'svc' can be declared as reference to const [constParameterReference]
+src/main.cpp:114: style: Parameter 'svc' can be declared as reference to const [constParameterReference]
+src/main.cpp:233: style: Variable 'v' can be declared as reference to const [constVariableReference]
+src/main.cpp:261: style: Variable 'r' can be declared as reference to const [constVariableReference]

@@ -1,5 +1,5 @@
 ---
-# Static-analysis configuration (Phase 6 QA). Run: clang-tidy -p build src/**/*.cpp  (see docs/qa/STATIC_ANALYSIS_REPORT.md)
+# Static-analysis configuration (Phase 6 QA). Run: clang-tidy -p build src/**/*.cpp  (see docs/qa/STATIC_ANALYSIS_REPORT.md; disabled checks justified there)
 # Families chosen for defect-finding value; purely stylistic checks that conflict with docs/CODING_STANDARD.md are off.
 Checks: >
   bugprone-*,

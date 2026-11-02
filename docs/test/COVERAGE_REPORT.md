@@ -45,7 +45,7 @@ The previous figure (98.6%, 582/590) was taken when SQL lived inside `LmsService
 Line coverage says which statements ran; it does not say the assertions were strong. Two checks against over-reading the figure:
 
 1. **Branch coverage is the weaker metric here (90.6%)**, and `DeadlineEvaluator.cpp` is the weakest file at 70%. Its untaken branches are mostly defensive parsing paths (malformed field widths, out-of-range components) that T_ARCH_13 only samples. Because the late-penalty rule depends on this class, it is the first place to add equivalence-class tests if marks are lost on V&V depth.
-2. The suite contains explicit boundary-value tables (T_PENALTY_*, T_ARCH_07, T_ARCH_10) and negative tests (54 denied role/operation pairs in T_AUTHZ_01), so the coverage is not obtained only by happy-path execution.
+2. The suite contains explicit boundary-value tables (T_PEN_*, T_ARCH_07, T_ARCH_10) and negative tests (54 denied role/operation pairs in T_AUTHZ_01), so the coverage is not obtained only by happy-path execution.
 
 ## Lines not executed
 

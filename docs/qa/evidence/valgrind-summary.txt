@@ -1,0 +1,6 @@
+[==========] 28 tests from 4 test suites ran. (108086 ms total)
+[  PASSED  ] 28 tests.
+lms_smoke_tests exit=0 errors=0
+lms_late_policy_tests exit=0 errors=0
+lms_integration_tests exit=0 errors=0
+unit exit=0 [==========] 28 tests from 4 test suites ran. (108086 ms total)

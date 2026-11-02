@@ -27,10 +27,16 @@ void isoUtc(const std::string& v, const char* field) {
               second = std::stoi(v.substr(17, 2));
     if (year < 1 || month < 1 || month > 12 || hour > 23 || minute > 59 || second > 59)
         throw std::invalid_argument(std::string(field) + " contains an out-of-range date/time component");
-    const bool leap = (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0));
-    const int monthDays[] = {31, leap ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-    if (day < 1 || day > monthDays[month - 1])
+    if (day < 1 || day > daysInMonth(year, month))
         throw std::invalid_argument(std::string(field) + " contains an invalid calendar date");
+}
+
+int daysInMonth(int year, int month) {
+    if (month < 1 || month > 12)
+        throw std::invalid_argument("Month must be between 1 and 12");
+    const bool leap = (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0));
+    static constexpr int kDays[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    return month == 2 && leap ? 29 : kDays[month - 1];
 }
 
 void minimumPasswordLength(const std::string& password) {

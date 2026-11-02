@@ -1,4 +1,4 @@
-# Installation guide — CS4433 Moderated LMS v1.1
+# Installation guide — CS4433 Moderated LMS v1.1.1
 
 **Audience:** the school's IT technician. **Time:** about 30 minutes for a first installation (NFR-10). This target has not yet been timed with a technician; please note your time in §8.
 
@@ -25,7 +25,7 @@ sudo apt update
 sudo apt install -y build-essential cmake git libsqlite3-dev libssl-dev python3
 git clone https://github.com/BenjaminMoerane/Software-engineering-project.git lms-src
 cd lms-src
-git checkout v1.1
+git checkout v1.1.1
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build --parallel
 ctest --test-dir build --output-on-failure        # optional but recommended: all 6 test groups should pass (about 1 minute)
@@ -44,11 +44,11 @@ The database schema is built into the program, so after installation you may del
 
 ### Option B — Linux, from the release package
 
-If you were given `cs4433-moderated-lms-1.1.0-Linux.tar.gz` (made with `cpack` on the build machine), install the runtime libraries and unpack it:
+If you were given `cs4433-moderated-lms-1.1.1-Linux.tar.gz` (made with `cpack` on the build machine), install the runtime libraries and unpack it:
 
 ```bash
 sudo apt install -y libsqlite3-0 libssl3t64      # Ubuntu 24.04; on 22.04 use libssl3
-sudo mkdir -p /opt/lms && sudo tar -xzf cs4433-moderated-lms-1.1.0-Linux.tar.gz -C /opt/lms --strip-components=1
+sudo mkdir -p /opt/lms && sudo tar -xzf cs4433-moderated-lms-1.1.1-Linux.tar.gz -C /opt/lms --strip-components=1
 ```
 
 ### Option C — Windows (not verified)
@@ -58,7 +58,7 @@ sudo mkdir -p /opt/lms && sudo tar -xzf cs4433-moderated-lms-1.1.0-Linux.tar.gz 
 3. In a "x64 Native Tools" prompt:
    ```powershell
    git clone https://github.com/BenjaminMoerane/Software-engineering-project.git lms-src
-   cd lms-src; git checkout v1.1
+   cd lms-src; git checkout v1.1.1
    cmake -S . -B build -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake
    cmake --build build --config Release
    ctest --test-dir build -C Release --output-on-failure
@@ -69,7 +69,7 @@ sudo mkdir -p /opt/lms && sudo tar -xzf cs4433-moderated-lms-1.1.0-Linux.tar.gz 
 ## 3. Check the installation
 
 ```bash
-/opt/lms/bin/lms_app --version          # prints: lms_app 1.1.0
+/opt/lms/bin/lms_app --version          # prints: lms_app 1.1.1
 ```
 
 On Windows: `C:\LMS\app\bin\lms_app.exe --version`.
@@ -131,7 +131,7 @@ Windows: copy `C:\LMS\data` to the backup drive as `LMS-YYYY-MM-DD`.
 
 ## 8. Upgrading, uninstalling and recording the installation
 
-- **Upgrade:** back up (§7), install the new version over the old one (§2), then read that version's release notes for any database step before first use. **v1.0 → v1.1:** no manual step. The first time v1.1 opens a v1.0 database it adds the `class_extensions` table and changes nothing else (tested by T_CR1_09). After the upgrade, `lms_app --version` prints `1.1.0`; log in once and check that the existing assignments are listed.
+- **Upgrade:** back up (§7), install the new version over the old one (§2), then read that version's release notes for any database step before first use. **v1.0 → v1.1:** no manual step. The first time v1.1 opens a v1.0 database it adds the `class_extensions` table and changes nothing else (tested by T_CR1_09). After the upgrade, `lms_app --version` prints `1.1.1`; log in once and check that the existing assignments are listed.
 - **Uninstall:** `sudo rm -rf /opt/lms` (or delete `C:\LMS\app`). Removing the program does **not** remove `/srv/lms`; archive or securely delete it according to the school's retention policy.
 - Please record: date, technician, operating system, time taken, and any step that differed from this guide. This is the evidence for NFR-10.
 

@@ -1,5 +1,12 @@
 # Release notes
 
+## v1.1.1 — patch release (corrective)
+
+- **F14 fixed:** on Linux, the `lms-start.sh` launcher failed with `lms_app: not found` when it was started by a relative path (for example `bin/lms-start.sh`). It now works from any path and always opens `<data folder>/school_lms.sqlite3`. Found while verifying a fresh install of the v1.1 package. New system test `ST_DEP_01`.
+- No database or behaviour change; upgrade by installing over v1.1 (or v1.0).
+
+---
+
 ## v1.1.0 — maintenance release for change request CR1 (Phase 8)
 
 **Perfective maintenance:** class-wide extensions. Analysis: `docs/maintenance/CR1_IMPACT_ANALYSIS.md`; design updates: `docs/maintenance/CR1_DESIGN_UPDATES.md`; regression evidence: `docs/maintenance/REGRESSION_RESULTS.md`.

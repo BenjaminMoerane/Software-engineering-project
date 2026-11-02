@@ -30,5 +30,5 @@ NFR-06,UC-02,Audit integrity (atomic),MarkingService; AuditService; ITransaction
 NFR-07,All,100 consecutive workflow runs,,,,lms_app,,ST_PERS_01 repeated,Verified: 100 of 100 runs passed (see TEST_RESULTS)
 NFR-08,,Usability with representative users,,,,,,,NOT VERIFIED
 NFR-09,,Clean checkout builds and tests,,,,CMakeLists.txt; .github/workflows/ci.yml,,ctest,"Verified locally (GCC, Clang); hosted CI NOT VERIFIED"
-NFR-10,,Technician installs within 30 minutes,,,,docs/BUILD_GUIDE.md,,,NOT VERIFIED
+NFR-10,,Technician installs within 30 minutes,,,,docs/deployment/INSTALLATION_GUIDE.md; CMakeLists.txt (install/CPack); packaging/,,,NOT VERIFIED with a technician; install steps run by developer on Ubuntu 24.04 (docs/deployment/README.md)
 CR1,,Class-wide extensions (v1.1),,,,not in v1.0,,,Deferred (Phase 8)

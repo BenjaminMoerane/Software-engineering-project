@@ -1,5 +1,14 @@
 # CS4433 Moderated LMS
 
+Current release: **v1.0** ([release notes](RELEASE_NOTES.md)). Install: [`docs/deployment/INSTALLATION_GUIDE.md`](docs/deployment/INSTALLATION_GUIDE.md) · user manuals: [`docs/deployment/`](docs/deployment/) · build: [`BUILD_GUIDE.md`](BUILD_GUIDE.md).
+
+| Phase | Where |
+|---|---|
+| 4 Implementation | `src/`, `BUILD_GUIDE.md`, `docs/PHASE4_*` |
+| 5 Verification and validation | `docs/test/` (test plan, RTM, results, coverage, defect log), `tests/` |
+| 6 Configuration management and QA | `docs/CODING_STANDARD.md`, `docs/BRANCHING_STRATEGY.md`, `docs/qa/`, `.github/workflows/ci.yml` |
+| 7 Deployment | `docs/deployment/`, `RELEASE_NOTES.md`, tag `v1.0` |
+
 This repository contains the C++17/SQLite console application and its automated tests. It is an incremental implementation of the Phase 3 design, not evidence that the full course project or Gate 2 is approved.
 
 ## Implemented foundation
@@ -50,7 +59,7 @@ The brief says 10% of the available mark per late day, for up to three days, and
 
 - Formal Gate 2 approval is still **NOT APPROVED**. See `docs/GATE2_BLOCKERS.md`.
 - The UI remains a basic console menu. File extensions and size are checked, but extensions are not a substitute for content-type inspection or malware scanning. The storage folder is local and must be protected with operating-system permissions; a dedicated authorised file-download interface is not implemented.
-- Full maintenance/listing workflows and password reset are incomplete; account name/role/department update and department/course update operations are included.
+- There is no password reset and no list screen for users or courses; account name/role/department update and department/course update operations are included.
 - The database schema's unique mark-per-submission-version constraint is preserved. A returned mark is updated in place; `mark_audit` records actor, time, old/new final mark and reason for every change (FR-14). Raw mark, penalty and earlier feedback text are not versioned, and no history table beyond the Phase 3 tables exists. A mark the HoD has approved cannot be changed until the HoD returns it for correction, so release always follows a decision made on the current mark. A resubmission is accepted only on or before the applicable deadline; a first late submission within the window is still accepted.
 - Confirmed, not fixed: if a student resubmits after their work was marked but before the deadline, the existing mark stays tied to the earlier version (observation O-6, pinned by test T_RESUB_08). Resolving it needs a policy decision.
 - The OD-01 to OD-08 numbering in `docs/GATE2_BLOCKERS.md` and `docs/GATE2_REVIEW_AND_DECISION_RECORD.md` differs from the open-decision register in the Phase 3 SDD (for example OD-04 is penalty arithmetic in the SDD). The Phase 3 validation report was not available to settle this, so the conflict is recorded, not resolved.

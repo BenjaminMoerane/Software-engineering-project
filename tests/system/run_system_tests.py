@@ -445,6 +445,25 @@ class CR1ClassExtension(SystemTest):
         self.assertEqual(self.query("SELECT revised_deadline FROM class_extensions"), [(first,)])
 
 
+@unittest.skipIf(os.name == "nt", "POSIX launcher; lms-start.bat is not exercised here")
+class Deployment(SystemTest):
+    LAUNCHER = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "packaging", "lms-start.sh")
+
+    def test_ST_DEP_01_launcher_works_from_a_relative_path_and_keeps_data_in_the_data_folder(self):
+        # Defect F14: the launcher used a relative program path after changing into the data folder.
+        bindir = os.path.join(self.dir, "bin")
+        os.makedirs(bindir)
+        shutil.copy(APP, os.path.join(bindir, "lms_app"))
+        shutil.copy(self.LAUNCHER, os.path.join(bindir, "lms-start.sh"))
+        os.chmod(os.path.join(bindir, "lms-start.sh"), 0o755)
+        lines = SETUP[:-1] + ["0", "quit"]
+        p = subprocess.run(["sh", os.path.join("bin", "lms-start.sh"), "data"], input="\n".join(lines) + "\n",
+                           capture_output=True, text=True, cwd=self.dir, timeout=300)
+        self.assertEqual(p.returncode, 0, p.stdout + p.stderr)
+        self.assertIn("Database: " + os.path.join(self.dir, "data", "school_lms.sqlite3"), p.stdout)
+        self.assertTrue(os.path.exists(os.path.join(self.dir, "data", "school_lms.sqlite3")))
+
+
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--app", required=True)

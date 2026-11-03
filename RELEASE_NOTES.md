@@ -1,5 +1,15 @@
 # Release notes
 
+## v1.1.2 — patch release (build and CI only)
+
+- **No change to the program's behaviour, database or user manuals.** Only `lms_app --version` changes (it now prints `1.1.2`). Upgrade by installing over v1.1.1, v1.1 or v1.0.
+- **F16 fixed:** the CI `static-analysis` job failed on GitHub's Ubuntu 24.04 runner. Its packaged cppcheck 2.13 found no files with the absolute `--file-filter`, and it reports the two suppressed menu-handler notes under an older check ID. The filter is now relative and both IDs are suppressed. The tagged releases v1.0, v1.1 and v1.1.1 keep their red `static-analysis` runs, because tags are never moved (`docs/BRANCHING_STRATEGY.md`). v1.1.2 is the first release tag whose hosted CI run passes all 7 jobs.
+- **F15 documented:** the F9/F10 fix branches were not self-contained (the system-test script was committed after them). Review checklist item F3 was added.
+- **CI maintenance:** `actions/checkout` v4 → v5 and `actions/upload-artifact` v4 → v6, the first major versions that run on Node.js 24. This removes the 7 Node.js 20 deprecation warnings that every run showed.
+- Hosted CI evidence for Phases 5–8 is recorded in `docs/qa/CI_EVIDENCE.md`.
+
+---
+
 ## v1.1.1 — patch release (corrective)
 
 - **F14 fixed:** on Linux, the `lms-start.sh` launcher failed with `lms_app: not found` when it was started by a relative path (for example `bin/lms-start.sh`). It now works from any path and always opens `<data folder>/school_lms.sqlite3`. Found while verifying a fresh install of the v1.1 package. New system test `ST_DEP_01`.

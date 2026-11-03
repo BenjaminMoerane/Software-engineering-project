@@ -22,7 +22,7 @@ jobs:
         compiler: [gcc, clang]
         build_type: [Debug, Release]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Install build dependencies
         run: sudo apt-get update && sudo apt-get install -y $DEPS
       - name: Configure (warnings as errors)
@@ -35,7 +35,7 @@ jobs:
         run: ctest --test-dir build --output-on-failure
       - name: Upload test log
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ctest-${{ matrix.compiler }}-${{ matrix.build_type }}
           path: build/Testing/Temporary/LastTest.log
@@ -43,7 +43,7 @@ jobs:
   sanitizers:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Install build dependencies
         run: sudo apt-get update && sudo apt-get install -y $DEPS
       - name: Configure with AddressSanitizer + UndefinedBehaviorSanitizer
@@ -59,7 +59,7 @@ jobs:
   coverage:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Install dependencies
         run: |
           sudo apt-get update && sudo apt-get install -y $DEPS
@@ -77,7 +77,7 @@ jobs:
           gcovr -r . --object-directory build-cov --filter src/services/ --filter src/domain/ \
             --exclude-throw-branches --exclude-unreachable-branches --txt --txt-metric branch | tee coverage-branch.txt
           gcovr -r . --object-directory build-cov --filter src/ --exclude src/main.cpp --html-details coverage.html
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         with:
           name: coverage-report
           path: |
@@ -88,7 +88,7 @@ jobs:
   static-analysis:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Install analysers
         run: |
           sudo apt-get update && sudo apt-get install -y $DEPS clang-tidy clang-format cppcheck

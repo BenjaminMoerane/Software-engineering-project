@@ -1,6 +1,6 @@
 # CS4433 Moderated LMS
 
-Current release: **v1.1.1** ([release notes](RELEASE_NOTES.md)). Install: [`docs/deployment/INSTALLATION_GUIDE.md`](docs/deployment/INSTALLATION_GUIDE.md) · user manuals: [`docs/deployment/`](docs/deployment/) · build: [`BUILD_GUIDE.md`](BUILD_GUIDE.md).
+Current release: **v1.1.2** ([release notes](RELEASE_NOTES.md)). Install: [`docs/deployment/INSTALLATION_GUIDE.md`](docs/deployment/INSTALLATION_GUIDE.md) · user manuals: [`docs/deployment/`](docs/deployment/) · build: [`BUILD_GUIDE.md`](BUILD_GUIDE.md).
 
 | Phase | Where |
 |---|---|

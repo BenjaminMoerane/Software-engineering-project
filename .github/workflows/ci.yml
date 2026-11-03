@@ -99,10 +99,11 @@ jobs:
       - name: clang-tidy (config in .clang-tidy; any finding fails)
         run: clang-tidy -p build --quiet --warnings-as-errors='*' $(git ls-files 'src/*.cpp')
       - name: cppcheck (any finding fails)
+        # Relative filter: Ubuntu 24.04's cppcheck 2.13 matches no files with an absolute pattern (defect F16).
         run: >
           cppcheck --enable=warning,style,performance,portability --std=c++17 --error-exitcode=1
           --inline-suppr --suppress=missingIncludeSystem -I src
-          --project=build/compile_commands.json --file-filter="$PWD/src/*" -q
+          --project=build/compile_commands.json --file-filter='src/*' -q
       - name: Code metrics (lizard; CCN > 10 reported, not failing)
         run: |
           pipx install lizard

@@ -79,4 +79,4 @@ The standard is adapted from the C++ Core Guidelines (Stroustrup and Sutter) and
 
 ## 9. Allowed exceptions
 
-A tool finding may be suppressed only inline (`// NOLINT(check)` or `// cppcheck-suppress id`) with a one-line reason next to it. Current suppressions: two `cppcheck-suppress constParameterCallback` in `src/main.cpp` (menu handlers share one function-pointer signature). Checks disabled in `.clang-tidy` are listed with reasons in `docs/qa/STATIC_ANALYSIS_REPORT.md`.
+A tool finding may be suppressed only inline (`// NOLINT(check)` or `// cppcheck-suppress id`) with a one-line reason next to it. Current suppressions: two `cppcheck-suppress [constParameterCallback,constParameterReference]` in `src/main.cpp` (the check's ID in cppcheck 2.22 and in 2.13) (menu handlers share one function-pointer signature). Checks disabled in `.clang-tidy` are listed with reasons in `docs/qa/STATIC_ANALYSIS_REPORT.md`.

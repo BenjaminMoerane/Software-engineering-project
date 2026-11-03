@@ -24,9 +24,15 @@ The GitHub runner is a normal (non-root) user, so `T_FILE_11` (unreadable submis
 | `daeab08` `feature/phase5-verification` | #7 | Success, 2 min 7 s | same |
 | `469b7bb` `fix/f9-hod-moderation-queue` | #6 | **Failure**: system-test script not yet in that commit (defect F15) | same |
 | `fec4c33` `fix/f10-mark-message-order` | #5 | **Failure**: same cause (F15) | same |
-| Phase 6–8 commits (four-job workflow) | *to be recorded after push* | — | — |
+| `c8aeb59` `qa/phase6-config-qa` | #10 ([41555306535](https://github.com/BenjaminMoerane/Software-engineering-project/actions/runs/41555306535)) | **Failure**: `static-analysis` only, at the cppcheck step (F16); the other 6 jobs completed | GitHub Actions page, 3 Nov 2026 |
+| `8a9aab4` `main` (Phase 6, four-job workflow) | #11 ([41555314639](https://github.com/BenjaminMoerane/Software-engineering-project/actions/runs/41555314639)) | **Failure**: same (F16); 1 error annotation, in `static-analysis` | same |
+| `8a9aab4` tag `phase6-config-qa` | #12 ([41555321921](https://github.com/BenjaminMoerane/Software-engineering-project/actions/runs/41555321921)) | **Failure**: same (F16) | same |
+| Tags `v1.0`, `v1.1`, `v1.1.1` | *to be recorded after push* | Expected: `static-analysis` fails (F16, fixed later); all other jobs pass | — |
+| `main` after the F16 fix | *to be recorded after push* | Expected: all 7 jobs pass | — |
 
 **After pushing**, open the Actions tab, confirm all four jobs are green for the commits tagged `phase6-config-qa`, `v1.0` and `v1.1`, take a screenshot for the report appendix, and add the run IDs to the table above. Until then, the four-job workflow has been verified by running each job's exact commands locally (GCC 13.3 / Clang 18.1 on Ubuntu 24.04, the same image family as `ubuntu-24.04`), not by a hosted run. The two places where the hosted run can still differ are listed so a failure there is quick to diagnose:
 
-1. Ubuntu's packaged `cppcheck` is older (2.13) than the version used locally (2.22) and may report a slightly different set of style findings.
+1. Ubuntu's packaged `cppcheck` is older (2.13) than the version used locally (2.22) and may report a slightly different set of style findings. **This happened (F16):** 2.13 rejected the absolute `--file-filter` and used a different check ID for the two suppressed notes. Both versions are now run locally before each push.
 2. GoogleTest is fetched from GitHub at configure time (`FetchContent`, pinned v1.14.0).
+
+Every hosted run also warns that `actions/checkout@v4` and `actions/upload-artifact@v4` target the deprecated Node.js 20 runtime, which GitHub currently forces to Node.js 24. These are warnings only; moving to the next major versions of those actions is a maintenance item and was not done in this release.

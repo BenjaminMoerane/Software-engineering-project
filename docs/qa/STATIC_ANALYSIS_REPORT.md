@@ -5,7 +5,7 @@ Brief requirement: "run a static analyser and address its findings". Four static
 | Tool | Version | Scope | Findings at start | Findings now | CI gate |
 |---|---|---|---|---|---|
 | clang-tidy (`.clang-tidy`) | 18.1.3 | `src/` | 19 | **0** | Fails on any finding |
-| cppcheck (warning, style, performance, portability) | 2.22 local; distro version in CI | `src/` | 5 | **0** (2 justified inline suppressions) | Fails on any finding |
+| cppcheck (warning, style, performance, portability) | 2.22 and 2.13 (Ubuntu 24.04, as in CI) local; 2.13 in CI | `src/` | 5 | **0** (2 justified inline suppressions) | Fails on any finding |
 | GCC `-fanalyzer` | 13.3.0 | `src/` | 88 | 88, all one false-positive class (§3) | Not gated |
 | Compiler warnings, `-Wall -Wextra -Wpedantic -Wconversion -Wshadow` | GCC 13.3, Clang 18.1 | project targets | 0 | **0** | `-Werror` |
 | ASan + UBSan + LSan (dynamic) | GCC 13.3 | all 6 CTest targets | 0 | **0** | Fails on any report |
@@ -38,7 +38,7 @@ All 19 were fixed before the refactor was merged. The current run reports 0.
 
 Five style findings, all in `src/main.cpp` (`evidence/cppcheck-before.txt`): one `variableScope` (`value` in `askSecret` declared outside the `try` that uses it) and four `constParameterReference`/`constVariableReference` (display helpers and loops that only read). All five were fixed (code review items CR-01, CR-02).
 
-Splitting `main()` (CR-03) created two `constParameterCallback` notes: `listAssignments` and `viewResults` only read the service, but every menu handler must share one function-pointer type. Making those two `const` would need a cast, which is worse than the finding. Both are suppressed inline with the reason written next to them, as the coding standard (§9) requires.
+Splitting `main()` (CR-03) created two `constParameterCallback` notes (named `constParameterReference` by cppcheck 2.13; both IDs are suppressed, see F16): `listAssignments` and `viewResults` only read the service, but every menu handler must share one function-pointer type. Making those two `const` would need a cast, which is worse than the finding. Both are suppressed inline with the reason written next to them, as the coding standard (§9) requires.
 
 ## 3. GCC `-fanalyzer`: 88 warnings, analysed rather than dismissed
 

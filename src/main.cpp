@@ -129,7 +129,7 @@ using Handler = void (*)(LmsService&, const Session&);
 // One handler per menu option (Phase 6 code review CR-03: main() had CCN 31; each handler is now CCN 1-2).
 // Prompts and messages are unchanged; system tests ST_* depend on them.
 // All menu handlers share one Handler signature, so read-only handlers cannot take a const service.
-// cppcheck-suppress constParameterCallback
+// cppcheck-suppress [constParameterCallback,constParameterReference]
 void listAssignments(LmsService& svc, const Session& s) {
     showAssignments(svc, s);
 }
@@ -221,7 +221,7 @@ void releaseMark(LmsService& svc, const Session& s) {
     std::cout << "Mark released.\n";
 }
 // All menu handlers share one Handler signature, so read-only handlers cannot take a const service.
-// cppcheck-suppress constParameterCallback
+// cppcheck-suppress [constParameterCallback,constParameterReference]
 void viewResults(LmsService& svc, const Session& s) {
     for (const auto& r : svc.releasedResults(s))
         std::cout << r.courseCode << " | " << r.assignmentTitle << " | " << r.mark << "/" << r.maxMark << " | "

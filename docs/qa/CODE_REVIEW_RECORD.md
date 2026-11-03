@@ -33,6 +33,7 @@ Reviewer: the developer (individual project; no second reviewer was available, w
 | F. Tests and documentation |||
 | F1 | Does every changed behaviour have a test that fails without the change? | Pass after CR-04 (T_ARCH_15 shown failing before the fix). |
 | F2 | Do documents that state facts about the code still match it? | **Fail → CR-07.** README still said "no hosted Git remote or CI"; RTM pointed every requirement at `LmsService.cpp`. |
+| F3 | Is every commit on the branch self-contained (configures, builds and passes its own tests), and is CI green on the branch tip before merging? | Added after defect F15 (found by hosted CI after the Phase 5 push). Applied from Phase 6 onward; the Phase 6–8 branch tips are checked by CI on push. |
 
 ## 2. Findings and changes made
 

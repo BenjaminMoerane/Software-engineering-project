@@ -8,7 +8,7 @@ Brief requirement: "run a static analyser and address its findings". Four static
 | cppcheck (warning, style, performance, portability) | 2.22 and 2.13 (Ubuntu 24.04, as in CI) local; 2.13 in CI | `src/` | 5 | **0** (2 justified inline suppressions) | Fails on any finding |
 | GCC `-fanalyzer` | 13.3.0 | `src/` | 88 | 88, all one false-positive class (§3) | Not gated |
 | Compiler warnings, `-Wall -Wextra -Wpedantic -Wconversion -Wshadow` | GCC 13.3, Clang 18.1 | project targets | 0 | **0** | `-Werror` |
-| ASan + UBSan + LSan (dynamic) | GCC 13.3 | all 6 CTest targets | 0 | **0** | Fails on any report |
+| ASan + UBSan + LSan (dynamic) | GCC 13.3 | all CTest targets (6 at Phase 6, 7 from v1.1) | 0 | **0** | Fails on any report |
 | Valgrind memcheck (dynamic) | 3.22.0 | smoke, late-policy, integration, 28 unit tests | 0 | **0** | Not gated (slow) |
 
 Baseline: at Phase 4 (commit `42a0b64`) neither clang-tidy nor cppcheck was available, and the 37 `-fanalyzer` warnings were recorded as "remaining under review". That open item is closed in §3.
@@ -60,7 +60,7 @@ Static analysis cannot show the absence of logic errors in business rules. Those
 cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 clang-tidy -p build --quiet --warnings-as-errors='*' $(git ls-files 'src/*.cpp')
 cppcheck --enable=warning,style,performance,portability --std=c++17 --error-exitcode=1 --inline-suppr \
-  --suppress=missingIncludeSystem -I src --project=build/compile_commands.json --file-filter="$PWD/src/*" -q
+  --suppress=missingIncludeSystem -I src --project=build/compile_commands.json --file-filter='src/*' -q   # relative pattern: absolute fails on cppcheck 2.13 (F16)
 for f in $(git ls-files 'src/*.cpp'); do g++ -std=c++17 -fanalyzer -Isrc -c $f -o /dev/null; done
 g++ -std=c++17 -fanalyzer -c docs/qa/evidence/fanalyzer_false_positive_repro.cpp -o /dev/null
 ```

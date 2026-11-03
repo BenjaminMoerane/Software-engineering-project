@@ -16,9 +16,10 @@
       10      3    122      6      10 lms::services::AssignmentService::createAssignment@15-24@src/services/AssessmentServices.cpp
        4      1     42      1       4 lms::services::AssignmentService::listAssignments@26-29@src/services/AssessmentServices.cpp
       15      4    152      5      16 lms::services::ExtensionService::grantIndividualExtension@31-46@src/services/AssessmentServices.cpp
-      23      7    252      3      27 lms::services::SubmissionService::submit@48-74@src/services/AssessmentServices.cpp
-      34      8    408      4      34 lms::services::SubmissionService::submitFile@76-109@src/services/AssessmentServices.cpp
-       4      1     33      1       4 lms::services::SubmissionService::submissionsForMarking@111-114@src/services/AssessmentServices.cpp
+      17      5    180      4      18 lms::services::ExtensionService::grantClassExtension@48-65@src/services/AssessmentServices.cpp
+      25      7    261      3      30 lms::services::SubmissionService::submit@67-96@src/services/AssessmentServices.cpp
+      34      8    408      4      34 lms::services::SubmissionService::submitFile@98-131@src/services/AssessmentServices.cpp
+       4      1     33      1       4 lms::services::SubmissionService::submissionsForMarking@133-136@src/services/AssessmentServices.cpp
       11      5     96      1      12 lms::services::ModerationService::moderationQueue@9-20@src/services/ModerationServices.cpp
        8      3     60      2       8 lms::services::ModerationService::requireCurrentMarkInDepartment@22-29@src/services/ModerationServices.cpp
        8      3     87      4       8 lms::services::ModerationService::moderate@31-38@src/services/ModerationServices.cpp
@@ -35,11 +36,11 @@
        3      1     37      3       3 lms::services::CourseService::CourseService@69-71@src/services/Services.hpp
        2      1     25      2       2 lms::services::AssignmentService::AssignmentService@91-92@src/services/Services.hpp
        2      1     25      2       2 lms::services::ExtensionService::ExtensionService@105-106@src/services/Services.hpp
-       3      1     61      5       3 lms::services::SubmissionService::SubmissionService@119-121@src/services/Services.hpp
-       1      1     15      1       1 lms::services::AuditService::AuditService@138-138@src/services/Services.hpp
-       5      1     79      7       5 lms::services::MarkingService::MarkingService@149-153@src/services/Services.hpp
-       2      1     25      2       2 lms::services::ModerationService::ModerationService@170-171@src/services/Services.hpp
-       2      1     26      2       2 lms::services::ResultQueryService::ResultQueryService@185-186@src/services/Services.hpp
+       3      1     61      5       3 lms::services::SubmissionService::SubmissionService@122-124@src/services/Services.hpp
+       1      1     15      1       1 lms::services::AuditService::AuditService@141-141@src/services/Services.hpp
+       5      1     79      7       5 lms::services::MarkingService::MarkingService@152-156@src/services/Services.hpp
+       2      1     25      2       2 lms::services::ModerationService::ModerationService@173-174@src/services/Services.hpp
+       2      1     26      2       2 lms::services::ResultQueryService::ResultQueryService@188-189@src/services/Services.hpp
       14      5    165      6      14 lms::services::UserAdministrationService::createUser@10-23@src/services/AdministrationServices.cpp
       11      5    110      5      11 lms::services::UserAdministrationService::updateUserAccount@25-35@src/services/AdministrationServices.cpp
        7      3     59      2       7 lms::services::UserAdministrationService::deactivateUser@37-43@src/services/AdministrationServices.cpp
@@ -67,21 +68,23 @@
        3      1     15      0       3 lms::services::LmsService::listDepartments@55-57@src/services/LmsService.cpp
        4      1     56      6       4 lms::services::LmsService::createAssignment@59-62@src/services/LmsService.cpp
        3      1     46      5       3 lms::services::LmsService::grantIndividualExtension@63-65@src/services/LmsService.cpp
-       3      1     20      1       3 lms::services::LmsService::listAssignments@66-68@src/services/LmsService.cpp
-       3      1     33      3       3 lms::services::LmsService::submit@70-72@src/services/LmsService.cpp
-       4      1     46      4       4 lms::services::LmsService::submitFile@73-76@src/services/LmsService.cpp
-       3      1     20      1       3 lms::services::LmsService::submissionsForMarking@77-79@src/services/LmsService.cpp
-       3      1     47      5       3 lms::services::LmsService::markSubmission@81-83@src/services/LmsService.cpp
-       3      1     20      1       3 lms::services::LmsService::moderationQueue@85-87@src/services/LmsService.cpp
-       3      1     37      4       3 lms::services::LmsService::moderate@88-90@src/services/LmsService.cpp
-       3      1     23      2       3 lms::services::LmsService::release@91-93@src/services/LmsService.cpp
-       3      1     20      1       3 lms::services::LmsService::releasedResults@94-96@src/services/LmsService.cpp
+       3      1     42      4       3 lms::services::LmsService::grantClassExtension@66-68@src/services/LmsService.cpp
+       3      1     20      1       3 lms::services::LmsService::listAssignments@69-71@src/services/LmsService.cpp
+       3      1     33      3       3 lms::services::LmsService::submit@73-75@src/services/LmsService.cpp
+       4      1     46      4       4 lms::services::LmsService::submitFile@76-79@src/services/LmsService.cpp
+       3      1     20      1       3 lms::services::LmsService::submissionsForMarking@80-82@src/services/LmsService.cpp
+       3      1     47      5       3 lms::services::LmsService::markSubmission@84-86@src/services/LmsService.cpp
+       3      1     20      1       3 lms::services::LmsService::moderationQueue@88-90@src/services/LmsService.cpp
+       3      1     37      4       3 lms::services::LmsService::moderate@91-93@src/services/LmsService.cpp
+       3      1     23      2       3 lms::services::LmsService::release@94-96@src/services/LmsService.cpp
+       3      1     20      1       3 lms::services::LmsService::releasedResults@97-99@src/services/LmsService.cpp
        8      7     95      3       8 lms::services::LatePenaltyPolicy::evaluate@22-29@src/services/LatePenaltyPolicy.hpp
        9      5     98      3       9 lms::services::digits@9-17@src/services/DeadlineEvaluator.cpp
        8      4    117      3       8 lms::services::daysFromCivil@19-26@src/services/DeadlineEvaluator.cpp
       18     23    310      1      19 lms::services::DeadlineEvaluator::toEpochSeconds@29-47@src/services/DeadlineEvaluator.cpp
        6      2     60      2       6 lms::services::DeadlineEvaluator::latenessDays@49-54@src/services/DeadlineEvaluator.cpp
        5      3     29      1       5 lms::services::DeadlineEvaluator::classify@56-60@src/services/DeadlineEvaluator.cpp
+      16      4    114      3      16 lms::services::DeadlineEvaluator::applicableDeadline@62-77@src/services/DeadlineEvaluator.cpp
        3      1     25      1       3 lms::data::lastId@7-9@src/data/SqliteRepositories.cpp
        3      1     21      1       3 lms::data::changedOneRow@10-12@src/data/SqliteRepositories.cpp
        6      2     37      3       6 lms::data::bindOptionalDepartment@13-18@src/data/SqliteRepositories.cpp
@@ -106,58 +109,60 @@
        6      1     50      2       6 lms::data::SqliteCourseRepository::isStudentEnrolled@151-156@src/data/SqliteRepositories.cpp
       12      1    104      1      12 lms::data::SqliteCourseRepository::insertAssignment@157-168@src/data/SqliteRepositories.cpp
        8      2     72      1       8 lms::data::SqliteCourseRepository::findActiveAssignment@169-176@src/data/SqliteRepositories.cpp
-      21      2    138      3      21 lms::data::SqliteCourseRepository::listAssignmentsVisibleTo@177-197@src/data/SqliteRepositories.cpp
-      13      1     95      5      13 lms::data::SqliteCourseRepository::upsertExtension@198-210@src/data/SqliteRepositories.cpp
-       8      2     65      2       8 lms::data::SqliteCourseRepository::findExtensionDeadline@211-218@src/data/SqliteRepositories.cpp
-       9      2     77      2       9 lms::data::SqliteSubmissionRepository::find@221-229@src/data/SqliteRepositories.cpp
-      30      2    237      1      30 lms::data::SqliteSubmissionRepository::saveVersion@230-259@src/data/SqliteRepositories.cpp
-      11      2     89      1      11 lms::data::SqliteSubmissionRepository::findMarkingContext@260-270@src/data/SqliteRepositories.cpp
-      19      2    160      1      19 lms::data::SqliteSubmissionRepository::markingQueueFor@271-289@src/data/SqliteRepositories.cpp
-       7      2     65      1       7 lms::data::SqliteMarkRepository::findCurrent@292-298@src/data/SqliteRepositories.cpp
-      18      1    149      2      18 lms::data::SqliteMarkRepository::updateCurrent@299-316@src/data/SqliteRepositories.cpp
-      18      1    159      1      18 lms::data::SqliteMarkRepository::insertCurrent@317-334@src/data/SqliteRepositories.cpp
-      13      2    101      1      13 lms::data::SqliteMarkRepository::appendAudit@335-347@src/data/SqliteRepositories.cpp
-      10      2     56      1      10 lms::data::SqliteModerationRepository::departmentOfCurrentMark@350-359@src/data/SqliteRepositories.cpp
-       8      2     54      1       8 lms::data::SqliteModerationRepository::latestDecision@360-367@src/data/SqliteRepositories.cpp
-       5      1     38      1       5 lms::data::SqliteModerationRepository::isReleased@368-372@src/data/SqliteRepositories.cpp
-       9      1     80      4       9 lms::data::SqliteModerationRepository::insertDecision@373-381@src/data/SqliteRepositories.cpp
-       6      1     48      2       6 lms::data::SqliteModerationRepository::insertRelease@382-387@src/data/SqliteRepositories.cpp
-      27      4    216      1      27 lms::data::SqliteModerationRepository::unreleasedCurrentMarksFor@388-414@src/data/SqliteRepositories.cpp
-      13      2    106      1      13 lms::data::SqliteModerationRepository::releasedResultsFor@415-427@src/data/SqliteRepositories.cpp
-       3      2     31      2       3 lms::data::errorMessage@12-14@src/data/Database.cpp
-       4      2     37      3       4 lms::data::check@15-18@src/data/Database.cpp
-       3      1     48      2       3 lms::data::Statement::Statement@20-22@src/data/Database.cpp
-       4      2     16      0       4 lms::data::Statement::~Statement@23-26@src/data/Database.cpp
-       1      1     32      1       1 lms::data::Statement::Statement@27-27@src/data/Database.cpp
-       9      3     53      1       9 lms::data::Statement::operator =@28-36@src/data/Database.cpp
-       3      1     50      2       3 lms::data::Statement::bind@37-39@src/data/Database.cpp
-       6      2     45      2       6 lms::data::Statement::bind@40-45@src/data/Database.cpp
+      23      2    147      3      23 lms::data::SqliteCourseRepository::listAssignmentsVisibleTo@177-199@src/data/SqliteRepositories.cpp
+      13      1     95      5      13 lms::data::SqliteCourseRepository::upsertExtension@200-212@src/data/SqliteRepositories.cpp
+       8      2     65      2       8 lms::data::SqliteCourseRepository::findExtensionDeadline@213-220@src/data/SqliteRepositories.cpp
+      11      1     87      4      11 lms::data::SqliteCourseRepository::insertClassExtension@221-231@src/data/SqliteRepositories.cpp
+       8      2     54      1       8 lms::data::SqliteCourseRepository::findClassExtensionDeadline@232-239@src/data/SqliteRepositories.cpp
+       9      2     77      2       9 lms::data::SqliteSubmissionRepository::find@242-250@src/data/SqliteRepositories.cpp
+      30      2    237      1      30 lms::data::SqliteSubmissionRepository::saveVersion@251-280@src/data/SqliteRepositories.cpp
+      11      2     89      1      11 lms::data::SqliteSubmissionRepository::findMarkingContext@281-291@src/data/SqliteRepositories.cpp
+      19      2    160      1      19 lms::data::SqliteSubmissionRepository::markingQueueFor@292-310@src/data/SqliteRepositories.cpp
+       7      2     65      1       7 lms::data::SqliteMarkRepository::findCurrent@313-319@src/data/SqliteRepositories.cpp
+      18      1    149      2      18 lms::data::SqliteMarkRepository::updateCurrent@320-337@src/data/SqliteRepositories.cpp
+      18      1    159      1      18 lms::data::SqliteMarkRepository::insertCurrent@338-355@src/data/SqliteRepositories.cpp
+      13      2    101      1      13 lms::data::SqliteMarkRepository::appendAudit@356-368@src/data/SqliteRepositories.cpp
+      10      2     56      1      10 lms::data::SqliteModerationRepository::departmentOfCurrentMark@371-380@src/data/SqliteRepositories.cpp
+       8      2     54      1       8 lms::data::SqliteModerationRepository::latestDecision@381-388@src/data/SqliteRepositories.cpp
+       5      1     38      1       5 lms::data::SqliteModerationRepository::isReleased@389-393@src/data/SqliteRepositories.cpp
+       9      1     80      4       9 lms::data::SqliteModerationRepository::insertDecision@394-402@src/data/SqliteRepositories.cpp
+       6      1     48      2       6 lms::data::SqliteModerationRepository::insertRelease@403-408@src/data/SqliteRepositories.cpp
+      27      4    216      1      27 lms::data::SqliteModerationRepository::unreleasedCurrentMarksFor@409-435@src/data/SqliteRepositories.cpp
+      13      2    106      1      13 lms::data::SqliteModerationRepository::releasedResultsFor@436-448@src/data/SqliteRepositories.cpp
+       3      2     31      2       3 lms::data::errorMessage@9-11@src/data/Database.cpp
+       4      2     37      3       4 lms::data::check@12-15@src/data/Database.cpp
+       3      1     48      2       3 lms::data::Statement::Statement@17-19@src/data/Database.cpp
+       4      2     16      0       4 lms::data::Statement::~Statement@20-23@src/data/Database.cpp
+       1      1     32      1       1 lms::data::Statement::Statement@24-24@src/data/Database.cpp
+       9      3     53      1       9 lms::data::Statement::operator =@25-33@src/data/Database.cpp
+       3      1     50      2       3 lms::data::Statement::bind@34-36@src/data/Database.cpp
+       6      2     45      2       6 lms::data::Statement::bind@37-42@src/data/Database.cpp
+       3      1     28      2       3 lms::data::Statement::bind@43-45@src/data/Database.cpp
        3      1     28      2       3 lms::data::Statement::bind@46-48@src/data/Database.cpp
-       3      1     28      2       3 lms::data::Statement::bind@49-51@src/data/Database.cpp
-       3      1     23      1       3 lms::data::Statement::bindNull@52-54@src/data/Database.cpp
-       8      3     47      0       8 lms::data::Statement::step@55-62@src/data/Database.cpp
-       4      2     21      0       4 lms::data::Statement::execute@63-66@src/data/Database.cpp
-       3      1     18      1       3 lms::data::Statement::integer@67-69@src/data/Database.cpp
-       3      1     18      1       3 lms::data::Statement::real@70-72@src/data/Database.cpp
-       4      2     37      1       4 lms::data::Statement::text@73-76@src/data/Database.cpp
-       3      1     20      1       3 lms::data::Statement::isNull@77-79@src/data/Database.cpp
-       8      3     70      1       8 lms::data::Transaction::Transaction@80-87@src/data/Database.cpp
-       4      3     27      0       4 lms::data::Transaction::~Transaction@88-91@src/data/Database.cpp
-       9      3     66      0       9 lms::data::Transaction::commit@92-100@src/data/Database.cpp
-      21      5    124      1      21 lms::data::Database::Database@101-121@src/data/Database.cpp
-       4      2     16      0       4 lms::data::Database::~Database@122-125@src/data/Database.cpp
-       1      1     25      1       1 lms::data::Database::Database@126-126@src/data/Database.cpp
-       8      3     47      1       8 lms::data::Database::operator =@127-134@src/data/Database.cpp
-       3      1     12      0       3 lms::data::Database::handle@135-137@src/data/Database.cpp
-       9      3     79      1       9 lms::data::Database::execute@138-146@src/data/Database.cpp
-       8      2     59      0       8 lms::data::Database::initialiseSchema@147-154@src/data/Database.cpp
-       4      2     32      0       4 lms::data::Database::foreignKeysEnabled@155-158@src/data/Database.cpp
+       3      1     23      1       3 lms::data::Statement::bindNull@49-51@src/data/Database.cpp
+       8      3     47      0       8 lms::data::Statement::step@52-59@src/data/Database.cpp
+       4      2     21      0       4 lms::data::Statement::execute@60-63@src/data/Database.cpp
+       3      1     18      1       3 lms::data::Statement::integer@64-66@src/data/Database.cpp
+       3      1     18      1       3 lms::data::Statement::real@67-69@src/data/Database.cpp
+       4      2     37      1       4 lms::data::Statement::text@70-73@src/data/Database.cpp
+       3      1     20      1       3 lms::data::Statement::isNull@74-76@src/data/Database.cpp
+       8      3     70      1       8 lms::data::Transaction::Transaction@77-84@src/data/Database.cpp
+       4      3     27      0       4 lms::data::Transaction::~Transaction@85-88@src/data/Database.cpp
+       9      3     66      0       9 lms::data::Transaction::commit@89-97@src/data/Database.cpp
+      21      5    124      1      21 lms::data::Database::Database@98-118@src/data/Database.cpp
+       4      2     16      0       4 lms::data::Database::~Database@119-122@src/data/Database.cpp
+       1      1     25      1       1 lms::data::Database::Database@123-123@src/data/Database.cpp
+       8      3     47      1       8 lms::data::Database::operator =@124-131@src/data/Database.cpp
+       3      1     12      0       3 lms::data::Database::handle@132-134@src/data/Database.cpp
+       9      3     79      1       9 lms::data::Database::execute@135-143@src/data/Database.cpp
+       3      1     13      0       3 lms::data::Database::initialiseSchema@144-146@src/data/Database.cpp
+       4      2     32      0       4 lms::data::Database::foreignKeysEnabled@147-150@src/data/Database.cpp
        1      1     13      1       1 lms::data::SqliteTransactionManager::SqliteTransactionManager@12-12@src/data/SqliteRepositories.hpp
        1      1     13      1       1 lms::data::SqliteUserRepository::SqliteUserRepository@21-21@src/data/SqliteRepositories.hpp
        1      1     13      1       1 lms::data::SqliteCourseRepository::SqliteCourseRepository@35-35@src/data/SqliteRepositories.hpp
-       1      1     13      1       1 lms::data::SqliteSubmissionRepository::SqliteSubmissionRepository@60-60@src/data/SqliteRepositories.hpp
-       1      1     13      1       1 lms::data::SqliteMarkRepository::SqliteMarkRepository@72-72@src/data/SqliteRepositories.hpp
-       1      1     13      1       1 lms::data::SqliteModerationRepository::SqliteModerationRepository@84-84@src/data/SqliteRepositories.hpp
+       1      1     13      1       1 lms::data::SqliteSubmissionRepository::SqliteSubmissionRepository@63-63@src/data/SqliteRepositories.hpp
+       1      1     13      1       1 lms::data::SqliteMarkRepository::SqliteMarkRepository@75-75@src/data/SqliteRepositories.hpp
+       1      1     13      1       1 lms::data::SqliteModerationRepository::SqliteModerationRepository@87-87@src/data/SqliteRepositories.hpp
       13      5     53      1      13 lms::domain::roleName@8-20@src/domain/User.hpp
       11      5     63      1      11 lms::domain::parseRole@21-31@src/domain/User.hpp
        1      1     17      1       1 lms::domain::User::User@41-41@src/domain/User.hpp
@@ -189,29 +194,31 @@
       47     17    295      1      50 askSecret@25-74@src/main.cpp
       16      5     93      1      16 askInt@75-90@src/main.cpp
       16      5     93      1      16 askDouble@91-106@src/main.cpp
-       9      3    109      2       9 showAssignments@107-115@src/main.cpp
-       7      2    131      2       7 showModerationQueue@116-122@src/main.cpp
-       3      1     20      2       3 listAssignments@131-133@src/main.cpp
-       4      1     41      2       4 createDepartment@134-137@src/main.cpp
-       9      1     93      2       9 createUser@138-146@src/main.cpp
-       7      1     66      2       7 createCourse@147-153@src/main.cpp
-       6      1     47      2       6 assignLecturer@154-159@src/main.cpp
-       6      1     47      2       6 enrolStudent@160-165@src/main.cpp
-       9      1     86      2       9 createAssignment@166-174@src/main.cpp
-       8      1     67      2       8 grantExtension@175-182@src/main.cpp
-       6      1     72      2       6 submitWork@183-188@src/main.cpp
-      12      2    154      2      12 markWork@189-200@src/main.cpp
-       8      1     66      2       8 moderateMark@201-208@src/main.cpp
-       5      1     39      2       5 releaseMark@209-213@src/main.cpp
-       5      2     71      2       5 viewResults@216-220@src/main.cpp
-       4      1     32      2       4 deactivateUser@221-224@src/main.cpp
-       8      1     74      2       8 updateUser@225-232@src/main.cpp
-       6      1     47      2       6 updateDepartment@233-238@src/main.cpp
-       8      1     67      2       8 updateCourse@239-246@src/main.cpp
-       8      1    123      0       8 menuHandlers@248-255@src/main.cpp
-      18      5    120      2      18 runSession@265-282@src/main.cpp
-      18      3    122      1      18 firstRunSetup@285-302@src/main.cpp
-      33      9    260      1      33 main@305-337@src/main.cpp
+      11      4    132      2      11 showAssignments@107-117@src/main.cpp
+       7      2    131      2       7 showModerationQueue@118-124@src/main.cpp
+       3      1     20      2       3 listAssignments@133-135@src/main.cpp
+       4      1     41      2       4 createDepartment@136-139@src/main.cpp
+       9      1     93      2       9 createUser@140-148@src/main.cpp
+       7      1     66      2       7 createCourse@149-155@src/main.cpp
+       6      1     47      2       6 assignLecturer@156-161@src/main.cpp
+       6      1     47      2       6 enrolStudent@162-167@src/main.cpp
+       9      1     86      2       9 createAssignment@168-176@src/main.cpp
+       8      1     67      2       8 grantExtension@177-184@src/main.cpp
+       7      1     57      2       7 grantClassExtension@185-191@src/main.cpp
+       6      1     72      2       6 submitWork@192-197@src/main.cpp
+      12      2    154      2      12 markWork@198-209@src/main.cpp
+       8      1     66      2       8 moderateMark@210-217@src/main.cpp
+       5      1     39      2       5 releaseMark@218-222@src/main.cpp
+       5      2     71      2       5 viewResults@225-229@src/main.cpp
+       4      1     32      2       4 deactivateUser@230-233@src/main.cpp
+       8      1     74      2       8 updateUser@234-241@src/main.cpp
+       6      1     47      2       6 updateDepartment@242-247@src/main.cpp
+       8      1     67      2       8 updateCourse@248-255@src/main.cpp
+       9      1    129      0       9 menuHandlers@257-265@src/main.cpp
+      18      5    120      2      18 runSession@275-292@src/main.cpp
+      18      3    122      1      18 firstRunSetup@295-312@src/main.cpp
+       6      3     50      1       6 printVersionIfRequested@320-325@src/main.cpp
+      35     10    272      1      35 main@327-361@src/main.cpp
 24 file analyzed.
 ==============================================================
 NLOC    Avg.NLOC  AvgCCN  Avg.token  function_cnt    file
@@ -219,27 +226,27 @@ NLOC    Avg.NLOC  AvgCCN  Avg.token  function_cnt    file
      45      19.5     4.5      186.0         2     src/services/MarkingServices.cpp
      55       6.1     3.0       61.8         8     src/services/AccessServices.cpp
      34       5.0     3.5       50.0         2     src/services/PenaltyStrategy.hpp
-    101      15.0     4.0      168.2         6     src/services/AssessmentServices.cpp
+    120      15.6     4.1      171.1         7     src/services/AssessmentServices.cpp
      43       7.6     2.8       68.6         5     src/services/ModerationServices.cpp
      50       8.4     7.6      119.6         5     src/services/Validation.cpp
-     10       0.0     0.0        0.0         0     src/services/DeadlineEvaluator.hpp
-    154       2.3     1.0       32.8        11     src/services/Services.hpp
+     13       0.0     0.0        0.0         0     src/services/DeadlineEvaluator.hpp
+    156       2.3     1.0       32.8        11     src/services/Services.hpp
      84       7.1     2.5       72.3        11     src/services/AdministrationServices.cpp
-     89       3.3     1.0       38.6        25     src/services/LmsService.cpp
+     92       3.3     1.0       38.7        26     src/services/LmsService.cpp
      23       8.0     7.0       95.0         1     src/services/LatePenaltyPolicy.hpp
-     54       9.2     7.4      122.8         5     src/services/DeadlineEvaluator.cpp
+     70      10.3     6.8      121.3         6     src/services/DeadlineEvaluator.cpp
       8       0.0     0.0        0.0         0     src/services/Validation.hpp
-     66       0.0     0.0        0.0         0     src/services/LmsService.hpp
-    112       0.0     0.0        0.0         0     src/repositories/Repositories.hpp
+     68       0.0     0.0        0.0         0     src/services/LmsService.hpp
+    115       0.0     0.0        0.0         0     src/repositories/Repositories.hpp
      55       0.0     0.0        0.0         0     src/data/Database.hpp
-    412       9.5     1.5       77.9        42     src/data/SqliteRepositories.cpp
-    155       5.2     2.0       39.6        28     src/data/Database.cpp
-     80       1.0     1.0       13.0         6     src/data/SqliteRepositories.hpp
+    433       9.5     1.5       77.8        44     src/data/SqliteRepositories.cpp
+    149       5.0     1.9       38.0        28     src/data/Database.cpp
+     83       1.0     1.0       13.0         6     src/data/SqliteRepositories.hpp
      99       2.6     1.6       20.3        21     src/domain/User.hpp
-     88       0.0     0.0        0.0         0     src/domain/Records.hpp
+     89       0.0     0.0        0.0         0     src/domain/Records.hpp
      12       0.0     0.0        0.0         0     src/security/PasswordHasher.hpp
      74       9.3     3.7      102.7         6     src/security/PasswordHasher.cpp
-    317      10.9     2.6       91.8        27     src/main.cpp
+    335      10.7     2.7       90.6        29     src/main.cpp
 
 ===========================================================================================================
 !!!! Warnings (cyclomatic_complexity > 15 or length > 1000 or nloc > 1000000 or parameter_count > 100) !!!!
@@ -252,4 +259,4 @@ NLOC    Avg.NLOC  AvgCCN  Avg.token  function_cnt    file
 ==========================================================================================
 Total nloc   Avg.NLOC  AvgCCN  Avg.token   Fun Cnt  Warning cnt   Fun Rt   nloc Rt
 ------------------------------------------------------------------------------------------
-      2220       6.9     2.2       65.1      211            3      0.01    0.06
+      2305       7.0     2.2       65.7      218            3      0.01    0.05

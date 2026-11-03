@@ -1,36 +1,38 @@
-# Code metrics (Phase 6)
+# Code metrics (Phase 6, updated for v1.1.2)
 
 Tool: `lizard` 1.25.0 (NLOC = non-comment lines of code; CCN = McCabe cyclomatic complexity, i.e. the number of linearly independent paths through a function, equal to decision points + 1). Thresholds: CCN > 10 (McCabe's original recommended limit) or NLOC > 60 per function. Full output: `evidence/lizard-full.txt`.
 
-## 1. Evolution across the three QA points
+## 1. Evolution across the QA points
 
-| Measure (`src/` only) | Phase 5 baseline `1965a3a` | After repository refactor `6bfc2fb` | After code review `f9cad4c` |
-|---|---|---|---|
-| Total NLOC | 1,382 | 2,186 | 2,220 |
-| Functions | 94 | 190 | 211 |
-| Mean NLOC per function | 12.0 | 7.6 | **6.9** |
-| Mean CCN per function | 3.5 | 2.4 | **2.2** |
-| Functions over a threshold | 4 | 4 | **3** |
-| Largest function | `main`, 193 NLOC / CCN 31 | `main`, 191 / 31 | `askSecret`, 47 / 17 |
-| `markSubmission` | 90 NLOC / CCN 11 | 34 / 8 | 34 / 8 |
+| Measure (`src/` only) | Phase 5 baseline `1965a3a` | After repository refactor `6bfc2fb` | After code review `f9cad4c` | v1.1.2 `72e7f38` |
+|---|---|---|---|---|
+| Total NLOC | 1,382 | 2,186 | 2,220 | 2,305 |
+| Functions | 94 | 190 | 211 | 218 |
+| Mean NLOC per function | 12.0 | 7.6 | 6.9 | **7.0** |
+| Mean CCN per function | 3.5 | 2.4 | 2.2 | **2.2** |
+| Functions over a threshold | 4 | 4 | 3 | **3** |
+| Largest function | `main`, 193 NLOC / CCN 31 | `main`, 191 / 31 | `askSecret`, 47 / 17 | `askSecret`, 47 / 17 |
+| `markSubmission` | 90 NLOC / CCN 11 | 34 / 8 | 34 / 8 | 34 / 8 |
 
 The refactor added about 800 NLOC, mostly interface declarations, repository mapping code and per-use-case services. The SDD named this cost in advance ("additional mapping code and a risk of over-abstraction"). In return, mean function size fell by 43% and mean CCN by 37%: the logic is no longer in fewer, larger functions, but spread across small units that can be tested in isolation (T_ARCH tests use in-memory fakes).
 
-## 2. Size by layer (current)
+From `f9cad4c` to v1.1.2 the code grew by 85 NLOC and 7 functions, almost all from CR1 (class-wide extensions: repository methods, the precedence rule and menu option 18). Mean size and complexity did not change, and no new function crossed a threshold, so the change was absorbed without degrading the structure.
+
+## 2. Size by layer (v1.1.2, `72e7f38`)
 
 | Layer | Files | NLOC | Functions | Mean CCN |
 |---|---|---|---|---|
-| Application services + policy (`src/services`) | 14 | 816 | 81 | 3.3 |
-| Data access (`src/data`, `src/repositories`) | 5 | 814 | 76 | 1.6 |
-| Domain (`src/domain`) | 2 | 187 | 21 | 1.6 |
+| Application services + policy (`src/services`) | 14 | 861 | 84 | 2.8 |
+| Data access (`src/data`, `src/repositories`) | 5 | 835 | 78 | 1.6 |
+| Domain (`src/domain`) | 2 | 188 | 21 | 1.6 |
 | Security adapter (`src/security`) | 2 | 86 | 6 | 3.7 |
-| Presentation (`src/main.cpp`) | 1 | 317 | 27 | 3.1 |
-| **Production total** | **24** | **2,220** | **211** | **2.2** |
-| Tests (`tests/`, C++ and Python) | 19 | 2,576 | 263 | 1.4 |
+| Presentation (`src/main.cpp`) | 1 | 335 | 29 | 2.7 |
+| **Production total** | **24** | **2,305** | **218** | **2.2** |
+| Tests (`tests/`, C++ and Python) | 20 | 2,916 | 298 | 1.4 |
 
-The test-to-production NLOC ratio is about 1.16 : 1. Mean CCN for services is higher than the overall mean because the two date parsers (§3) are there.
+The test-to-production NLOC ratio is about 1.27 : 1 (1.16 : 1 at `f9cad4c`): CR1 added more test code than production code. Mean CCN for services is higher than the overall mean because the two date parsers (§3) are there.
 
-## 3. Functions over threshold (current) and decision
+## 3. Functions over threshold (v1.1.2) and decision
 
 | Function | NLOC | CCN | Decision |
 |---|---|---|---|

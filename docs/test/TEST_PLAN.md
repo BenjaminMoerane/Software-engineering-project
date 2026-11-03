@@ -1,20 +1,22 @@
 # Phase 5 test plan: CS4433 Moderated LMS
 
+Written in Phase 5; counts and CI status updated for v1.1.2 (commit `72e7f38`, 3 Nov 2026). The test design is unchanged except where marked.
+
 Gate 2 status is **NOT APPROVED**. Provisional rules OD-01 to OD-08 (see `docs/GATE2_BLOCKERS.md`) are tested as *current provisional behaviour*, not as approved policy. A test that pins a provisional rule is marked "(provisional)" below and will need updating if the reviewer decides differently.
 
 ## 1. Scope and approach
 
-The test suite checks the console program and the service layer against the Phase 2 requirements (FR-01..FR-22, NFR-01..NFR-10, use cases UC-01..UC-03) and the Phase 3 design (schema of 14 tables, layered services, test IDs T-LOGIN, T-AUTHZ, T-SUB-BOUNDARY, T-RESUB, T-PEN, T-EXT, T-MARK-RANGE, T-AUDIT-TX, T-MOD-RELEASE, T-SCOPE, T-PERSIST, T-DB-ERROR).
+The test suite checks the console program and the service layer against the Phase 2 requirements (FR-01..FR-22, NFR-01..NFR-10, use cases UC-01..UC-03) and the Phase 3 design (schema of 14 tables, 15 from v1.1, where CR1 adds `class_extensions`; layered services, test IDs T-LOGIN, T-AUTHZ, T-SUB-BOUNDARY, T-RESUB, T-PEN, T-EXT, T-MARK-RANGE, T-AUDIT-TX, T-MOD-RELEASE, T-SCOPE, T-PERSIST, T-DB-ERROR).
 
-Framework: GoogleTest v1.14.0 (found with `find_package`, otherwise fetched at a pinned commit) run by CTest. System tests are Python `unittest` scripts that run the real `lms_app` executable. CI (`.github/workflows/ci.yml`) is configured to run both; no hosted CI run has been made (see section 8).
+Framework: GoogleTest v1.14.0 (found with `find_package`, otherwise fetched at a pinned commit) run by CTest. System tests are Python `unittest` scripts that run the real `lms_app` executable. CI (`.github/workflows/ci.yml`) runs both on every push and pull request on GitHub Actions (Ubuntu 24.04); hosted runs and results are in `docs/qa/CI_EVIDENCE.md`.
 
 ## 2. V-Model: level, artefact, test, evidence
 
 | V-Model level | Artefact verified against | Test level here | Where | Count |
 |---|---|---|---|---|
-| Requirements (Phase 2 SRS) | FR/NFR/BR list, use cases UC-01..03 | Acceptance tests | `tests/system/run_system_tests.py` classes UC01Submit, UC02Mark, UC03Moderate, Access | 23 |
-| System design (Phase 3 SDD, architecture) | Layers, roles, workflow state machine, schema | System tests | same file: Robustness, Persistence, Offline | 5 |
-| Detailed design (classes, SQL, transactions) | LmsService, LatePenaltyPolicy, PasswordHasher, Database/Statement/Transaction, User/Role | Integration tests (service + real SQLite) | `tests/unit/test_*.cpp` (fixture creates a real temp database) | 137 integration and unit tests together (one gtest binary) |
+| Requirements (Phase 2 SRS) | FR/NFR/BR list, use cases UC-01..03 | Acceptance tests | `tests/system/run_system_tests.py` classes UC01Submit, UC02Mark, UC03Moderate, Access; CR1ClassExtension (v1.1) | 25 |
+| System design (Phase 3 SDD, architecture) | Layers, roles, workflow state machine, schema | System tests | same file: Robustness, Persistence, Offline; Deployment (`ST_DEP_01`, v1.1.1) | 6 |
+| Detailed design (classes, SQL, transactions) | LmsService, LatePenaltyPolicy, PasswordHasher, Database/Statement/Transaction, User/Role | Integration tests (service + real SQLite) | `tests/unit/test_*.cpp` (fixture creates a real temp database) | 165 integration and unit tests together (one gtest binary; 137 when this plan was written) |
 | Implementation (source) | Individual functions | Unit tests | `tests/unit/test_domain.cpp`, `test_penalty_policy.cpp`, `test_security_login.cpp` (hasher), `test_persistence_errors.cpp` (wrappers) | included above |
 | Legacy Phase 4 checks | Smoke, integration and late-policy executables | Retained unchanged | `tests/smoke_tests.cpp`, `integration_tests.cpp`, `late_policy_tests.cpp` | 3 executables |
 
@@ -94,7 +96,7 @@ Defects found while testing are recorded in `docs/test/DEFECT_LOG.md` with sever
 ## 8. Not covered (NOT VERIFIED)
 
 - Windows and macOS builds, MSVC, and the Windows `_getch` password path.
-- A hosted CI run and any remote repository (none exists, no URL is claimed).
+- Hosted CI runs on Ubuntu 24.04 only; there is no hosted Windows or macOS runner.
 - Clang AddressSanitizer/UBSan (runtime not installed); GCC sanitizers were run in Phase 4.
 - NFR-08 usability with representative users and NFR-10 technician installation: no participants were available.
 - NFR-01/NFR-02 against agreed target hardware (OD-06 open): only a synthetic benchmark on this environment was run.

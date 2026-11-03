@@ -14,7 +14,7 @@ This repository contains the C++17/SQLite console application and its automated 
 
 ## Implemented foundation
 
-- CMake build; SQLite persistence; schema with the same 14 tables as the Phase 3 data dictionary (table names compared; no column-level comparison has been run).
+- CMake build; SQLite persistence. Schema: the 14 tables of the Phase 3 data dictionary (table names compared; no column-level comparison has been run), plus `class_extensions` added by CR1 in v1.1, so **15 tables** from v1.1. A v1.0 database is migrated on first start (`docs/maintenance/CR1_DESIGN_UPDATES.md`, `REGRESSION_RESULTS.md`).
 - Parameterised SQLite statements, RAII statement handling, foreign-key enforcement, a busy timeout and WAL mode.
 - Salted scrypt password hashes using OpenSSL and constant-time hash comparison.
 - First-run bootstrap of the initial Administrator account when the `users` table is empty.
@@ -65,12 +65,12 @@ The brief says 10% of the available mark per late day, for up to three days, and
 - Confirmed, not fixed: if a student resubmits after their work was marked but before the deadline, the existing mark stays tied to the earlier version (observation O-6, pinned by test T_RESUB_08). Resolving it needs a policy decision.
 - The OD-01 to OD-08 numbering in `docs/GATE2_BLOCKERS.md` and `docs/GATE2_REVIEW_AND_DECISION_RECORD.md` differs from the open-decision register in the Phase 3 SDD (for example OD-04 is penalty arithmetic in the SDD). The Phase 3 validation report was not available to settle this, so the conflict is recorded, not resolved.
 - OD-08 post-release correction is blocked. Class-wide extensions (CR1) are implemented in v1.1; their precedence rules CR1-D1..D4 are provisional.
-- Tests: GoogleTest suite, system tests and three dependency-free executables, all registered with CTest. cppcheck is not installed in the execution environment. GCC `-fanalyzer` compiled the project but emitted warnings that remain under review; see `docs/STATIC_ANALYSIS_REPORT.md`.
-- Measured in a Linux container: business-logic line coverage 99.2% and branch coverage 90.6% (`docs/test/COVERAGE_REPORT.md`) and a synthetic 800-student/100,000-record benchmark (`docs/test/TEST_RESULTS.md`). Hosted repository: https://github.com/BenjaminMoerane/Software-engineering-project with GitHub Actions CI (`.github/workflows/ci.yml`). No target-school-hardware measurement or user-acceptance test with real users is claimed.
+- Tests: 165 GoogleTest tests, 31 system tests and three dependency-free executables, with SQL-isolation and RTM checks: 7 CTest targets in all. clang-tidy and cppcheck report 0 findings and gate CI; the 88 GCC `-fanalyzer` warnings are one documented false-positive class. See `docs/qa/STATIC_ANALYSIS_REPORT.md`.
+- Measured at v1.1.2: business-logic line coverage 99.2% and branch coverage 92.2% (`docs/test/COVERAGE_REPORT.md`) and a synthetic 800-student/100,000-record benchmark (`docs/test/TEST_RESULTS.md`). Hosted repository: https://github.com/BenjaminMoerane/Software-engineering-project with GitHub Actions CI (`.github/workflows/ci.yml`). No target-school-hardware measurement or user-acceptance test with real users is claimed.
 - The code has not yet received an independent security review. In particular, file permissions, manual testing of masked password input on the target terminals (the Windows `_getch` path has not been run), deployment hardening and the full negative permission matrix require additional work.
 
 ## Source-of-truth rules
 
-Do not alter the Phase 3 schema or promote provisional decisions to approved policy without reconciling the official brief, Phase 2 SRS, Phase 3 SDD/data dictionary/traceability and Gate 2 decisions. The schema contains the same tables as the Phase 3 data dictionary and adds none.
+Do not alter the Phase 3 schema or promote provisional decisions to approved policy without reconciling the official brief, Phase 2 SRS, Phase 3 SDD/data dictionary/traceability and Gate 2 decisions. The schema contains the Phase 3 data dictionary's 14 tables plus `class_extensions` (CR1, v1.1); CR1's design decisions CR1-D1..D4 are provisional.
 
 See [`BUILD_GUIDE.md`](BUILD_GUIDE.md) for the expanded build, test and troubleshooting guide. The upload directory contains learner assessment data and should not be committed to Git or included in source-code archives.

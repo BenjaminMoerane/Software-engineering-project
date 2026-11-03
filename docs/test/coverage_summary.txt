@@ -4,23 +4,18 @@ Directory: .
 ------------------------------------------------------------------------------
 File                                         Lines     Exec  Cover   Missing
 ------------------------------------------------------------------------------
-src/data/Database.cpp                          133      127    95%   95-98,113,150
-src/data/SqliteRepositories.cpp                351      344    98%   124-130
-src/data/SqliteRepositories.hpp                  6        6   100%
 src/domain/User.hpp                             51       51   100%
-src/repositories/Repositories.hpp               14       14   100%
-src/security/PasswordHasher.cpp                 52       48    92%   29,56,58,66
-src/services/AccessServices.cpp                 44       44   100%
+src/services/AccessServices.cpp                 45       45   100%
 src/services/AdministrationServices.cpp         73       72    98%   63
-src/services/AssessmentServices.cpp             79       78    98%   103
-src/services/DeadlineEvaluator.cpp              39       38    97%   12
+src/services/AssessmentServices.cpp             96       96   100%
+src/services/DeadlineEvaluator.cpp              51       50    98%   13
 src/services/LatePenaltyPolicy.hpp               8        8   100%
-src/services/LmsService.cpp                     53       53   100%
-src/services/MarkingServices.cpp                34       34   100%
+src/services/LmsService.cpp                     67       67   100%
+src/services/MarkingServices.cpp                33       33   100%
 src/services/ModerationServices.cpp             36       35    97%   20
 src/services/PenaltyStrategy.hpp                10       10   100%
 src/services/Services.hpp                       21       21   100%
-src/services/Validation.cpp                     35       35   100%
+src/services/Validation.cpp                     38       37    97%   36
 ------------------------------------------------------------------------------
-TOTAL                                         1039     1018    98%
+TOTAL                                          529      525    99%
 ------------------------------------------------------------------------------

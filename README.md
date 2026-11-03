@@ -2,6 +2,8 @@
 
 Current release: **v1.1.2** ([release notes](RELEASE_NOTES.md)). Install: [`docs/deployment/INSTALLATION_GUIDE.md`](docs/deployment/INSTALLATION_GUIDE.md) · user manuals: [`docs/deployment/`](docs/deployment/) · build: [`BUILD_GUIDE.md`](BUILD_GUIDE.md).
 
+**Video presentation (12 min 44 s):** [watch on Google Drive](https://drive.google.com/file/d/19kv-PD5JixqZ4P72sXxglHOKtCsGdm0X/view?usp=drive_link): problem, requirements, use cases, class design, architecture, implementation, live demo, testing, and challenges and gaps.
+
 | Phase | Where |
 |---|---|
 | 4 Implementation | `src/`, `BUILD_GUIDE.md`, `docs/PHASE4_*` |

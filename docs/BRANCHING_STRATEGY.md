@@ -39,7 +39,13 @@ A branch may be merged into `main` only when:
 2. The self-review checklist in `docs/qa/CODE_REVIEW_RECORD.md` has been applied and any finding recorded.
 3. `docs/test/RTM.csv` and any document that states facts about changed code are updated in the same branch.
 
-On GitHub, enable branch protection on `main`: *Require a pull request before merging* and *Require status checks to pass* (select the four CI jobs). This turns rule 1 into an enforced gate rather than a convention.
+On GitHub, `main` is protected by a branch protection rule, which turns rule 1 into an enforced gate rather than a convention:
+
+- *Require a pull request before merging*, with 0 required approvals (a single maintainer cannot approve their own pull request; rule 2's self-review applies instead);
+- *Require status checks to pass before merging* and *Require branches to be up to date*, with all 7 checks required: `build-and-test (gcc, Debug)`, `build-and-test (gcc, Release)`, `build-and-test (clang, Debug)`, `build-and-test (clang, Release)`, `sanitizers`, `coverage`, `static-analysis` (four workflow jobs, one of them a 4-way matrix);
+- *Do not allow bypassing the above settings*: the rule applies to administrators too.
+
+The rule has been enforced since 3 November 2026, after release v1.1.2 (CI runs #23–#25). Earlier merges into `main` were direct pushes, checked by running the CI commands locally before pushing and by the CI run after it; several of those post-push runs failed (F15, F16), as recorded in `docs/qa/CI_EVIDENCE.md`.
 
 ## 5. Tags and releases
 
